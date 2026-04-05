@@ -1,0 +1,52 @@
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+
+// الصفحات المحمية التي تتطلب تسجيل دخول
+const protectedRoutes = [
+  '/dashboard',
+  '/profile',
+  '/settings',
+  '/posts/create',
+  '/chat',
+  '/notifications',
+]
+
+// الصفحات العامة (لا يسمح بالوصول إليها إذا كان المستخدم مسجلاً للدخول)
+const publicRoutes = ['/auth/login', '/auth/register']
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+
+  // التحقق من أن المسار محمي
+  const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+  const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
+
+  // استخراج الـ token من الـ cookie
+  const token = request.cookies.get('auth-token')?.value
+
+  // إذا كان المسار محمي ولا يوجد token
+  if (isProtectedRoute && !token) {
+    const loginUrl = new URL('/auth/login', request.url)
+    loginUrl.searchParams.set('callbackUrl', pathname)
+    return NextResponse.redirect(loginUrl)
+  }
+
+  // إذا كان المسار عام ويوجد token (مستخدم مسجل دخوله)
+  if (isPublicRoute && token) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  }
+
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: [
+    /*
+     * تطابق كل المسارات باستثناء:
+     * - الملفات الثابتة (._next/static, _next/image, favicon.ico)
+     * - API routes
+     * - مسارات public
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+  ],
+}
