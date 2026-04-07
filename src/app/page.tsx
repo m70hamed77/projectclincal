@@ -413,7 +413,7 @@ export default function Home() {
                 e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,191,166,0.4)";
               }}
             >
-              <Link href="/auth/register">{t("home.getStarted")}</Link>
+              <Link href="/auth/register-verification">{t("home.getStarted")}</Link>
             </Button>
           </div>
         </div>
@@ -497,7 +497,7 @@ export default function Home() {
                     e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,191,166,0.5)";
                   }}
                 >
-                  <Link href="/auth/register?type=student">
+                  <Link href="/auth/register-verification?type=student">
                     <Stethoscope className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
                     {t("home.registerAsStudent")}
                   </Link>
@@ -519,7 +519,7 @@ export default function Home() {
                     e.currentTarget.style.boxShadow = "none";
                   }}
                 >
-                  <Link href="/auth/register?type=patient">
+                  <Link href="/auth/register-verification?type=patient">
                     <User className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
                     {t("home.registerAsPatient")}
                   </Link>
@@ -672,7 +672,7 @@ export default function Home() {
           {/* Patient Card */}
           <div
             className="user-card patient"
-            onClick={() => window.location.href = "/auth/register?type=patient"}
+            onClick={() => window.location.href = "/auth/register-verification?type=patient"}
             style={{
               background: "#E8F8F5",
               borderRadius: "24px",
@@ -727,7 +727,7 @@ export default function Home() {
               className="btn-primary"
               onClick={(e) => {
                 e.stopPropagation();
-                window.location.href = "/auth/register?type=patient";
+                window.location.href = "/auth/register-verification?type=patient";
               }}
               style={{
                 width: "100%",
@@ -760,7 +760,7 @@ export default function Home() {
           {/* Student Card */}
           <div
             className="user-card student"
-            onClick={() => window.location.href = "/auth/register?type=student"}
+            onClick={() => window.location.href = "/auth/register-verification?type=student"}
             style={{
               background: "#FFF8E7",
               borderRadius: "24px",
@@ -815,7 +815,7 @@ export default function Home() {
               className="btn-primary"
               onClick={(e) => {
                 e.stopPropagation();
-                window.location.href = "/auth/register?type=student";
+                window.location.href = "/auth/register-verification?type=student";
               }}
               style={{
                 width: "100%",
@@ -1279,7 +1279,7 @@ export default function Home() {
                       (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(255,255,255,0.2)";
                     }}
                   >
-                    <Link href="/auth/register">
+                    <Link href="/auth/register-verification">
                       {t("home.registerAsPatient")}
                     </Link>
                   </Button>

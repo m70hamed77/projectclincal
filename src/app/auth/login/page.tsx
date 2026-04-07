@@ -543,7 +543,7 @@ export default function LoginPage() {
               <div className="mt-8 text-center fade-in" style={{ animationDelay: '400ms' }}>
                 <p className="text-foreground-muted text-responsive-sm" suppressHydrationWarning={true}>
                   {t('loginPage.noAccount')}{' '}
-                  <Link href="/auth/register" className="text-primary hover:text-primary-hover font-semibold transition-all inline-flex items-center gap-1 link-underline" suppressHydrationWarning={true}>
+                  <Link href="/auth/register-verification" className="text-primary hover:text-primary-hover font-semibold transition-all inline-flex items-center gap-1 link-underline" suppressHydrationWarning={true}>
                     {t('auth.registerNow')}
                     <ArrowRight className="w-4 h-4" aria-hidden="true" />
                   </Link>
