@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // توليد كود تحقق عشوائي من 6 أرقام
-    const code = Math.floor(100000 + Math.random() * 900000).toString()
+    // توليد كود تحقق عشوائي من 4 أرقام (حسب طلب المستخدم)
+    const code = Math.floor(1000 + Math.random() * 9000).toString()
 
-    // حساب وقت انتهاء الصلاحية (5 دقائق من الآن)
-    const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
+    // حساب وقت انتهاء الصلاحية (10 دقائق من الآن - حسب طلب المستخدم)
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
     // حفظ الكود الجديد في قاعدة البيانات باستخدام upsert
     await db.verificationCode.upsert({

@@ -149,7 +149,7 @@ export async function sendVerificationCode(email: string, code: string, name?: s
           <div class="info">
             <strong>⚠️ مهم:</strong>
             <ul style="margin: 10px 0 0 20px; padding: 0;">
-              <li>هذا الكود صالح لمدة 5 دقائق فقط</li>
+              <li>هذا الكود صالح لمدة 10 دقائق فقط</li>
               <li>لا تشارك هذا الكود مع أي شخص</li>
               <li>إذا لم تطلب هذا الكود، يمكنك تجاهل هذه الرسالة</li>
             </ul>
@@ -173,7 +173,7 @@ export async function sendVerificationCode(email: string, code: string, name?: s
     to: email,
     subject: 'كود التحقق من سمايلي لطب الأسنان',
     html,
-    text: `كود التحقق الخاص بك هو: ${code}\nصالح لمدة 5 دقائق.`
+    text: `كود التحقق الخاص بك هو: ${code}\nصالح لمدة 10 دقائق.`
   })
 }
 
