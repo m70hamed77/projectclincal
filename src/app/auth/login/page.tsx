@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Eye, EyeOff, Lock, Mail, AlertCircle, LogIn, User, ArrowRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Eye, EyeOff, Lock, Mail, AlertCircle, LogIn, User, ArrowRight, Sparkles, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -26,6 +26,21 @@ export default function LoginPage() {
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [rememberMe, setRememberMe] = useState(false)
+
+  // Mouse position for parallax effect
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   // Real-time Validation
   const validateField = (name: string, value: string) => {
@@ -62,11 +77,7 @@ export default function LoginPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-
-    // Mark field as touched immediately
     setTouched(prev => ({ ...prev, [name]: true }))
-
-    // Validate data in real-time while typing
     validateField(name, value)
   }
 
@@ -77,19 +88,17 @@ export default function LoginPage() {
     validateField(name, value)
   }
 
-  // Check if form is valid - simplified and fast
+  // Check if form is valid
   const isFormValid = () => {
     const hasEmail = formData.email && formData.email.trim().length > 5
     const hasPassword = formData.password && formData.password.length >= 6
-
     return hasEmail && hasPassword
   }
 
-  // Handle Submit - improved and more secure
+  // Handle Submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validate all fields
     const fieldsToValidate = ['email', 'password']
     const newTouched: Record<string, boolean> = {}
 
@@ -108,19 +117,15 @@ export default function LoginPage() {
     setErrors({})
 
     try {
-      // Create controller for timeout
       const controller = new AbortController()
-      const timeoutId = setTimeout(() => controller.abort(), 15000) // 15 seconds timeout
-
-      console.log('🔐 [Login] Attempting login for:', formData.email.trim().toLowerCase())
-      console.log('🔐 [Login] Password length:', formData.password.trim().length)
+      const timeoutId = setTimeout(() => controller.abort(), 15000)
 
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: formData.email.trim().toLowerCase(),
-          password: formData.password.trim(),  // ✅ أضفت trim
+          password: formData.password.trim(),
           rememberMe
         }),
         signal: controller.signal
@@ -128,97 +133,34 @@ export default function LoginPage() {
 
       clearTimeout(timeoutId)
 
-      console.log('📡 [Login] Response status:', response.status, response.statusText)
-
-      // Try to read response as JSON with error handling
       let data
       try {
-        const contentType = response.headers.get('content-type')
         const responseText = await response.text()
-
-        console.log('📡 [Login] Response details:', {
-          status: response.status,
-          statusText: response.statusText,
-          contentType,
-          textLength: responseText.length,
-          textPreview: responseText.substring(0, 200)
-        })
-
-        // Try to parse as JSON
         data = JSON.parse(responseText)
-        console.log('📦 [Login] Parsed data successfully:', { success: data.success, hasUser: !!data.user, hasError: !!data.error })
       } catch (parseError) {
-        console.error('❌ [Login] Failed to parse response:', parseError)
         throw new Error(t('loginPage.errors.parseError'))
       }
 
-      // Handle successful response
       if (response.ok) {
         if (!data.success) {
-          // Special case: success: false with status 200 (suspended/banned account)
           const errorMessage = data.message || data.error || 'Unknown error'
-          console.log('⚠️ [Login] Account not ready:', errorMessage)
           setErrors({ submit: errorMessage })
           return
         }
 
-        // Login successful
-        console.log('✅ [Login] Login successful:', {
-          userId: data.user?.id,
-          name: data.user?.name,
-          role: data.user?.role
-        })
-
-        // Save user data in storage (try multiple methods)
-        let storageSuccess = false
-
-        // Method 1: localStorage
+        // Save user data
         try {
           localStorage.setItem('currentUser', JSON.stringify(data.user))
           localStorage.setItem('userId', data.user?.id || '')
-          console.log('✅ [Login] Saved to localStorage')
-          storageSuccess = true
-        } catch (storageError: unknown) {
-          console.warn('⚠️ [Login] Failed to save to localStorage:', storageError instanceof Error ? storageError.message : String(storageError))
-        }
-
-        // Method 2: sessionStorage (for sandboxed environments)
-        try {
           sessionStorage.setItem('currentUser', JSON.stringify(data.user))
           sessionStorage.setItem('userId', data.user?.id || '')
-          console.log('✅ [Login] Saved to sessionStorage')
-          storageSuccess = true
-        } catch (sessionError: unknown) {
-          console.warn('⚠️ [Login] Failed to save to sessionStorage:', sessionError instanceof Error ? sessionError.message : String(sessionError))
-        }
-
-        // Method 3: document.cookie (for sandboxed environments)
-        try {
           document.cookie = `userId=${data.user?.id || ''}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=lax`
           document.cookie = `userRole=${data.user?.role || ''}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=lax`
-          console.log('✅ [Login] Saved to document.cookie')
-          storageSuccess = true
-        } catch (cookieError: unknown) {
-          console.warn('⚠️ [Login] Failed to save to document.cookie:', cookieError instanceof Error ? cookieError.message : String(cookieError))
+        } catch (storageError) {
+          console.warn('Failed to save user session:', storageError)
         }
 
-        // Save token if remember me is checked
-        try {
-          if (rememberMe && data.token) {
-            localStorage.setItem('authToken', data.token)
-            sessionStorage.setItem('authToken', data.token)
-          } else if (data.token) {
-            sessionStorage.setItem('authToken', data.token)
-          }
-        } catch (tokenError: unknown) {
-          console.warn('⚠️ [Login] Failed to save token:', tokenError instanceof Error ? tokenError.message : String(tokenError))
-        }
-
-        if (!storageSuccess) {
-          console.warn('⚠️ [Login] Warning: Failed to save user session in any storage')
-        }
-
-        // Redirect based on user role
+        // Redirect based on role
         let redirectPath = '/dashboard'
         if (data.user?.role === 'ADMIN') {
           redirectPath = '/admin'
@@ -228,58 +170,24 @@ export default function LoginPage() {
           redirectPath = '/dashboard/patient'
         }
 
-        // Add userId to URL as query parameter (for sandboxed environment)
         const userId = data.user?.id || ''
-        const urlWithUserId = `${redirectPath}?userId=${userId}`
-
-        console.log('🔄 [Login] Redirecting to:', urlWithUserId)
-        router.push(urlWithUserId)
-      }
-      // Handle server errors
-      else {
+        router.push(`${redirectPath}?userId=${userId}`)
+      } else {
         let errorMessage = t('loginPage.errors.invalidCredentials')
-
-        // Use error message from server if available
-        if (data.error) {
-          errorMessage = data.error
-        } else if (data.message) {
-          errorMessage = data.message
-        } else if (response.status === 400) {
-          errorMessage = t('loginPage.errors.invalidData')
-        } else if (response.status === 401) {
-          errorMessage = t('loginPage.errors.invalidCredentials')
-        } else if (response.status === 403) {
-          errorMessage = t('loginPage.errors.forbidden')
-        } else if (response.status === 500) {
-          errorMessage = t('loginPage.errors.serverError')
-        }
-
-        console.log('❌ [Login] Login failed:', {
-          status: response.status,
-          message: errorMessage,
-          data
-        })
+        if (data.error) errorMessage = data.error
+        else if (data.message) errorMessage = data.message
+        else if (response.status === 401) errorMessage = t('loginPage.errors.invalidCredentials')
+        else if (response.status === 500) errorMessage = t('loginPage.errors.serverError')
 
         setErrors({ submit: errorMessage })
       }
     } catch (error: any) {
-      console.error('❌ [Login] Unexpected error:', {
-        message: error.message,
-        name: error.name,
-        stack: error.stack
-      })
-
       let errorMessage = t('loginPage.errors.connectionError')
-
-      // Handle different errors
       if (error.name === 'AbortError') {
         errorMessage = t('loginPage.errors.timeout')
-      } else if (error.message?.includes('fetch')) {
-        errorMessage = t('loginPage.errors.noInternet')
       } else if (error.message) {
         errorMessage = error.message
       }
-
       setErrors({ submit: errorMessage })
     } finally {
       setIsSubmitting(false)
@@ -287,182 +195,204 @@ export default function LoginPage() {
   }
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen bg-gradient-hero flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Elements */}
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl pulse-gentle" />
+        {/* Gradient Orbs */}
+        <div
+          className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
+          style={{
+            animationDelay: '0s',
+            transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
+          }}
+        />
+        <div
+          className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float"
+          style={{
+            animationDelay: '2s',
+            transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
+          }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow"
+        />
+
+        {/* Floating Particles */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-particle-1" />
+        <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-blue-400 rounded-full animate-particle-2" />
+        <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400 rounded-full animate-particle-3" />
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
       </div>
 
       {/* Language Switcher */}
-      <div className="absolute top-4 right-4 md:top-8 md:right-8 z-20">
+      <div className="absolute top-6 right-6 z-20">
         <LanguageSwitcher />
       </div>
 
-
-
-      {/* Main Card */}
-      <div className="relative w-full max-w-5xl z-10 fade-in" style={{ animationDelay: '200ms' }}>
-        <div className="glass border-2 border-border/50 rounded-3xl shadow-2xl overflow-hidden">
-          <div className="grid md:grid-cols-2">
-            {/* Right Side - Branding */}
-            <div className="relative overflow-hidden hidden md:flex p-12 transition-all duration-500">
-              {/* Background Image */}
-              <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                  backgroundImage: 'url("/img/login-bg.jpg")',
-                }}
-                aria-hidden="true"
-              />
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-primary opacity-90" aria-hidden="true"></div>
-              {/* Pattern Overlay */}
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" aria-hidden="true"></div>
-
-              <div className="relative z-10 flex flex-col justify-center">
-                <div className="mb-8 fade-in" style={{ animationDelay: '250ms' }}>
-                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-                    <User className="w-8 h-8 text-white" />
-                  </div>
-                  <h1 className="text-responsive-4xl font-bold text-white mb-4" suppressHydrationWarning={true}>
-                    {t('loginPage.welcomeBack')}
-                  </h1>
-                  <p className="text-responsive-base text-white/80 leading-relaxed" suppressHydrationWarning={true}>
-                    {t('loginPage.welcomeSubtitle')}
-                  </p>
+      {/* Main Container */}
+      <div className="relative w-full max-w-6xl z-10">
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          {/* Left Side - Branding */}
+          <div className="hidden md:flex flex-col justify-center items-start space-y-8 animate-slide-in-left">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 hover:scale-105 cursor-pointer group">
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                  <User className="w-5 h-5 text-white" />
                 </div>
+                <span className="text-white font-semibold text-lg group-hover:text-purple-300 transition-colors">Smiley Dental</span>
+              </div>
 
-                <div className="space-y-4">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 card-hover stagger-1">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Lock className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-bold text-responsive-base" suppressHydrationWarning={true}>{t('loginPage.highSecurity')}</h3>
-                        <p className="text-white/70 text-responsive-sm" suppressHydrationWarning={true}>{t('loginPage.securityDesc')}</p>
-                      </div>
-                    </div>
+              <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+                مرحباً بك في{' '}
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
+                  سمايلي
+                </span>
+              </h1>
+
+              <p className="text-xl text-gray-300 leading-relaxed">
+                منصة طبية عصرية تجمع بين المرضى وطلاب طب الأسنان لعلاج الأسنان بأسعار مناسبة
+              </p>
+            </div>
+
+            {/* Feature Cards */}
+            <div className="space-y-4 w-full">
+              <div className="group bg-gradient-to-r from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Shield className="w-6 h-6 text-white" />
                   </div>
-
-                  <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 card-hover stagger-2">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <LogIn className="w-6 h-6 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="text-white font-bold text-responsive-base" suppressHydrationWarning={true}>{t('loginPage.fastAccess')}</h3>
-                        <p className="text-white/70 text-responsive-sm" suppressHydrationWarning={true}>{t('loginPage.fastAccessDesc')}</p>
-                      </div>
-                    </div>
+                  <div>
+                    <h3 className="text-white font-bold text-lg">أمان عالي</h3>
+                    <p className="text-gray-400 text-sm">بياناتك محمية بأحدث تقنيات التشفير</p>
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-8 pt-8 border-t border-white/20">
-                  <p className="text-blue-100 text-sm" suppressHydrationWarning={true}>
-                    💡 <span className="font-semibold">{t('loginPage.tipLabel')}:</span> {t('loginPage.tipText')}
-                  </p>
+              <div className="group bg-gradient-to-r from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Zap className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-white font-bold text-lg">سرعة فائقة</h3>
+                    <p className="text-gray-400 text-sm">وصول سريع وسهل لجميع الخدمات</p>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Left Side - Login Form */}
-            <div className="p-8 md:p-12">
+          {/* Right Side - Login Form */}
+          <div className="animate-slide-in-right">
+            <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 hover:border-purple-500/30">
               {/* Header */}
-              <div className="mb-8 fade-in" style={{ animationDelay: '300ms' }}>
-                <h2 className="text-responsive-3xl font-bold text-foreground mb-2" suppressHydrationWarning={true}>{t('loginPage.title')}</h2>
-                <p className="text-foreground-muted" suppressHydrationWarning={true}>{t('loginPage.subtitle')}</p>
+              <div className="text-center mb-8">
+                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full px-4 py-2 mb-4 animate-bounce-slow">
+                  <Sparkles className="w-4 h-4 text-purple-400" />
+                  <span className="text-purple-300 text-sm font-medium">سجّل الدخول الآن</span>
+                  <Sparkles className="w-4 h-4 text-pink-400" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-2">مرحباً بعودتك!</h2>
+                <p className="text-gray-400">أدخل بياناتك للوصول إلى حسابك</p>
               </div>
 
-              {/* Login Form */}
-              <form onSubmit={handleSubmit} className="space-y-6 fade-in" style={{ animationDelay: '350ms' }}>
+              {/* Form */}
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Email */}
-                <div>
-                  <label className="block text-responsive-sm font-medium text-foreground mb-2" suppressHydrationWarning={true}>
-                    {t('loginPage.emailLabel')}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-300">
+                    البريد الإلكتروني
                   </label>
-                  <div className="relative">
-                    <Mail className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-foreground-muted" />
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`w-full px-4 py-3 pr-11 bg-white/50 border ${
-                        errors.email && touched.email ? 'border-error focus:ring-error' : 'border-border focus:ring-primary'
-                      } rounded-xl text-foreground placeholder-foreground-muted focus:outline-none focus:ring-2 transition-all`}
-                      placeholder="example@domain.com"
-                      autoComplete="email"
-                      aria-label={t('loginPage.emailLabel')}
-                    />
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                    <div className="relative flex items-center">
+                      <Mail className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                          errors.email && touched.email
+                            ? 'border-red-500 group-focus-within:border-red-500'
+                            : 'border-white/10 group-focus-within:border-purple-500'
+                        }`}
+                        placeholder="example@domain.com"
+                        autoComplete="email"
+                      />
+                    </div>
                   </div>
                   {errors.email && touched.email && (
-                    <p className="mt-2 text-responsive-sm text-error flex items-center gap-1 fade-in">
-                      <AlertCircle className="w-4 h-4" aria-hidden="true" />
-                      <span>{errors.email}</span>
+                    <p className="text-sm text-red-400 flex items-center gap-2 animate-shake">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.email}
                     </p>
                   )}
                 </div>
 
                 {/* Password */}
-                <div>
-                  <label className="block text-responsive-sm font-medium text-foreground mb-2" suppressHydrationWarning={true}>
-                    {t('loginPage.passwordLabel')}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-300">
+                    كلمة المرور
                   </label>
-                  <div className="relative">
-                    <Lock className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-foreground-muted" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      name="password"
-                      value={formData.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`w-full px-4 py-3 pr-11 pl-11 bg-white/50 border ${
-                        errors.password && touched.password ? 'border-error focus:ring-error' : 'border-border focus:ring-primary'
-                      } rounded-xl text-foreground placeholder-foreground-muted focus:outline-none focus:ring-2 transition-all`}
-                      placeholder="••••••••"
-                      autoComplete="current-password"
-                      aria-label={t('loginPage.passwordLabel')}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 text-foreground-muted hover:text-foreground transition-all"
-                      aria-label={showPassword ? t('loginPage.hidePassword') : t('loginPage.showPassword')}
-                    >
-                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                    </button>
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                    <div className="relative flex items-center">
+                      <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={`w-full px-4 py-3.5 pr-12 pl-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                          errors.password && touched.password
+                            ? 'border-red-500 group-focus-within:border-red-500'
+                            : 'border-white/10 group-focus-within:border-purple-500'
+                        }`}
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute left-4 text-gray-400 hover:text-purple-400 transition-colors hover:scale-110 active:scale-95"
+                      >
+                        {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                      </button>
+                    </div>
                   </div>
                   {errors.password && touched.password && (
-                    <p className="mt-2 text-responsive-sm text-error flex items-center gap-1 fade-in">
-                      <AlertCircle className="w-4 h-4" aria-hidden="true" />
-                      <span>{errors.password}</span>
+                    <p className="text-sm text-red-400 flex items-center gap-2 animate-shake">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.password}
                     </p>
                   )}
                 </div>
 
                 {/* Remember Me & Forgot Password */}
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 cursor-pointer group">
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
-                      className="w-4 h-4 rounded border-slate-600 bg-slate-800 text-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 cursor-pointer"
-                    />
-                    <span className="text-sm text-slate-400 group-hover:text-slate-300 transition-all" suppressHydrationWarning={true}>
-                      {t('loginPage.rememberMe')}
-                    </span>
+                  <label className="flex items-center gap-3 cursor-pointer group">
+                    <div className="relative">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="peer sr-only"
+                      />
+                      <div className="w-5 h-5 border-2 border-white/20 rounded-lg peer-checked:bg-purple-500 peer-checked:border-purple-500 transition-all duration-300 group-hover:border-purple-400" />
+                      <svg className="absolute inset-0 w-full h-full text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-300 pointer-events-none" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">تذكرني</span>
                   </label>
                   <Link
                     href="/forgot-password"
-                    className="text-sm text-blue-400 hover:text-blue-300 transition-all font-medium"
-                    suppressHydrationWarning={true}
+                    className="text-sm text-purple-400 hover:text-purple-300 transition-colors hover:underline font-medium"
                   >
-                    {t('loginPage.forgotPassword')}
+                    نسيت كلمة المرور؟
                   </Link>
                 </div>
 
@@ -470,55 +400,53 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2 btn-hover-lift ${
-                    !isSubmitting
-                      ? 'bg-gradient-primary shadow-lg hover:shadow-xl'
-                      : 'bg-muted cursor-not-allowed opacity-50'
+                  className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
+                    isSubmitting
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98]'
                   }`}
-                  suppressHydrationWarning={true}
-                  aria-label={t('auth.loginButton')}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                   {isSubmitting ? (
-                    <>
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      {t('loginPage.loggingIn')}
-                    </>
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>جاري تسجيل الدخول...</span>
+                    </div>
                   ) : (
-                    <>
-                      <LogIn className="w-5 h-5" />
-                      {t('auth.loginButton')}
-                    </>
+                    <div className="flex items-center justify-center gap-3">
+                      <LogIn className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                      <span>تسجيل الدخول</span>
+                    </div>
                   )}
                 </button>
 
                 {/* Error Message */}
                 {errors.submit && (
-                  <div className="bg-error/10 border border-error/30 rounded-xl p-4 fade-in">
-                    <p className="text-error text-responsive-sm text-center flex items-center justify-center gap-2">
-                      <AlertCircle className="w-5 h-5" aria-hidden="true" />
-                      <span>{errors.submit}</span>
+                  <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 animate-shake">
+                    <p className="text-red-400 text-sm text-center flex items-center justify-center gap-2">
+                      <AlertCircle className="w-5 h-5" />
+                      {errors.submit}
                     </p>
                   </div>
                 )}
 
                 {/* Divider */}
-                <div className="relative">
+                <div className="relative my-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-slate-700"></div>
+                    <div className="w-full border-t border-white/10"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-slate-900 text-slate-400" suppressHydrationWarning={true}>{t('loginPage.or')}</span>
+                    <span className="px-4 bg-slate-900/50 text-gray-400">أو</span>
                   </div>
                 </div>
 
-                {/* Social Login Options (Optional) */}
-                <div className="grid grid-cols-2 gap-3">
+                {/* Social Login */}
+                <div className="grid grid-cols-2 gap-4">
                   <button
                     type="button"
-                    className="py-3 px-4 bg-white/50 hover:bg-white/70 border border-border rounded-xl text-foreground font-medium transition-all flex items-center justify-center gap-2 btn-hover-lift"
-                    aria-label="Sign in with Google"
+                    className="py-3.5 px-4 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/20 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/10 flex items-center justify-center gap-2 group"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                       <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
@@ -528,10 +456,9 @@ export default function LoginPage() {
                   </button>
                   <button
                     type="button"
-                    className="py-3 px-4 bg-white/50 hover:bg-white/70 border border-border rounded-xl text-foreground font-medium transition-all flex items-center justify-center gap-2 btn-hover-lift"
-                    aria-label="Sign in with Facebook"
+                    className="py-3.5 px-4 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/20 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-white/10 flex items-center justify-center gap-2 group"
                   >
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
                     Facebook
@@ -540,26 +467,126 @@ export default function LoginPage() {
               </form>
 
               {/* Sign Up Link */}
-              <div className="mt-8 text-center fade-in" style={{ animationDelay: '400ms' }}>
-                <p className="text-foreground-muted text-responsive-sm" suppressHydrationWarning={true}>
-                  {t('loginPage.noAccount')}{' '}
-                  <Link href="/auth/register-verification" className="text-primary hover:text-primary-hover font-semibold transition-all inline-flex items-center gap-1 link-underline" suppressHydrationWarning={true}>
-                    {t('auth.registerNow')}
-                    <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              <div className="mt-8 text-center pt-6 border-t border-white/10">
+                <p className="text-gray-400 text-sm">
+                  ليس لديك حساب؟{' '}
+                  <Link
+                    href="/auth/register-verification"
+                    className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline"
+                  >
+                    إنشاء حساب جديد
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </p>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Bottom Note */}
-        <div className="mt-6 text-center fade-in" style={{ animationDelay: '450ms' }}>
-          <p className="text-foreground-muted text-responsive-sm" suppressHydrationWarning={true}>
-            {t('loginPage.securityNote')}
-          </p>
-        </div>
       </div>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        @keyframes particle-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(100px, -50px) scale(1.5); opacity: 1; }
+        }
+
+        @keyframes particle-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(-80px, 100px) scale(1.3); opacity: 1; }
+        }
+
+        @keyframes particle-3 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(120px, 80px) scale(1.4); opacity: 1; }
+        }
+
+        @keyframes particle-4 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(-100px, -60px) scale(1.2); opacity: 1; }
+        }
+
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-right {
+          from { opacity: 0; transform: translateX(50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes bounce-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        @keyframes shake {
+          0%, 100% { transform: translateX(0); }
+          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+          20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 8s ease-in-out infinite;
+        }
+
+        .animate-particle-1 {
+          animation: particle-1 15s ease-in-out infinite;
+        }
+
+        .animate-particle-2 {
+          animation: particle-2 18s ease-in-out infinite;
+        }
+
+        .animate-particle-3 {
+          animation: particle-3 12s ease-in-out infinite;
+        }
+
+        .animate-particle-4 {
+          animation: particle-4 20s ease-in-out infinite;
+        }
+
+        .animate-slide-in-left {
+          animation: slide-in-left 0.8s ease-out;
+        }
+
+        .animate-slide-in-right {
+          animation: slide-in-right 0.8s ease-out;
+        }
+
+        .animate-bounce-slow {
+          animation: bounce-slow 3s ease-in-out infinite;
+        }
+
+        .animate-shake {
+          animation: shake 0.5s ease-in-out;
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+      `}</style>
     </div>
   )
 }

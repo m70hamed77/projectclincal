@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin } from 'lucide-react'
+import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin, Sparkles, Shield, Zap, Heart } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { LanguageSwitcher } from '@/components/language-switcher'
@@ -52,7 +52,7 @@ export default function RegisterWithVerificationPage() {
   const type = searchParams.get('type') || 'patient'
 
   const [userType, setUserType] = useState(type)
-  const [step, setStep] = useState(1) // 1=البيانات, 2=كود التحقق, 3=نجاح
+  const [step, setStep] = useState(1)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -63,7 +63,6 @@ export default function RegisterWithVerificationPage() {
     password: '',
     confirmPassword: '',
     verificationCode: '',
-    // طالب فقط
     universityName: '',
     specialization: '',
   })
@@ -75,7 +74,22 @@ export default function RegisterWithVerificationPage() {
   const [codeSent, setCodeSent] = useState(false)
   const [countdown, setCountdown] = useState(0)
 
-  // Countdown timer for resend code
+  // Mouse position for parallax effect
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  // Countdown timer
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown(countdown - 1), 1000)
@@ -206,12 +220,10 @@ export default function RegisterWithVerificationPage() {
     const { name, value } = e.target
     let cleanedValue = value
 
-    // Phone: numbers only
     if (name === 'phone') {
       cleanedValue = value.replace(/\D/g, '').slice(0, 11)
     }
 
-    // Verification code: numbers only, max 4 digits
     if (name === 'verificationCode') {
       cleanedValue = value.replace(/\D/g, '').slice(0, 4)
     }
@@ -227,7 +239,6 @@ export default function RegisterWithVerificationPage() {
 
   // Send Verification Code
   const sendVerificationCode = async () => {
-    // Validate all required fields first
     const allValid = validateAllFields()
     if (!allValid) return
 
@@ -248,7 +259,7 @@ export default function RegisterWithVerificationPage() {
 
       if (response.ok) {
         setCodeSent(true)
-        setCountdown(60) // 60 seconds countdown
+        setCountdown(60)
         setStep(2)
       } else {
         setErrors({ email: data.error || 'فشل في إرسال كود التحقق' })
@@ -260,11 +271,9 @@ export default function RegisterWithVerificationPage() {
     }
   }
 
-  // Validate all fields before sending code
   const validateAllFields = () => {
     const newErrors: Record<string, string> = {}
 
-    // Validate all fields
     if (!formData.name.trim()) newErrors.name = 'الاسم مطلوب'
     if (!formData.email.trim()) newErrors.email = 'البريد الإلكتروني مطلوب'
     if (!formData.phone.trim()) newErrors.phone = 'رقم الهاتف مطلوب'
@@ -273,33 +282,27 @@ export default function RegisterWithVerificationPage() {
     if (!formData.password) newErrors.password = 'كلمة المرور مطلوبة'
     if (!formData.confirmPassword) newErrors.confirmPassword = 'تأكيد كلمة المرور مطلوب'
 
-    // Student specific
     if (userType === 'student') {
       if (!formData.universityName.trim()) newErrors.universityName = 'الجامعة مطلوبة'
       if (!formData.specialization.trim()) newErrors.specialization = 'التخصص مطلوب'
     }
 
-    // Email format
     if (formData.email && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
       newErrors.email = 'البريد الإلكتروني غير صحيح'
     }
 
-    // Phone format
     if (formData.phone && !/^01[0125][0-9]{8}$/.test(formData.phone.trim())) {
-      newErrors.phone = 'رقم الهاتف غير صحيح (يجب أن يبدأ بـ 01)'
+      newErrors.phone = 'رقم الهاتف غير صحيح'
     }
 
-    // Password length
     if (formData.password && formData.password.length < 8) {
       newErrors.password = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'
     }
 
-    // Password match
     if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'كلمات المرور غير متطابقة'
     }
 
-    // Address length
     if (formData.address && formData.address.trim().length < 10) {
       newErrors.address = 'العنوان يجب أن يكون 10 أحرف على الأقل'
     }
@@ -308,7 +311,6 @@ export default function RegisterWithVerificationPage() {
     return Object.keys(newErrors).length === 0
   }
 
-  // Verify Code and Register
   const verifyAndRegister = async () => {
     if (!/^\d{4}$/.test(formData.verificationCode)) {
       setErrors({ verificationCode: 'الكود يجب أن يكون 4 أرقام' })
@@ -319,7 +321,6 @@ export default function RegisterWithVerificationPage() {
     setErrors({})
 
     try {
-      // Determine which API to use
       const apiEndpoint = userType === 'patient'
         ? '/api/auth/register-patient'
         : '/api/auth/register-student'
@@ -334,13 +335,11 @@ export default function RegisterWithVerificationPage() {
           verificationCode: formData.verificationCode,
           phone: formData.phone.trim(),
           address: formData.address.trim(),
-          // Additional student fields
           ...(userType === 'student' && {
             universityName: formData.universityName,
             specialization: formData.specialization,
             city: formData.governorate.trim(),
           }),
-          // Patient specific
           ...(userType === 'patient' && {
             gender: null,
             age: null,
@@ -351,7 +350,7 @@ export default function RegisterWithVerificationPage() {
       const data = await response.json()
 
       if (response.ok) {
-        setStep(3) // Success step
+        setStep(3)
       } else {
         setErrors({ verificationCode: data.error || 'فشل في التسجيل' })
       }
@@ -373,376 +372,508 @@ export default function RegisterWithVerificationPage() {
            (userType === 'student' ? formData.universityName.trim().length > 0 && formData.specialization.trim().length > 0 : true)
   }
 
-  // Step 1: Basic Info
+  // Step 1: Registration Form
   if (step === 1) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center p-4" dir="rtl">
-        <div className="absolute top-4 right-4 z-20">
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="absolute top-20 left-20 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '0s',
+              transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
+            }}
+          />
+          <div
+            className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '2s',
+              transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
+            }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"
+          />
+
+          {/* Floating Particles */}
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-pink-400 rounded-full animate-particle-1" />
+          <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-purple-400 rounded-full animate-particle-2" />
+          <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-particle-3" />
+          <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
+        </div>
+
+        {/* Language Switcher */}
+        <div className="absolute top-6 right-6 z-20">
           <LanguageSwitcher />
         </div>
 
-        <Card className="w-full max-w-3xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white text-center sticky top-0 z-10">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
-              {userType === 'patient' ? <User className="w-10 h-10" /> : <GraduationCap className="w-10 h-10" />}
-            </div>
-            <h1 className="text-3xl font-bold mb-2">
-              {userType === 'patient' ? 'تسجيل كمريض' : 'تسجيل كطالب'}
-            </h1>
-            <p className="text-emerald-100">
-              {userType === 'patient'
-                ? 'أنشئ حسابك وابدأ رحلة العناية بأسنانك'
-                : 'أنشئ حسابك وابدأ رحلتك المهنية'}
-            </p>
-          </div>
+        {/* Main Container */}
+        <div className="relative w-full max-w-4xl z-10 animate-slide-in-up">
+          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden hover:shadow-purple-500/20 transition-all duration-500 hover:border-purple-500/30">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-blue-500/20 p-8 text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />
 
-          {/* Form */}
-          <div className="p-8 space-y-5">
-            {/* User Type Toggle */}
-            <div className="bg-gray-100 p-1.5 rounded-xl flex gap-2">
-              <button
-                onClick={() => setUserType('patient')}
-                className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
-                  userType === 'patient'
-                    ? 'bg-white shadow-md text-emerald-700'
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
-              >
-                <User className="w-5 h-5" />
-                مريض
-              </button>
-              <button
-                onClick={() => setUserType('student')}
-                className={`flex-1 py-3 px-6 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 ${
-                  userType === 'student'
-                    ? 'bg-white shadow-md text-emerald-700'
-                    : 'text-gray-600 hover:text-gray-800'
-                }`}
-              >
-                <GraduationCap className="w-5 h-5" />
-                طالب
-              </button>
-            </div>
-
-            {/* Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                الاسم الكامل *
-              </label>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                  errors.name ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
-                }`}
-                placeholder="أدخل اسمك الكامل"
-              />
-              {errors.name && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.name}
-                </p>
-              )}
-            </div>
-
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                البريد الإلكتروني *
-              </label>
-              <div className="relative">
-                <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-11 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                    errors.email ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
-                  }`}
-                  placeholder="example@domain.com"
-                  autoComplete="email"
-                />
-              </div>
-              {errors.email && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.email}
-                </p>
-              )}
-              {!errors.email && formData.email && (
-                <p className="mt-2 text-sm text-gray-500 flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4 text-emerald-500" />
-                  سيتم إرسال كود التحقق إلى هذا الإيميل
-                </p>
-              )}
-            </div>
-
-            {/* Phone */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                رقم الهاتف *
-              </label>
-              <div className="relative">
-                <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-11 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                    errors.phone ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
-                  }`}
-                  placeholder="01xxxxxxxxx"
-                  autoComplete="tel"
-                  maxLength={11}
-                />
-              </div>
-              {errors.phone && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.phone}
-                </p>
-              )}
-            </div>
-
-            {/* Governorate */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                المحافظة *
-              </label>
-              <Select
-                value={formData.governorate}
-                onValueChange={(value) => handleSelectChange('governorate', value)}
-              >
-                <SelectTrigger className={`w-full ${
-                  errors.governorate ? 'border-red-500' : 'border-gray-300'
-                }`}>
-                  <SelectValue placeholder="اختر المحافظة" />
-                </SelectTrigger>
-                <SelectContent className="max-h-64 overflow-y-auto">
-                  {EGYPTIAN_GOVERNORATES.map((gov) => (
-                    <SelectItem key={gov} value={gov}>
-                      {gov}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.governorate && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.governorate}
-                </p>
-              )}
-            </div>
-
-            {/* Address */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                العنوان بالتفصيل *
-              </label>
-              <div className="relative">
-                <MapPin className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
-                <textarea
-                  name="address"
-                  value={formData.address}
-                  onChange={(e) => handleChange(e as any)}
-                  rows={3}
-                  className={`w-full px-4 py-3 pr-11 border rounded-xl focus:outline-none focus:ring-2 transition-all resize-none ${
-                    errors.address ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
-                  }`}
-                  placeholder="أدخل العنوان بالتفصيل (الشارع، رقم المبنى، الطابق...)"
-                />
-              </div>
-              {errors.address && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.address}
-                </p>
-              )}
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                كلمة المرور *
-              </label>
-              <div className="relative">
-                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-11 pl-11 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                    errors.password ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
-                  }`}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-
-              {/* Password Strength */}
-              {formData.password && (
-                <div className="mt-3">
-                  <div className="flex gap-1 mb-2">
-                    {[25, 50, 75, 100].map((threshold) => (
-                      <div
-                        key={threshold}
-                        className={`h-1.5 flex-1 rounded-full transition-all ${
-                          passwordStrength >= threshold
-                            ? passwordStrength === 100
-                              ? 'bg-emerald-500'
-                              : passwordStrength >= 75
-                                ? 'bg-yellow-500'
-                                : 'bg-orange-500'
-                            : 'bg-gray-200'
-                        }`}
-                      />
-                    ))}
+              <div className="relative z-10">
+                <div className="flex justify-center mb-4">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity" />
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      {userType === 'patient' ? <User className="w-10 h-10 text-white" /> : <GraduationCap className="w-10 h-10 text-white" />}
+                    </div>
                   </div>
-                  <p className={`text-xs ${
-                    passwordStrength === 100 ? 'text-emerald-600' :
-                    passwordStrength >= 75 ? 'text-yellow-600' :
-                    'text-orange-600'
-                  }`}>
-                    {passwordStrength === 100 ? 'قوية جداً' :
-                     passwordStrength >= 75 ? 'قوية' :
-                     passwordStrength >= 50 ? 'متوسطة' : 'ضعيفة'}
-                  </p>
                 </div>
-              )}
 
-              {errors.password && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.password}
+                <h1 className="text-3xl font-bold text-white mb-2 animate-gradient bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+                  {userType === 'patient' ? 'تسجيل كمريض جديد' : 'تسجيل كطالب جديد'}
+                </h1>
+                <p className="text-gray-300 flex items-center justify-center gap-2">
+                  <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
+                  {userType === 'patient'
+                    ? 'انضم إلينا وابدأ رحلة العناية بأسنانك'
+                    : 'انضم إلينا وابدأ رحلتك المهنية'}
+                  <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
                 </p>
-              )}
+              </div>
             </div>
 
-            {/* Confirm Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                تأكيد كلمة المرور *
-              </label>
-              <div className="relative">
-                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-11 pl-11 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                    errors.confirmPassword ? 'border-red-500 focus:ring-red-200' :
-                    formData.confirmPassword && formData.confirmPassword === formData.password ? 'border-emerald-500' :
-                    'border-gray-300'
-                  }`}
-                  placeholder="••••••••"
-                  autoComplete="new-password"
-                />
+            {/* Form */}
+            <div className="p-8 space-y-5">
+              {/* User Type Toggle */}
+              <div className="bg-white/5 backdrop-blur-sm p-1.5 rounded-2xl flex gap-2 border border-white/10">
                 <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setUserType('patient')}
+                  className={`flex-1 py-3.5 px-6 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 group ${
+                    userType === 'patient'
+                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30 hover:shadow-xl hover:shadow-purple-500/40'
+                      : 'text-gray-400 hover:text-gray-300 hover:bg-white/5'
+                  }`}
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  <User className={`w-5 h-5 ${userType === 'patient' ? 'group-hover:scale-110 transition-transform' : ''}`} />
+                  مريض
+                </button>
+                <button
+                  onClick={() => setUserType('student')}
+                  className={`flex-1 py-3.5 px-6 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 group ${
+                    userType === 'student'
+                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40'
+                      : 'text-gray-400 hover:text-gray-300 hover:bg-white/5'
+                  }`}
+                >
+                  <GraduationCap className={`w-5 h-5 ${userType === 'student' ? 'group-hover:scale-110 transition-transform' : ''}`} />
+                  طالب
                 </button>
               </div>
-              {errors.confirmPassword && (
-                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.confirmPassword}
-                </p>
-              )}
-            </div>
 
-            {/* Student Additional Fields */}
-            {userType === 'student' && (
-              <div className="space-y-4 pt-4 border-t">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    الجامعة *
-                  </label>
-                  <input
-                    type="text"
-                    name="universityName"
-                    value={formData.universityName}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                      errors.universityName ? 'border-red-500' : 'border-gray-300 focus:ring-emerald-500'
-                    }`}
-                    placeholder="اسم الجامعة"
-                  />
-                  {errors.universityName && (
-                    <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.universityName}
-                    </p>
-                  )}
+              {/* Name */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">الاسم الكامل *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-center">
+                    <User className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                        errors.name ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="أدخل اسمك الكامل"
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    التخصص *
-                  </label>
-                  <input
-                    type="text"
-                    name="specialization"
-                    value={formData.specialization}
-                    onChange={handleChange}
-                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                      errors.specialization ? 'border-red-500' : 'border-gray-300 focus:ring-emerald-500'
-                    }`}
-                    placeholder="التخصص الجامعي"
-                  />
-                  {errors.specialization && (
-                    <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.specialization}
-                    </p>
-                  )}
-                </div>
+                {errors.name && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.name}
+                  </p>
+                )}
               </div>
-            )}
 
-            {/* Submit Button */}
-            <Button
-              onClick={sendVerificationCode}
-              disabled={!isFormValid() || isSubmitting}
-              className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <span className="animate-spin">⏳</span>
-                  جاري الإرسال...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <Send className="w-5 h-5" />
-                  إرسال كود التحقق
-                </span>
+              {/* Email */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">البريد الإلكتروني *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-center">
+                    <Mail className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                        errors.email ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="example@domain.com"
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                {errors.email && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.email}
+                  </p>
+                )}
+                {!errors.email && formData.email && (
+                  <p className="text-sm text-gray-400 flex items-center gap-1">
+                    <CheckCircle className="w-4 h-4 text-green-400" />
+                    سيتم إرسال كود التحقق إلى هذا الإيميل
+                  </p>
+                )}
+              </div>
+
+              {/* Phone */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">رقم الهاتف *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-center">
+                    <Phone className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                        errors.phone ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="01xxxxxxxxx"
+                      autoComplete="tel"
+                      maxLength={11}
+                    />
+                  </div>
+                </div>
+                {errors.phone && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.phone}
+                  </p>
+                )}
+              </div>
+
+              {/* Governorate */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">المحافظة *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative">
+                    <Select value={formData.governorate} onValueChange={(value) => handleSelectChange('governorate', value)}>
+                      <SelectTrigger className={`w-full bg-slate-800/50 border-2 rounded-xl text-white focus:ring-0 transition-all duration-300 ${
+                        errors.governorate ? 'border-red-500' : 'border-white/10'
+                      }`}>
+                        <SelectValue placeholder="اختر المحافظة" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-64 overflow-y-auto bg-slate-800 border-white/10">
+                        {EGYPTIAN_GOVERNORATES.map((gov) => (
+                          <SelectItem key={gov} value={gov} className="text-white hover:bg-purple-500/20">
+                            {gov}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                {errors.governorate && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.governorate}
+                  </p>
+                )}
+              </div>
+
+              {/* Address */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">العنوان بالتفصيل *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-start">
+                    <MapPin className="absolute right-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <textarea
+                      name="address"
+                      value={formData.address}
+                      onChange={(e) => handleChange(e as any)}
+                      rows={3}
+                      className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 resize-none ${
+                        errors.address ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="أدخل العنوان بالتفصيل (الشارع، رقم المبنى، الطابق...)"
+                    />
+                  </div>
+                </div>
+                {errors.address && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.address}
+                  </p>
+                )}
+              </div>
+
+              {/* Password */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">كلمة المرور *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-center">
+                    <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 pr-12 pl-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                        errors.password ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute left-4 text-gray-400 hover:text-purple-400 transition-colors hover:scale-110 active:scale-95"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Password Strength */}
+                {formData.password && (
+                  <div className="mt-3 space-y-2">
+                    <div className="flex gap-1">
+                      {[25, 50, 75, 100].map((threshold) => (
+                        <div
+                          key={threshold}
+                          className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${
+                            passwordStrength >= threshold
+                              ? passwordStrength === 100
+                                ? 'bg-gradient-to-r from-green-500 to-emerald-500'
+                                : passwordStrength >= 75
+                                  ? 'bg-gradient-to-r from-yellow-500 to-orange-500'
+                                  : 'bg-gradient-to-r from-orange-500 to-red-500'
+                              : 'bg-white/10'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <p className={`text-xs font-medium ${
+                      passwordStrength === 100 ? 'text-green-400' :
+                      passwordStrength >= 75 ? 'text-yellow-400' :
+                      'text-orange-400'
+                    }`}>
+                      {passwordStrength === 100 ? 'قوية جداً ✨' :
+                       passwordStrength >= 75 ? 'قوية 👍' :
+                       passwordStrength >= 50 ? 'متوسطة' : 'ضعيفة'}
+                    </p>
+                  </div>
+                )}
+
+                {errors.password && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+
+              {/* Confirm Password */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300">تأكيد كلمة المرور *</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="relative flex items-center">
+                    <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
+                    <input
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-3.5 pr-12 pl-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                        errors.confirmPassword ? 'border-red-500 group-focus-within:border-red-500' :
+                        formData.confirmPassword && formData.confirmPassword === formData.password ? 'border-green-500' :
+                        'border-white/10 group-focus-within:border-purple-500'
+                      }`}
+                      placeholder="••••••••"
+                      autoComplete="new-password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute left-4 text-gray-400 hover:text-purple-400 transition-colors hover:scale-110 active:scale-95"
+                    >
+                      {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.confirmPassword}
+                  </p>
+                )}
+              </div>
+
+              {/* Student Additional Fields */}
+              {userType === 'student' && (
+                <div className="space-y-4 pt-4 border-t border-white/10 animate-slide-in-down">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">الجامعة *</label>
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                      <div className="relative flex items-center">
+                        <GraduationCap className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
+                        <input
+                          type="text"
+                          name="universityName"
+                          value={formData.universityName}
+                          onChange={handleChange}
+                          className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                            errors.universityName ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-blue-500'
+                          }`}
+                          placeholder="اسم الجامعة"
+                        />
+                      </div>
+                    </div>
+                    {errors.universityName && (
+                      <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.universityName}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">التخصص *</label>
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                      <div className="relative flex items-center">
+                        <Shield className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
+                        <input
+                          type="text"
+                          name="specialization"
+                          value={formData.specialization}
+                          onChange={handleChange}
+                          className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
+                            errors.specialization ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-blue-500'
+                          }`}
+                          placeholder="التخصص الجامعي"
+                        />
+                      </div>
+                    </div>
+                    {errors.specialization && (
+                      <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.specialization}
+                      </p>
+                    )}
+                  </div>
+                </div>
               )}
-            </Button>
 
-            {/* Login Link */}
-            <p className="text-center text-gray-600">
-              لديك حساب بالفعل؟{' '}
-              <Link href="/auth/login" className="text-emerald-600 hover:text-emerald-700 font-semibold">
-                تسجيل الدخول
-              </Link>
-            </p>
-          </div>
-        </Card>
+              {/* Submit Button */}
+              <Button
+                onClick={sendVerificationCode}
+                disabled={!isFormValid() || isSubmitting}
+                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
+                  !isSubmitting && isFormValid()
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98]'
+                    : 'bg-gray-600 cursor-not-allowed opacity-50'
+                }`}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    جاري الإرسال...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    إرسال كود التحقق
+                  </span>
+                )}
+              </Button>
+
+              {/* Login Link */}
+              <p className="text-center text-gray-400">
+                لديك حساب بالفعل؟{' '}
+                <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline">
+                  تسجيل الدخول
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </p>
+            </div>
+          </Card>
+        </div>
+
+        <style jsx>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+          }
+
+          @keyframes pulse-slow {
+            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+          }
+
+          @keyframes particle-1 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(100px, -50px) scale(1.5); opacity: 1; }
+          }
+
+          @keyframes particle-2 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(-80px, 100px) scale(1.3); opacity: 1; }
+          }
+
+          @keyframes particle-3 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(120px, 80px) scale(1.4); opacity: 1; }
+          }
+
+          @keyframes particle-4 {
+            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            50% { transform: translate(-100px, -60px) scale(1.2); opacity: 1; }
+          }
+
+          @keyframes slide-in-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes slide-in-down {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+          }
+
+          @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+
+          .animate-float { animation: float 6s ease-in-out infinite; }
+          .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+          .animate-particle-1 { animation: particle-1 15s ease-in-out infinite; }
+          .animate-particle-2 { animation: particle-2 18s ease-in-out infinite; }
+          .animate-particle-3 { animation: particle-3 12s ease-in-out infinite; }
+          .animate-particle-4 { animation: particle-4 20s ease-in-out infinite; }
+          .animate-slide-in-up { animation: slide-in-up 0.6s ease-out; }
+          .animate-slide-in-down { animation: slide-in-down 0.4s ease-out; }
+          .animate-shake { animation: shake 0.5s ease-in-out; }
+          .animate-gradient { background-size: 200% 200%; animation: gradient 3s ease infinite; }
+        `}</style>
       </div>
     )
   }
@@ -750,97 +881,163 @@ export default function RegisterWithVerificationPage() {
   // Step 2: Verification Code
   if (step === 2) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center p-4" dir="rtl">
-        <div className="absolute top-4 right-4 z-20">
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="absolute top-20 left-20 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '0s',
+              transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
+            }}
+          />
+          <div
+            className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '2s',
+              transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
+            }}
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" />
+        </div>
+
+        {/* Language Switcher */}
+        <div className="absolute top-6 right-6 z-20">
           <LanguageSwitcher />
         </div>
 
-        <Card className="w-full max-w-md shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white text-center">
-            <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-10 h-10" />
-            </div>
-            <h1 className="text-2xl font-bold mb-2">أدخل كود التحقق</h1>
-            <p className="text-emerald-100 text-sm">
-              تم إرسال كود 4 أرقام إلى {formData.email}
-            </p>
-          </div>
+        <div className="relative w-full max-w-md z-10 animate-slide-in-up">
+          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden hover:shadow-purple-500/20 transition-all duration-500">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-8 text-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30" />
 
-          {/* Form */}
-          <div className="p-8 space-y-6">
-            {/* Code Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
-                كود التحقق (صالح لمدة 10 دقائق)
-              </label>
-              <input
-                type="text"
-                name="verificationCode"
-                value={formData.verificationCode}
-                onChange={handleChange}
-                className={`w-full px-4 py-4 text-center text-2xl tracking-[0.5em] border rounded-xl focus:outline-none focus:ring-2 transition-all ${
-                  errors.verificationCode ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
+              <div className="relative z-10">
+                <div className="flex justify-center mb-4">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-50 group-hover:opacity-75 transition-opacity" />
+                    <div className="relative w-20 h-20 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                      <Mail className="w-10 h-10 text-white" />
+                    </div>
+                  </div>
+                </div>
+
+                <h1 className="text-2xl font-bold text-white mb-2">أدخل كود التحقق</h1>
+                <p className="text-gray-300 text-sm">
+                  تم إرسال كود 4 أرقام إلى {formData.email}
+                </p>
+              </div>
+            </div>
+
+            {/* Form */}
+            <div className="p-8 space-y-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-300 text-center">كود التحقق (صالح لمدة 10 دقائق)</label>
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <input
+                    type="text"
+                    name="verificationCode"
+                    value={formData.verificationCode}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-4 text-center text-2xl tracking-[0.5em] border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 bg-slate-800/50 ${
+                      errors.verificationCode ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-cyan-500'
+                    }`}
+                    placeholder="_ _ _ _"
+                    maxLength={4}
+                    autoFocus
+                  />
+                </div>
+                {errors.verificationCode && (
+                  <p className="text-sm text-red-400 text-center flex items-center justify-center gap-1 animate-shake">
+                    <AlertCircle className="w-4 h-4" />
+                    {errors.verificationCode}
+                  </p>
+                )}
+              </div>
+
+              {/* Countdown */}
+              <div className="text-center">
+                {countdown > 0 ? (
+                  <p className="text-sm text-gray-400 flex items-center justify-center gap-2">
+                    <Clock className="w-4 h-4 animate-pulse" />
+                    يمكنك طلب كود جديد بعد {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
+                  </p>
+                ) : (
+                  <button
+                    onClick={sendVerificationCode}
+                    disabled={isSubmitting}
+                    className="text-sm text-cyan-400 hover:text-cyan-300 font-semibold transition-all hover:underline flex items-center justify-center gap-1 group"
+                  >
+                    <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    إعادة إرسال الكود
+                  </button>
+                )}
+              </div>
+
+              {/* Back Button */}
+              <button
+                onClick={() => setStep(1)}
+                className="w-full py-3.5 border-2 border-white/10 text-gray-300 font-semibold rounded-xl hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98]"
+              >
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                العودة للبيانات
+              </button>
+
+              {/* Verify Button */}
+              <Button
+                onClick={verifyAndRegister}
+                disabled={!/^\d{4}$/.test(formData.verificationCode) || isSubmitting}
+                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
+                  !isSubmitting && /^\d{4}$/.test(formData.verificationCode)
+                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/50 active:scale-[0.98]'
+                    : 'bg-gray-600 cursor-not-allowed opacity-50'
                 }`}
-                placeholder="_ _ _ _"
-                maxLength={4}
-                autoFocus
-              />
-              {errors.verificationCode && (
-                <p className="mt-2 text-sm text-red-500 text-center flex items-center justify-center gap-1">
-                  <AlertCircle className="w-4 h-4" />
-                  {errors.verificationCode}
-                </p>
-              )}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                {isSubmitting ? (
+                  <span className="flex items-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    جاري التحقق والتسجيل...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    تحقق والتسجيل
+                  </span>
+                )}
+              </Button>
             </div>
+          </Card>
+        </div>
 
-            {/* Countdown & Resend */}
-            <div className="text-center">
-              {countdown > 0 ? (
-                <p className="text-sm text-gray-500 flex items-center justify-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  يمكنك طلب كود جديد بعد {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
-                </p>
-              ) : (
-                <button
-                  onClick={sendVerificationCode}
-                  disabled={isSubmitting}
-                  className="text-sm text-emerald-600 hover:text-emerald-700 font-semibold"
-                >
-                  إعادة إرسال الكود
-                </button>
-              )}
-            </div>
+        <style jsx>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+          }
 
-            {/* Back Button */}
-            <button
-              onClick={() => setStep(1)}
-              className="w-full py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all flex items-center justify-center gap-2"
-            >
-              <ArrowRight className="w-5 h-5" />
-              العودة للبيانات
-            </button>
+          @keyframes pulse-slow {
+            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+          }
 
-            {/* Verify Button */}
-            <Button
-              onClick={verifyAndRegister}
-              disabled={!/^\d{4}$/.test(formData.verificationCode) || isSubmitting}
-              className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isSubmitting ? (
-                <span className="flex items-center gap-2">
-                  <span className="animate-spin">⏳</span>
-                  جاري التحقق والتسجيل...
-                </span>
-              ) : (
-                <span className="flex items-center gap-2">
-                  <CheckCircle className="w-5 h-5" />
-                  تحقق والتسجيل
-                </span>
-              )}
-            </Button>
-          </div>
-        </Card>
+          @keyframes slide-in-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+          }
+
+          .animate-float { animation: float 6s ease-in-out infinite; }
+          .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+          .animate-slide-in-up { animation: slide-in-up 0.6s ease-out; }
+          .animate-shake { animation: shake 0.5s ease-in-out; }
+        `}</style>
       </div>
     )
   }
@@ -848,39 +1045,97 @@ export default function RegisterWithVerificationPage() {
   // Step 3: Success
   if (step === 3) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 flex items-center justify-center p-4" dir="rtl">
-        <div className="absolute top-4 right-4 z-20">
+      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div
+            className="absolute top-20 left-20 w-96 h-96 bg-green-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '0s',
+              transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
+            }}
+          />
+          <div
+            className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl animate-float"
+            style={{
+              animationDelay: '2s',
+              transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
+            }}
+          />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-500/10 rounded-full blur-3xl animate-pulse-slow" />
+        </div>
+
+        {/* Language Switcher */}
+        <div className="absolute top-6 right-6 z-20">
           <LanguageSwitcher />
         </div>
 
-        <Card className="w-full max-w-md shadow-2xl overflow-hidden text-center">
-          {/* Success */}
-          <div className="p-12 space-y-6">
-            <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto">
-              <CheckCircle className="w-12 h-12 text-emerald-600" />
-            </div>
+        <div className="relative w-full max-w-md z-10 animate-slide-in-up">
+          <Card className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden hover:shadow-green-500/20 transition-all duration-500 text-center">
+            <div className="p-12 space-y-6">
+              {/* Success Icon */}
+              <div className="flex justify-center">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-50 group-hover:opacity-75 transition-opacity" />
+                  <div className="relative w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 animate-bounce-slow">
+                    <CheckCircle className="w-12 h-12 text-white" />
+                  </div>
+                </div>
+              </div>
 
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {userType === 'patient' ? 'تم إنشاء حسابك!' : 'تم استلام طلبك!'}
-              </h1>
-              <p className="text-gray-600">
-                {userType === 'patient'
-                  ? 'حسابك الآن مفعل ويمكنك تسجيل الدخول فوراً'
-                  : 'حسابك الآن قيد المراجعة من قبل الإدارة. سيتم إشعارك عند الموافقة'}
-              </p>
-            </div>
+              <div className="space-y-4">
+                <h1 className="text-3xl font-bold text-white">
+                  {userType === 'patient' ? 'تم إنشاء حسابك!' : 'تم استلام طلبك!'}
+                </h1>
+                <p className="text-gray-300 leading-relaxed">
+                  {userType === 'patient'
+                    ? 'حسابك الآن مفعل ويمكنك تسجيل الدخول فوراً'
+                    : 'حسابك الآن قيد المراجعة من قبل الإدارة. سيتم إشعارك عند الموافقة'}
+                </p>
+              </div>
 
-            <div className="space-y-3">
-              <Button
-                onClick={() => router.push('/auth/login')}
-                className="w-full py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold rounded-xl shadow-lg"
-              >
-                تسجيل الدخول
-              </Button>
+              <div className="space-y-3 pt-6">
+                <Button
+                  onClick={() => router.push('/auth/login')}
+                  className="w-full py-4 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-bold rounded-xl shadow-lg hover:shadow-2xl hover:shadow-green-500/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] relative overflow-hidden group"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                  <span className="flex items-center gap-2">
+                    <LogIn className="w-5 h-5" />
+                    تسجيل الدخول
+                  </span>
+                </Button>
+              </div>
             </div>
-          </div>
-        </Card>
+          </Card>
+        </div>
+
+        <style jsx>{`
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+          }
+
+          @keyframes pulse-slow {
+            0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+          }
+
+          @keyframes slide-in-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+
+          @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+          }
+
+          .animate-float { animation: float 6s ease-in-out infinite; }
+          .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+          .animate-slide-in-up { animation: slide-in-up 0.6s ease-out; }
+          .animate-bounce-slow { animation: bounce-slow 3s ease-in-out infinite; }
+        `}</style>
       </div>
     )
   }
