@@ -261,14 +261,13 @@ export default function SignupPage() {
       if (response.ok && data.success) {
         console.log('[OTP Verification] Code is valid!')
 
+        // Both Patient and Student: Skip verification, register directly
+        console.log('[Direct Registration] Starting registration...')
         if (userType === 'patient') {
-          // Both Patient and Student: Skip verification, register directly
-          console.log('[Direct Registration] Starting registration...')
-          if (userType === 'patient') {
-            await handlePatientSubmit()
-          } else {
-            await handleStudentSubmitDirect()
-          }
+          await handlePatientSubmit()
+        } else {
+          await handleStudentSubmitDirect()
+        }
       } else {
         console.error('[OTP Verification] Invalid code:', data.error)
         setErrors({ verificationCode: data.error || t('registerPage.errors.verificationCodeInvalid') })
