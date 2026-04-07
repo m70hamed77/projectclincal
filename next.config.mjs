@@ -13,14 +13,11 @@ const nextConfig = {
     ],
   },
 
-  // ✅ تحسينات للـ build
-  swcMinify: true,
-
-  // ✅ تجنب مشاكل الـ compilation
-  experimental: {
-    // ✅ تعطيل بعض الأمور التي قد تسبب مشاكل
-    optimizePackageImports: ['lucide-react'],
-  },
+  // ✅ السماح للـ Preview بالعمل
+  allowedDevOrigins: [
+    '*.space.z.ai',
+    'preview-chat-*.space.z.ai',
+  ],
 
   // ✅ إعدادات الـ logging
   logging: {
@@ -38,6 +35,10 @@ const nextConfig = {
           {
             key: 'X-DNS-Prefetch-Control',
             value: 'on'
+          },
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*'
           },
         ],
       },
