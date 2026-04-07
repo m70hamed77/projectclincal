@@ -934,7 +934,7 @@ export default function RegisterWithVerificationPage() {
             {/* Form */}
             <div className="p-8 space-y-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300 text-center">{t('registerPage.verifyCode' )} (صالح لمدة 10 دقائق)</label>
+                <label className="block text-sm font-medium text-gray-300 text-center">{t('registerPage.verifyCode')} ({t('registerPage.codeValidity')})</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <input

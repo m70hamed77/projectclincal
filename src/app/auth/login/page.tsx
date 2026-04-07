@@ -250,7 +250,7 @@ export default function LoginPage() {
               </h1>
 
               <p className="text-xl text-gray-300 leading-relaxed">
-                منصة طبية عصرية تجمع بين المرضى وطلاب طب الأسنان لعلاج الأسنان بأسعار مناسبة
+                {t('loginPage.platformDescription')}
               </p>
             </div>
 

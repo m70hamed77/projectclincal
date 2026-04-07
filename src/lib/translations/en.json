@@ -247,6 +247,7 @@
     "securityDescFull": "Your data is protected with the latest encryption technologies",
     "speedTitle": "Super Fast",
     "speedDescFull": "Fast and easy access to all services",
+    "platformDescription": "A modern medical platform connecting patients and dental students for affordable dental treatments",
     "errors": {
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email address",
@@ -314,6 +315,8 @@
     "patient": "Patient",
     "student": "Student",
     "codeSentTo": "Verification code will be sent to this email",
+    "verifyCode": "Enter verification code",
+    "codeValidity": "Valid for 10 minutes",
     "studentPendingReview": "Your account is now under review by administration. You will be notified upon approval",
     "step1Student": "Register as Student/Doctor - Step 1",
     "step1Patient": "Register as Patient - Step 1",
