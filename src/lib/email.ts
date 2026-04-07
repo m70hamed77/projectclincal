@@ -156,7 +156,7 @@ export async function sendVerificationCode(email: string, code: string, name?: s
 
         <div class="footer">
           <p>هذه رسالة تلقائية، لا ترد عليها</p>
-          <p>© 2024 سمايلي لطب الأسنان - جميع الحقوق محفوظة</p>
+          <p>© 2026 سمايلي لطب الأسنان - جميع الحقوق محفوظة</p>
         </div>
       </div>
     </body>
@@ -240,7 +240,7 @@ export async function sendWelcomeEmail(email: string, name: string) {
         </div>
 
         <div class="footer">
-          <p>© 2024 سمايلي لطب الأسنان - جميع الحقوق محفوظة</p>
+          <p>© 2026 سمايلي لطب الأسنان - جميع الحقوق محفوظة</p>
         </div>
       </div>
     </body>
