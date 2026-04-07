@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse request body
     let body
-    let email, password, name, verificationCode
+    let email, password, name, verificationCode, phone, address
     let universityEmail, universityName, studentIdNumber, academicYear, specialization, collegeName, collegeAddress, bio, city
 
     try {
@@ -25,6 +25,8 @@ export async function POST(request: NextRequest) {
       password = body.password
       name = body.name
       verificationCode = body.verificationCode
+      phone = body.phone
+      address = body.address
       universityEmail = body.universityEmail
       universityName = body.universityName
       studentIdNumber = body.studentIdNumber
@@ -38,6 +40,8 @@ export async function POST(request: NextRequest) {
       console.log('[REGISTER STUDENT] Step 1 ✅: Parsed request body')
       console.log('[REGISTER STUDENT] Email:', email?.substring(0, 20) + '...')
       console.log('[REGISTER STUDENT] Name:', name)
+      console.log('[REGISTER STUDENT] Phone:', phone)
+      console.log('[REGISTER STUDENT] City:', city)
       console.log('[REGISTER STUDENT] Verification Code:', verificationCode)
     } catch (parseError: any) {
       console.error('[REGISTER STUDENT] Step 1 ❌: Failed to parse request body:', parseError)
@@ -45,10 +49,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Validate required fields
-    if (!email || !password || !name || !verificationCode) {
+    if (!email || !password || !name || !verificationCode || !phone || !address || !universityName || !specialization) {
       console.log('[REGISTER STUDENT] Step 2 ❌: Missing required fields')
       return NextResponse.json({
-        error: 'البريد الإلكتروني وكلمة المرور والاسم وكود التحقق مطلوبين'
+        error: 'جميع الحقول مطلوبة'
       }, { status: 400 })
     }
     console.log('[REGISTER STUDENT] Step 2 ✅: Fields validated')
@@ -58,6 +62,12 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email.trim())) {
       console.log('[REGISTER STUDENT] Step 3 ❌: Invalid email format')
       return NextResponse.json({ error: 'البريد الإلكتروني غير صحيح' }, { status: 400 })
+    }
+
+    // Step 3.5: Validate phone format
+    if (!/^01[0125][0-9]{8}$/.test(phone.trim())) {
+      console.log('[REGISTER STUDENT] Step 3.5 ❌: Invalid phone format')
+      return NextResponse.json({ error: 'رقم الهاتف غير صحيح' }, { status: 400 })
     }
 
     // Step 4: Validate password strength
@@ -172,13 +182,15 @@ export async function POST(request: NextRequest) {
             role: 'STUDENT',
             status: 'PENDING',
             emailVerified: new Date(),
+            phone: phone.trim(),
           },
           select: {
             id: true,
             name: true,
             email: true,
             role: true,
-            status: true
+            status: true,
+            phone: true
           }
         })
 

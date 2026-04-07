@@ -1,12 +1,50 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock } from 'lucide-react'
+import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+// قائمة المحافظات المصرية
+const EGYPTIAN_GOVERNORATES = [
+  "القاهرة",
+  "الجيزة",
+  "الإسكندرية",
+  "الدقهلية",
+  "الشرقية",
+  "المنوفية",
+  "القليوبية",
+  "البحيرة",
+  "الغربية",
+  "كفر الشيخ",
+  "الدلتا",
+  "الإسماعيلية",
+  "بور سعيد",
+  "السويس",
+  "الشرقية (شرق القناة)",
+  "شمال سيناء",
+  "جنوب سيناء",
+  "الجيزة (الواحة)",
+  "المنيا",
+  "أسيوط",
+  "سوهاج",
+  "قنا",
+  "الأقصر",
+  "أسوان",
+  "البحر الأحمر",
+  "الوادي الجديد",
+  "مطروح",
+]
 
 export default function RegisterWithVerificationPage() {
   const router = useRouter()
@@ -19,6 +57,9 @@ export default function RegisterWithVerificationPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    governorate: '',
+    address: '',
     password: '',
     confirmPassword: '',
     verificationCode: '',
@@ -82,6 +123,50 @@ export default function RegisterWithVerificationPage() {
         }
         break
 
+      case 'phone':
+        if (!value.trim()) {
+          newErrors.phone = 'رقم الهاتف مطلوب'
+        } else if (!/^01[0125][0-9]{8}$/.test(value.trim())) {
+          newErrors.phone = 'رقم الهاتف غير صحيح (يجب أن يبدأ بـ 01)'
+        } else {
+          delete newErrors.phone
+        }
+        break
+
+      case 'governorate':
+        if (!value.trim()) {
+          newErrors.governorate = 'المحافظة مطلوبة'
+        } else {
+          delete newErrors.governorate
+        }
+        break
+
+      case 'address':
+        if (!value.trim()) {
+          newErrors.address = 'العنوان بالتفصيل مطلوب'
+        } else if (value.trim().length < 10) {
+          newErrors.address = 'العنوان يجب أن يكون 10 أحرف على الأقل'
+        } else {
+          delete newErrors.address
+        }
+        break
+
+      case 'universityName':
+        if (!value.trim()) {
+          newErrors.universityName = 'الجامعة مطلوبة'
+        } else {
+          delete newErrors.universityName
+        }
+        break
+
+      case 'specialization':
+        if (!value.trim()) {
+          newErrors.specialization = 'التخصص مطلوب'
+        } else {
+          delete newErrors.specialization
+        }
+        break
+
       case 'password':
         if (!value) {
           newErrors.password = 'كلمة المرور مطلوبة'
@@ -121,6 +206,12 @@ export default function RegisterWithVerificationPage() {
     const { name, value } = e.target
     let cleanedValue = value
 
+    // Phone: numbers only
+    if (name === 'phone') {
+      cleanedValue = value.replace(/\D/g, '').slice(0, 11)
+    }
+
+    // Verification code: numbers only, max 4 digits
     if (name === 'verificationCode') {
       cleanedValue = value.replace(/\D/g, '').slice(0, 4)
     }
@@ -129,13 +220,16 @@ export default function RegisterWithVerificationPage() {
     validateField(name, cleanedValue)
   }
 
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }))
+    validateField(name, value)
+  }
+
   // Send Verification Code
   const sendVerificationCode = async () => {
-    // Validate email first
-    if (!formData.email || !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
-      setErrors({ email: 'البريد الإلكتروني غير صحيح' })
-      return
-    }
+    // Validate all required fields first
+    const allValid = validateAllFields()
+    if (!allValid) return
 
     setIsSubmitting(true)
     setErrors({})
@@ -166,6 +260,54 @@ export default function RegisterWithVerificationPage() {
     }
   }
 
+  // Validate all fields before sending code
+  const validateAllFields = () => {
+    const newErrors: Record<string, string> = {}
+
+    // Validate all fields
+    if (!formData.name.trim()) newErrors.name = 'الاسم مطلوب'
+    if (!formData.email.trim()) newErrors.email = 'البريد الإلكتروني مطلوب'
+    if (!formData.phone.trim()) newErrors.phone = 'رقم الهاتف مطلوب'
+    if (!formData.governorate.trim()) newErrors.governorate = 'المحافظة مطلوبة'
+    if (!formData.address.trim()) newErrors.address = 'العنوان بالتفصيل مطلوب'
+    if (!formData.password) newErrors.password = 'كلمة المرور مطلوبة'
+    if (!formData.confirmPassword) newErrors.confirmPassword = 'تأكيد كلمة المرور مطلوب'
+
+    // Student specific
+    if (userType === 'student') {
+      if (!formData.universityName.trim()) newErrors.universityName = 'الجامعة مطلوبة'
+      if (!formData.specialization.trim()) newErrors.specialization = 'التخصص مطلوب'
+    }
+
+    // Email format
+    if (formData.email && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
+      newErrors.email = 'البريد الإلكتروني غير صحيح'
+    }
+
+    // Phone format
+    if (formData.phone && !/^01[0125][0-9]{8}$/.test(formData.phone.trim())) {
+      newErrors.phone = 'رقم الهاتف غير صحيح (يجب أن يبدأ بـ 01)'
+    }
+
+    // Password length
+    if (formData.password && formData.password.length < 8) {
+      newErrors.password = 'كلمة المرور يجب أن تكون 8 أحرف على الأقل'
+    }
+
+    // Password match
+    if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'كلمات المرور غير متطابقة'
+    }
+
+    // Address length
+    if (formData.address && formData.address.trim().length < 10) {
+      newErrors.address = 'العنوان يجب أن يكون 10 أحرف على الأقل'
+    }
+
+    setErrors(newErrors)
+    return Object.keys(newErrors).length === 0
+  }
+
   // Verify Code and Register
   const verifyAndRegister = async () => {
     if (!/^\d{4}$/.test(formData.verificationCode)) {
@@ -190,10 +332,18 @@ export default function RegisterWithVerificationPage() {
           password: formData.password,
           name: formData.name.trim(),
           verificationCode: formData.verificationCode,
+          phone: formData.phone.trim(),
+          address: formData.address.trim(),
           // Additional student fields
           ...(userType === 'student' && {
             universityName: formData.universityName,
             specialization: formData.specialization,
+            city: formData.governorate.trim(),
+          }),
+          // Patient specific
+          ...(userType === 'patient' && {
+            gender: null,
+            age: null,
           })
         })
       })
@@ -215,8 +365,12 @@ export default function RegisterWithVerificationPage() {
   const isFormValid = () => {
     return formData.name.trim().length >= 3 &&
            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) &&
+           /^01[0125][0-9]{8}$/.test(formData.phone.trim()) &&
+           formData.governorate.trim().length > 0 &&
+           formData.address.trim().length >= 10 &&
            formData.password.length >= 8 &&
-           formData.password === formData.confirmPassword
+           formData.password === formData.confirmPassword &&
+           (userType === 'student' ? formData.universityName.trim().length > 0 && formData.specialization.trim().length > 0 : true)
   }
 
   // Step 1: Basic Info
@@ -227,9 +381,9 @@ export default function RegisterWithVerificationPage() {
           <LanguageSwitcher />
         </div>
 
-        <Card className="w-full max-w-2xl shadow-2xl overflow-hidden">
+        <Card className="w-full max-w-3xl shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto">
           {/* Header */}
-          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white text-center">
+          <div className="bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white text-center sticky top-0 z-10">
             <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-4">
               {userType === 'patient' ? <User className="w-10 h-10" /> : <GraduationCap className="w-10 h-10" />}
             </div>
@@ -244,7 +398,7 @@ export default function RegisterWithVerificationPage() {
           </div>
 
           {/* Form */}
-          <div className="p-8 space-y-6">
+          <div className="p-8 space-y-5">
             {/* User Type Toggle */}
             <div className="bg-gray-100 p-1.5 rounded-xl flex gap-2">
               <button
@@ -323,6 +477,90 @@ export default function RegisterWithVerificationPage() {
                 <p className="mt-2 text-sm text-gray-500 flex items-center gap-1">
                   <CheckCircle className="w-4 h-4 text-emerald-500" />
                   سيتم إرسال كود التحقق إلى هذا الإيميل
+                </p>
+              )}
+            </div>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                رقم الهاتف *
+              </label>
+              <div className="relative">
+                <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className={`w-full px-4 py-3 pr-11 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
+                    errors.phone ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
+                  }`}
+                  placeholder="01xxxxxxxxx"
+                  autoComplete="tel"
+                  maxLength={11}
+                />
+              </div>
+              {errors.phone && (
+                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" />
+                  {errors.phone}
+                </p>
+              )}
+            </div>
+
+            {/* Governorate */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                المحافظة *
+              </label>
+              <Select
+                value={formData.governorate}
+                onValueChange={(value) => handleSelectChange('governorate', value)}
+              >
+                <SelectTrigger className={`w-full ${
+                  errors.governorate ? 'border-red-500' : 'border-gray-300'
+                }`}>
+                  <SelectValue placeholder="اختر المحافظة" />
+                </SelectTrigger>
+                <SelectContent className="max-h-64 overflow-y-auto">
+                  {EGYPTIAN_GOVERNORATES.map((gov) => (
+                    <SelectItem key={gov} value={gov}>
+                      {gov}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {errors.governorate && (
+                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" />
+                  {errors.governorate}
+                </p>
+              )}
+            </div>
+
+            {/* Address */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                العنوان بالتفصيل *
+              </label>
+              <div className="relative">
+                <MapPin className="absolute right-3 top-3 w-5 h-5 text-gray-400" />
+                <textarea
+                  name="address"
+                  value={formData.address}
+                  onChange={(e) => handleChange(e as any)}
+                  rows={3}
+                  className={`w-full px-4 py-3 pr-11 border rounded-xl focus:outline-none focus:ring-2 transition-all resize-none ${
+                    errors.address ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-emerald-500'
+                  }`}
+                  placeholder="أدخل العنوان بالتفصيل (الشارع، رقم المبنى، الطابق...)"
+                />
+              </div>
+              {errors.address && (
+                <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" />
+                  {errors.address}
                 </p>
               )}
             </div>
@@ -441,9 +679,17 @@ export default function RegisterWithVerificationPage() {
                     name="universityName"
                     value={formData.universityName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
+                      errors.universityName ? 'border-red-500' : 'border-gray-300 focus:ring-emerald-500'
+                    }`}
                     placeholder="اسم الجامعة"
                   />
+                  {errors.universityName && (
+                    <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.universityName}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -454,9 +700,17 @@ export default function RegisterWithVerificationPage() {
                     name="specialization"
                     value={formData.specialization}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 transition-all ${
+                      errors.specialization ? 'border-red-500' : 'border-gray-300 focus:ring-emerald-500'
+                    }`}
                     placeholder="التخصص الجامعي"
                   />
+                  {errors.specialization && (
+                    <p className="mt-2 text-sm text-red-500 flex items-center gap-1">
+                      <AlertCircle className="w-4 h-4" />
+                      {errors.specialization}
+                    </p>
+                  )}
                 </div>
               </div>
             )}

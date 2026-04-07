@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse request body
     let body
-    let email, password, name, verificationCode, age, gender, address
+    let email, password, name, verificationCode, phone, address, age, gender
 
     try {
       body = await request.json()
@@ -23,13 +23,15 @@ export async function POST(request: NextRequest) {
       password = body.password
       name = body.name
       verificationCode = body.verificationCode
+      phone = body.phone
+      address = body.address
       age = body.age
       gender = body.gender
-      address = body.address
 
       console.log('[REGISTER PATIENT] Step 1 ✅: Parsed request body')
       console.log('[REGISTER PATIENT] Email:', email?.substring(0, 20) + '...')
       console.log('[REGISTER PATIENT] Name:', name)
+      console.log('[REGISTER PATIENT] Phone:', phone)
       console.log('[REGISTER PATIENT] Verification Code:', verificationCode)
     } catch (parseError: any) {
       console.error('[REGISTER PATIENT] Step 1 ❌: Failed to parse request body:', parseError)
@@ -37,10 +39,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Validate required fields
-    if (!email || !password || !name || !verificationCode) {
+    if (!email || !password || !name || !verificationCode || !phone || !address) {
       console.log('[REGISTER PATIENT] Step 2 ❌: Missing required fields')
       return NextResponse.json({
-        error: 'البريد الإلكتروني وكلمة المرور والاسم وكود التحقق مطلوبين'
+        error: 'جميع الحقول مطلوبة'
       }, { status: 400 })
     }
     console.log('[REGISTER PATIENT] Step 2 ✅: Fields validated')
@@ -50,6 +52,12 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(email.trim())) {
       console.log('[REGISTER PATIENT] Step 3 ❌: Invalid email format')
       return NextResponse.json({ error: 'البريد الإلكتروني غير صحيح' }, { status: 400 })
+    }
+
+    // Step 3.5: Validate phone format
+    if (!/^01[0125][0-9]{8}$/.test(phone.trim())) {
+      console.log('[REGISTER PATIENT] Step 3.5 ❌: Invalid phone format')
+      return NextResponse.json({ error: 'رقم الهاتف غير صحيح' }, { status: 400 })
     }
 
     // Step 4: Validate password strength
@@ -151,13 +159,15 @@ export async function POST(request: NextRequest) {
             role: 'PATIENT',
             status: 'ACTIVE',
             emailVerified: new Date(),
+            phone: phone.trim(),
           },
           select: {
             id: true,
             name: true,
             email: true,
             role: true,
-            status: true
+            status: true,
+            phone: true
           }
         })
 
