@@ -78,6 +78,7 @@ export async function POST(request: NextRequest) {
     console.log('[REGISTRATION API] Password hashed successfully')
 
     // تحديد حالة الحساب بناءً على النوع
+    // Patient: Active immediately, Student: Pending approval
     const userStatus = role === 'STUDENT' ? 'PENDING' : 'ACTIVE'
 
     // إنشاء المستخدم مع كلمة السر المشفرة

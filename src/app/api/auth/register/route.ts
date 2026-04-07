@@ -102,12 +102,16 @@ export async function POST(request: NextRequest) {
     try {
       console.log('[REGISTER] Step 8: Creating user...')
 
+      // Patient: Active immediately, Student: Pending approval
+      const userStatus = role === 'PATIENT' ? 'ACTIVE' : 'PENDING'
+
       const userData: any = {
         email: email.trim().toLowerCase(),
         password: hashedPassword,
         name: name.trim(),
         role,
-        status: 'PENDING'
+        status: userStatus,
+        emailVerified: new Date(), // Email verified immediately (no code verification needed)
       }
 
       user = await db.user.create({
@@ -151,9 +155,14 @@ export async function POST(request: NextRequest) {
     console.log(`[AUTH] ✅✅✅ New user registered: ${user.name} (${user.email}) as ${user.role}`)
     console.log('═══════════════════════════════════════')
 
+    // Custom message based on role
+    const successMessage = role === 'STUDENT'
+      ? '✅ تم استلام طلبك بنجاح! حسابك الآن قيد المراجعة من قبل الإدارة. سيتم تفعيل حسابك قريباً بعد الموافقة.'
+      : '✅ تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول.'
+
     return NextResponse.json({
       success: true,
-      message: 'تم التسجيل بنجاح',
+      message: successMessage,
       user
     }, { status: 201 })
 

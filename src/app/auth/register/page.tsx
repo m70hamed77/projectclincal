@@ -187,15 +187,16 @@ export default function SignupPage() {
     validateField(name, value)
   }
 
-  // Generate and Send OTP (Step 1)
-  const sendOTP = async () => {
-    console.log('[Send OTP] Starting...')
-    console.log('[Send OTP] Form data:', {
+  // Direct Registration - Skip OTP
+  const handleDirectRegistration = async () => {
+    console.log('[Direct Registration] Starting...')
+    console.log('[Direct Registration] Form data:', {
       name: formData.name,
       email: formData.email,
       hasPassword: !!formData.password,
       hasConfirm: !!formData.confirmPassword,
-      passwordsMatch: formData.password === formData.confirmPassword
+      passwordsMatch: formData.password === formData.confirmPassword,
+      userType
     })
 
     // Simple validation of fields
@@ -219,49 +220,13 @@ export default function SignupPage() {
       return
     }
 
-    console.log('[Send OTP] ✅ Validation passed')
+    console.log('[Direct Registration] ✅ Validation passed')
 
-    // Call API to send verification code directly
-    // We rely on isFormValid() in the button itself
-    try {
-      setIsSubmitting(true)
-      setErrors({})
-
-      const response = await fetch('/api/auth/send-verification-code', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: formData.email.trim(),
-          name: formData.name.trim()
-        })
-      })
-
-      const data = await response.json()
-
-      console.log('[Send OTP] Response:', { ok: response.ok, data })
-
-      if (response.ok && data.success) {
-        console.log('[Send OTP] Code sent successfully to:', formData.email)
-
-        // Show success message
-        alert(
-          `✅ تم إرسال كود التحقق!\n\n` +
-          `تم إرسال كود التحقق إلى بريدك الإلكتروني:\n${formData.email}\n\n` +
-          `📧 يرجى فتح البريد الإلكتروني ونسخ الكود من الرسالة\n\n` +
-          `⏰ الكود صالح لمدة 5 دقائق فقط`
-        )
-
-        // Move to step 2 (enter code)
-        setTimeout(() => setStep(2), 500)
-      } else {
-        console.error('[Send OTP] Failed:', data.error)
-        setErrors({ submit: data.error || t('registerPage.errors.sendCodeFailed') })
-      }
-    } catch (error) {
-      console.error('[Send OTP] Error:', error)
-      setErrors({ submit: t('registerPage.errors.connectionError') })
-    } finally {
-      setIsSubmitting(false)
+    // Register directly
+    if (userType === 'patient') {
+      await handlePatientSubmit()
+    } else {
+      await handleStudentSubmitDirect()
     }
   }
 
@@ -297,15 +262,13 @@ export default function SignupPage() {
         console.log('[OTP Verification] Code is valid!')
 
         if (userType === 'patient') {
-          // Patient: Register immediately after verification
-          console.log('[OTP Verification] Starting patient registration...')
-          await handlePatientSubmit()
-        } else {
-          // Student: Move to step 3
-          console.log('[OTP Verification] Moving to step 3 for student...')
-          setStep(3)
-          setErrors({})
-        }
+          // Both Patient and Student: Skip verification, register directly
+          console.log('[Direct Registration] Starting registration...')
+          if (userType === 'patient') {
+            await handlePatientSubmit()
+          } else {
+            await handleStudentSubmitDirect()
+          }
       } else {
         console.error('[OTP Verification] Invalid code:', data.error)
         setErrors({ verificationCode: data.error || t('registerPage.errors.verificationCodeInvalid') })
@@ -476,6 +439,13 @@ export default function SignupPage() {
     }
 
     return false
+  }
+
+  // Handle Student Submit Direct (Skip OTP)
+  const handleStudentSubmitDirect = async () => {
+    // For students, we still need university info, so move to step 3
+    setStep(3)
+    return
   }
 
   // Handle Student Submit (الخطوة 3)
@@ -949,10 +919,10 @@ export default function SignupPage() {
                     )}
                   </div>
 
-                  {/* Send OTP Button */}
+                  {/* Register Direct Button */}
                   <button
                     type="button"
-                    onClick={sendOTP}
+                    onClick={handleDirectRegistration}
                     disabled={isSubmitting}
                     className={`w-full py-4 rounded-xl font-bold text-white transition-all duration-300 flex items-center justify-center gap-2 btn-hover-lift ${
                       !isSubmitting
@@ -960,17 +930,17 @@ export default function SignupPage() {
                         : 'bg-muted cursor-not-allowed opacity-50'
                     }`}
                     suppressHydrationWarning={true}
-                    aria-label={t('registerPage.sendCode')}
+                    aria-label="إنشاء الحساب"
                   >
                     {isSubmitting ? (
                       <>
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
-                        {t('registerPage.sending')}
+                        جاري التسجيل...
                       </>
                     ) : (
                       <>
-                        <Send className="w-5 h-5" aria-hidden="true" />
-                        {t('registerPage.sendCode')}
+                        <UserPlus className="w-5 h-5" aria-hidden="true" />
+                        {userType === 'patient' ? 'إنشاء حساب' : 'متابعة التسجيل'}
                       </>
                     )}
                   </button>
