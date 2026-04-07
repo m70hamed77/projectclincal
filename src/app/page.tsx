@@ -209,7 +209,7 @@ interface HomeStats {
 }
 
 export default function Home() {
-  const { t, locale, loading } = useTranslations();
+  const { t, getData, locale, loading } = useTranslations();
   const isRTL = locale === "ar";
   const [isLoaded, setIsLoaded] = useState(false);
   const scrolled = useScrolled(20);
@@ -706,7 +706,7 @@ export default function Home() {
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
               {(() => {
-                const patientFeatures = t("home.userTypes.patient.features", { returnObjects: true });
+                const patientFeatures = getData("home.userTypes.patient.features");
                 const safeFeatures = Array.isArray(patientFeatures)
                   ? patientFeatures
                   : [
@@ -794,7 +794,7 @@ export default function Home() {
             </p>
             <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
               {(() => {
-                const studentFeatures = t("home.userTypes.student.features", { returnObjects: true });
+                const studentFeatures = getData("home.userTypes.student.features");
                 const safeFeatures = Array.isArray(studentFeatures)
                   ? studentFeatures
                   : [
