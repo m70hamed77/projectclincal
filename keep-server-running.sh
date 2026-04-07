@@ -1,29 +1,33 @@
 #!/bin/bash
 
-# Keep Server Running - Simple and Reliable
+# هذا السكريبت يحافظ على تشغيل خادم التطوير
+# استخدم: ./keep-server-running.sh
 
-cd /home/z/my-project
+echo "=========================================="
+echo "Starting Smile Dental Clinic Dev Server"
+echo "=========================================="
+echo ""
 
+# إيقاف أي عمليات قديمة
+echo "🔧 Stopping any old servers..."
+pkill -f "next dev" 2>/dev/null
+sleep 2
+
+# تشغيل الخادم
+echo "🚀 Starting development server on http://localhost:3000"
+echo "📝 Logs are saved to: /home/z/my-project/server.log"
+echo ""
+echo "Press Ctrl+C to stop the server"
+echo "=========================================="
+echo ""
+
+# تشغيل الخادم مع إعادة التشغيل التلقائي
 while true; do
-    # Check if server is responding
-    RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" --max-time 3 http://localhost:3000 2>/dev/null || echo "000")
+    cd /home/z/my-project
+    bun run dev >> /home/z/my-project/server.log 2>&1
 
-    if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "404" ]; then
-        echo "[$(date)] Server down (HTTP $RESPONSE), restarting..."
-
-        # Kill existing processes
-        pkill -9 -f "next dev" 2>/dev/null
-        pkill -9 -f "next-server" 2>/dev/null
-        fuser -k 3000/tcp 2>/dev/null || true
-        sleep 2
-
-        # Start server
-        bun run dev > dev-server-persistent.log 2>&1 &
-        echo "[$(date)] Server restarted (PID: $!)"
-    else
-        echo "[$(date)] Server OK (HTTP $RESPONSE)"
-    fi
-
-    # Check every 15 seconds
-    sleep 15
+    echo ""
+    echo "⚠️ Server stopped! Restarting in 3 seconds..."
+    echo "[$(date)] Server stopped unexpectedly" >> /home/z/my-project/server.log
+    sleep 3
 done
