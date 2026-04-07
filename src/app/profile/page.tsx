@@ -113,6 +113,7 @@ interface StudentProfile {
   bio: string | null
   location: string | null
   city: string | null
+  address: string | null
   collegeName: string | null
   collegeAddress: string | null
   completedCases: number
@@ -141,6 +142,10 @@ function ProfileContent() {
   const [loadingActivities, setLoadingActivities] = useState(true)
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null)
   const [loadingStudentProfile, setLoadingStudentProfile] = useState(true)
+  
+  // Patient profile data
+  const [patientProfile, setPatientProfile] = useState<any>(null)
+  const [loadingPatientProfile, setLoadingPatientProfile] = useState(true)
   
   // Cases state for students
   const [cases, setCases] = useState<any[]>([])
@@ -316,6 +321,15 @@ function ProfileContent() {
           const statsData = await statsResponse.json()
           if (statsData.success) {
             setPatientStats(statsData.stats)
+          }
+
+          // Fetch patient profile (including governorate and address)
+          const patientResponse = await fetch('/api/patient/me', {
+            credentials: 'include'
+          })
+          const patientData = await patientResponse.json()
+          if (patientData.success) {
+            setPatientProfile(patientData.patient)
           }
         }
 
@@ -838,7 +852,7 @@ function ProfileContent() {
     }
   }
 
-  if (userLoading || loadingStats || loadingPosts || loadingActivities || (user?.role === 'STUDENT' && loadingStudentProfile)) {
+  if (userLoading || loadingStats || loadingPosts || loadingActivities || (user?.role === 'STUDENT' && loadingStudentProfile) || (user?.role === 'PATIENT' && loadingPatientProfile)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -924,7 +938,7 @@ function ProfileContent() {
                     </Button>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex items-center gap-2 text-sm">
                       <Mail className="w-4 h-4 text-muted-foreground" />
                       <span className="text-teal-700 truncate">{user?.email}</span>
@@ -935,6 +949,26 @@ function ProfileContent() {
                         <span className="text-teal-700">{user.phone}</span>
                       </div>
                     )}
+                    {isStudent && studentProfile?.city && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-teal-700">{studentProfile.city}</span>
+                      </div>
+                    )}
+                    {!isStudent && patientProfile?.governorate && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="w-4 h-4 text-muted-foreground" />
+                        <span className="text-teal-700">{patientProfile.governorate}</span>
+                      </div>
+                    )}
+                    {(isStudent && studentProfile?.address) || (!isStudent && patientProfile?.address) ? (
+                      <div className="flex items-start gap-2 text-sm col-span-1 md:col-span-2">
+                        <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
+                        <span className="text-teal-700 line-clamp-2">
+                          {isStudent ? studentProfile.address : patientProfile.address}
+                        </span>
+                      </div>
+                    ) : null}
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className={`w-4 h-4 text-muted-foreground ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span className="text-teal-700" suppressHydrationWarning={true}>

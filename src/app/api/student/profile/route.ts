@@ -66,6 +66,7 @@ export async function GET(request: NextRequest) {
         bio: student.bio || null,
         location: student.location || null,
         city: student.city || null,
+        address: student.address || null,
         collegeName: student.collegeName || null,
         collegeAddress: student.collegeAddress || null,
         completedCases: student.completedCases,

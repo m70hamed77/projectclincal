@@ -37,7 +37,16 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      patient
+      patient: {
+        ...patient,
+        user: {
+          id: patient.user.id,
+          name: patient.user.name,
+          email: patient.user.email,
+          phone: patient.user.phone,
+          avatarUrl: patient.user.avatarUrl
+        }
+      }
     })
   } catch (error: any) {
     console.error('[Patient Me API] Error:', error)

@@ -206,7 +206,9 @@ export async function POST(request: NextRequest) {
             collegeName: collegeName || null,
             collegeAddress: collegeAddress || null,
             bio: bio || null,
+            location: address || null,
             city: city || null,
+            address: address || null,
             verificationStatus: 'PENDING',
             isVerified: false
           }

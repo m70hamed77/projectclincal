@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
   try {
     // Step 1: Parse request body
     let body
-    let email, password, name, verificationCode, phone, address, age, gender
+    let email, password, name, verificationCode, phone, governorate, address, age, gender
 
     try {
       body = await request.json()
@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
       name = body.name
       verificationCode = body.verificationCode
       phone = body.phone
+      governorate = body.governorate
       address = body.address
       age = body.age
       gender = body.gender
@@ -32,6 +33,7 @@ export async function POST(request: NextRequest) {
       console.log('[REGISTER PATIENT] Email:', email?.substring(0, 20) + '...')
       console.log('[REGISTER PATIENT] Name:', name)
       console.log('[REGISTER PATIENT] Phone:', phone)
+      console.log('[REGISTER PATIENT] Governorate:', governorate)
       console.log('[REGISTER PATIENT] Verification Code:', verificationCode)
     } catch (parseError: any) {
       console.error('[REGISTER PATIENT] Step 1 ❌: Failed to parse request body:', parseError)
@@ -39,7 +41,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 2: Validate required fields
-    if (!email || !password || !name || !verificationCode || !phone || !address) {
+    if (!email || !password || !name || !verificationCode || !phone || !governorate || !address) {
       console.log('[REGISTER PATIENT] Step 2 ❌: Missing required fields')
       return NextResponse.json({
         error: 'جميع الحقول مطلوبة'
@@ -177,6 +179,7 @@ export async function POST(request: NextRequest) {
             userId: user.id,
             age: age ? parseInt(age.toString()) : null,
             gender: gender || null,
+            governorate: governorate || null,
             address: address || null
           }
         })
