@@ -1,7 +1,13 @@
-import { Resend } from 'resend'
+import nodemailer from 'nodemailer'
 
-// تهيئة Resend
-const resend = new Resend(process.env.RESEND_API_KEY || 're_test_placeholder')
+// تهيئة Gmail SMTP transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  }
+})
 
 // واجهة لإرسال الإيميل
 export interface SendEmailOptions {
@@ -16,26 +22,26 @@ export interface SendEmailOptions {
  */
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
   try {
-    // تحقق من وجود مفتاح API
-    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_your_api_key_here') {
-      console.error('[EMAIL ERROR] RESEND_API_KEY is not configured properly')
-      throw new Error('لم يتم إعداد خدمة البريد الإلكتروني بعد. يرجى إضافة RESEND_API_KEY في ملف .env')
+    // التحقق من وجود إعدادات الإيميل
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error('[EMAIL ERROR] Gmail SMTP credentials not configured')
+      throw new Error('لم يتم إعداد خدمة البريد الإلكتروني بعد. يرجى إضافة EMAIL_USER و EMAIL_PASS في ملف .env')
     }
 
     // إرسال الإيميل فعلياً
-    const data = await resend.emails.send({
-      from: 'onboarding@resend.dev',
+    const info = await transporter.sendMail({
+      from: `'🦷 سمايلي لطب الأسنان' <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,
       text: text || html.replace(/<[^>]*>/g, ''),
     })
 
-    console.log('[EMAIL SENT SUCCESSFULLY]:', data)
+    console.log('[EMAIL SENT SUCCESSFULLY]:', info.messageId)
     return {
       success: true,
-      messageId: data.id,
-      data
+      messageId: info.messageId,
+      info
     }
   } catch (error: any) {
     console.error('[EMAIL SENDING ERROR]:', error)
