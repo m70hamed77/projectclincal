@@ -50,7 +50,6 @@ export default function SignupPage() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [touched, setTouched] = useState<Record<string, boolean>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [generatedOTP, setGeneratedOTP] = useState('')
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   // Password Strength Calculation
@@ -231,7 +230,10 @@ export default function SignupPage() {
       const response = await fetch('/api/auth/send-verification-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email.trim() })
+        body: JSON.stringify({
+          email: formData.email.trim(),
+          name: formData.name.trim()
+        })
       })
 
       const data = await response.json()
@@ -239,25 +241,15 @@ export default function SignupPage() {
       console.log('[Send OTP] Response:', { ok: response.ok, data })
 
       if (response.ok && data.success) {
-        // Sent code (shown in development)
-        const otp = data.devCode || ''
+        console.log('[Send OTP] Code sent successfully to:', formData.email)
 
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-        console.log('🔐 OTP Verification Code')
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
-        console.log(`📧 Sent to: ${formData.email}`)
-        if (otp) {
-          console.log(`🔢 Code: ${otp}`)
-          setGeneratedOTP(otp)
-        } else {
-          // If code is not returned (in production), we should use another method
-          // We'll generate a temporary code for development testing
-          const tempOtp = Math.floor(100000 + Math.random() * 900000).toString()
-          console.log(`🔢 Code (test): ${tempOtp}`)
-          setGeneratedOTP(tempOtp)
-        }
-        console.log(`⏰ Valid for: 10 minutes`)
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━')
+        // Show success message
+        alert(
+          `✅ تم إرسال كود التحقق!\n\n` +
+          `تم إرسال كود التحقق إلى بريدك الإلكتروني:\n${formData.email}\n\n` +
+          `📧 يرجى فتح البريد الإلكتروني ونسخ الكود من الرسالة\n\n` +
+          `⏰ الكود صالح لمدة 5 دقائق فقط`
+        )
 
         // Move to step 2 (enter code)
         setTimeout(() => setStep(2), 500)
@@ -276,9 +268,8 @@ export default function SignupPage() {
   // Verify OTP (Step 2)
   const verifyOTP = async () => {
     console.log('[OTP Verification] Verifying code:', formData.verificationCode)
-    console.log('[OTP Verification] Generated code:', generatedOTP)
 
-    // First validate the verification code
+    // First validate the verification code format
     validateField('verificationCode', formData.verificationCode)
 
     if (formData.verificationCode.length !== 6 || !/^\d{6}$/.test(formData.verificationCode)) {
@@ -286,23 +277,44 @@ export default function SignupPage() {
       return
     }
 
-    if (formData.verificationCode === generatedOTP) {
-      console.log('[OTP Verification] Code is correct!')
-      console.log('[OTP Verification] User type:', userType)
+    // Verify code with API
+    try {
+      setIsSubmitting(true)
+      setErrors({})
 
-      if (userType === 'patient') {
-        // Patient: Register immediately after verification
-        console.log('[OTP Verification] Starting patient registration...')
-        await handlePatientSubmit()
+      const response = await fetch('/api/auth/verify-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email.trim().toLowerCase(),
+          code: formData.verificationCode
+        })
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        console.log('[OTP Verification] Code is valid!')
+
+        if (userType === 'patient') {
+          // Patient: Register immediately after verification
+          console.log('[OTP Verification] Starting patient registration...')
+          await handlePatientSubmit()
+        } else {
+          // Student: Move to step 3
+          console.log('[OTP Verification] Moving to step 3 for student...')
+          setStep(3)
+          setErrors({})
+        }
       } else {
-        // Student: Move to step 3
-        console.log('[OTP Verification] Moving to step 3 for student...')
-        setStep(3)
-        setErrors({})
+        console.error('[OTP Verification] Invalid code:', data.error)
+        setErrors({ verificationCode: data.error || t('registerPage.errors.verificationCodeInvalid') })
       }
-    } else {
-      console.error('[OTP Verification] Wrong code!')
+    } catch (error) {
+      console.error('[OTP Verification] Error:', error)
       setErrors({ verificationCode: t('registerPage.errors.verificationCodeInvalid') })
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -543,7 +555,6 @@ export default function SignupPage() {
     setErrors({})
     setTouched({})
     setStep(1)
-    setGeneratedOTP('')
     setImagePreview(null)
   }, [userType])
 
@@ -992,11 +1003,17 @@ export default function SignupPage() {
                     <div className="w-20 h-20 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Mail className="w-10 h-10 text-primary" aria-hidden="true" />
                     </div>
-                    <p className="text-foreground" suppressHydrationWarning={true}>
-                      {t('registerPage.codeSentTo')} {formData.email}
+                    <p className="text-foreground font-semibold text-lg" suppressHydrationWarning={true}>
+                      ✅ تم إرسال كود التحقق!
+                    </p>
+                    <p className="text-foreground mt-2" suppressHydrationWarning={true}>
+                      {t('registerPage.codeSentTo')} <strong>{formData.email}</strong>
                     </p>
                     <p className="text-foreground-muted text-responsive-sm mt-2" suppressHydrationWarning={true}>
-                      {t('registerPage.checkConsole')}
+                      📧 يرجى فتح بريدك الإلكتروني ونسخ الكود من الرسالة
+                    </p>
+                    <p className="text-foreground-muted text-responsive-xs mt-1" suppressHydrationWarning={true}>
+                      ⏰ الكود صالح لمدة 10 دقائق فقط
                     </p>
                   </div>
 

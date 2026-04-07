@@ -5,8 +5,8 @@ const prisma = new PrismaClient();
 
 async function resetAdminPassword() {
   try {
-    const email = 'admin@smileydental.com';
-    const newPassword = 'Admin@123456';
+    const email = 'admin@smileydentalclinac.com';
+    const newPassword = 'Admin@mo#abdo*';
 
     console.log('🔍 Finding admin account...');
     const admin = await prisma.user.findUnique({
@@ -40,8 +40,7 @@ async function resetAdminPassword() {
     console.log('\n📝 New Login Credentials:');
     console.log('   Email:   ' + email);
     console.log('   Password: ' + newPassword);
-    console.log('\n💡 Please copy the password carefully (including capital letters)');
-    console.log('   A - Admin@ (capital A)\n   @ - Admin@ (at symbol)\n   123456 - numbers');
+    console.log('\n💡 Please copy the password carefully!');
 
   } catch (error) {
     console.error('❌ Error:', error.message);

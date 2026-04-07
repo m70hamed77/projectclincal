@@ -290,12 +290,12 @@ export default function AdminUsersPage() {
 
     // ✅ Check BANNED
     if (user.userStatus === 'BANNED') {
-      return <Badge variant="destructive">{t('users.suspended')}</Badge>
+      return <Badge variant="destructive">{t('users.banned')}</Badge>
     }
 
     // ✅ Check SUSPENDED
     if (user.userStatus === 'SUSPENDED') {
-      return <Badge className="bg-orange-100 text-orange-700">{t('users.suspended')}</Badge>
+      return <Badge style={{background: '#1B347A', color: '#ffffff'}}>{t('users.suspended')}</Badge>
     }
 
     if (user.role === 'PATIENT') {
@@ -455,7 +455,7 @@ export default function AdminUsersPage() {
                       <SelectItem value="APPROVED" suppressHydrationWarning={true}>{t('users.verified')}</SelectItem>
                       <SelectItem value="REJECTED" suppressHydrationWarning={true}>{t('users.rejected')}</SelectItem>
                       <SelectItem value="DELETED" suppressHydrationWarning={true}>{t('users.deleted')}</SelectItem>
-                      <SelectItem value="BANNED" suppressHydrationWarning={true}>{t('users.suspended')}</SelectItem>
+                      <SelectItem value="BANNED" suppressHydrationWarning={true}>{t('users.banned')}</SelectItem>
                       <SelectItem value="SUSPENDED" suppressHydrationWarning={true}>{t('users.suspended')}</SelectItem>
                     </SelectContent>
                   </Select>
@@ -589,7 +589,6 @@ export default function AdminUsersPage() {
                               size="sm"
                               onClick={() => setRejectDialog({ open: true, studentId: userData.id })}
                               disabled={actionLoading === userData.id}
-                              suppressHydrationWarning={true}
                             >
                               <X className="w-4 h-4 ml-1" />
                               {t('users.reject')}
@@ -599,16 +598,15 @@ export default function AdminUsersPage() {
 
                         {/* Delete Button - Available for all non-admin users */}
                         <Button
-                          variant="outline"
                           size="sm"
                           onClick={() => handleDeleteClick(userData.userId)}
                           disabled={actionLoading === userData.userId}
-                          style={{borderColor: '#ef4444', color: '#ef4444'}}
-                          className="hover:bg-red-50"
+                          style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                          className="hover:bg-red-700 transition-all duration-300"
                           suppressHydrationWarning={true}
                         >
-                          <Trash2 className="w-4 h-4 ml-1" />
-                          {t('users.delete')}
+                          <Trash2 className="w-4 h-4 ml-1" style={{color: '#ffffff'}} />
+                          <span style={{color: '#ffffff'}}>{t('users.delete')}</span>
                         </Button>
                       </div>
                     </div>
@@ -754,7 +752,6 @@ export default function AdminUsersPage() {
                       <>
                         <X className="w-4 h-4 ml-2" />
                         {t('users.reject')}
-                        <span suppressHydrationWarning={true} />
                       </>
                     )}
                   </Button>
@@ -770,8 +767,8 @@ export default function AdminUsersPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2" suppressHydrationWarning={true}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}>
-                <AlertCircle className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100">
+                <AlertCircle className="w-4 h-4 text-red-600" />
               </div>
               {t('verification.reject')}
             </DialogTitle>
@@ -810,11 +807,11 @@ export default function AdminUsersPage() {
       <Dialog open={deleteDialog.open} onOpenChange={(open) => !open && setDeleteDialog({ open, userId: null })}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-600" suppressHydrationWarning={true}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}>
+            <DialogTitle className="flex items-center gap-2" style={{color: '#ef4444'}} suppressHydrationWarning={true}>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{background: '#ef4444'}}>
                 <AlertTriangle className="w-4 h-4 text-white" />
               </div>
-              {t('users.deleteAccount')}
+              <span style={{color: '#ef4444'}}>{t('users.deleteAccount')}</span>
             </DialogTitle>
             <DialogDescription suppressHydrationWarning={true}>
               {t('users.deleteAccountDesc')}
@@ -869,20 +866,21 @@ export default function AdminUsersPage() {
               {t('common.cancel')}
             </Button>
             <Button
-              variant="destructive"
+              style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+              className="hover:bg-red-700 transition-all duration-300"
               onClick={handleDelete}
               disabled={actionLoading !== null || !deleteReason.trim()}
             >
               {actionLoading === deleteDialog.userId ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  {t('users.deleting')}
+                  <span style={{color: '#ffffff'}}>{t('users.deleting')}</span>
                   <span suppressHydrationWarning={true} />
                 </>
               ) : (
                 <>
-                  <Trash2 className="w-4 h-4 mr-2" />
-                  {t('users.deleteAccount')}
+                  <Trash2 className="w-4 h-4 mr-2" style={{color: '#ffffff'}} />
+                  <span style={{color: '#ffffff'}}>{t('users.deleteAccount')}</span>
                 </>
               )}
             </Button>

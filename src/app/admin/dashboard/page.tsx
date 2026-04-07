@@ -329,10 +329,14 @@ export default function AdminDashboard() {
                               موافقة
                             </Button>
                             <Button
-                              variant="outline"
                               onClick={() => handleRejectClick(user)}
                               disabled={isProcessing}
-                              className="w-full gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+                              className="w-full gap-2"
+                              style={{
+                                background: '#DC2626 !important',
+                                color: '#ffffff !important',
+                                border: 'none !important',
+                              }}
                             >
                               <XCircle className="w-4 h-4" />
                               رفض
@@ -391,10 +395,14 @@ export default function AdminDashboard() {
               إلغاء
             </Button>
             <Button
-              variant="destructive"
               onClick={handleReject}
               disabled={isProcessing}
               className="gap-2"
+              style={{
+                background: '#DC2626 !important',
+                color: '#ffffff !important',
+                border: 'none !important',
+              }}
             >
               {isProcessing ? (
                 <>

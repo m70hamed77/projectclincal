@@ -179,6 +179,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 7: Set cookies
+    let token: string
     try {
       console.log('[LOGIN] Step 7: Setting cookies...')
       const cookieStore = await cookies()
@@ -193,6 +194,21 @@ export async function POST(request: NextRequest) {
         // domain: undefined // ✅ السماح بالدليل الافتراضي
       })
 
+      // ✅ تعيين auth-token أيضاً ليعمل middleware بشكل صحيح
+      token = Buffer.from(JSON.stringify({
+        userId: user.id,
+        email: user.email,
+        role: user.role
+      })).toString('base64')
+
+      cookieStore.set('auth-token', token, {
+        httpOnly: false,
+        secure: false,
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/',
+      })
+
       console.log('[LOGIN] Step 7 ✅: Cookies set successfully, userId:', user.id)
     } catch (cookieError: any) {
       console.error('[LOGIN] Step 7 ❌: Failed to set cookies:', cookieError)
@@ -202,33 +218,10 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Step 8: Create token
-    try {
-      console.log('[LOGIN] Step 8: Creating token...')
-      const token = Buffer.from(JSON.stringify({
-        userId: user.id,
-        email: user.email,
-        role: user.role
-      })).toString('base64')
-      console.log('[LOGIN] Step 8 ✅: Token created successfully')
-    } catch (tokenError: any) {
-      console.error('[LOGIN] Step 8 ❌: Failed to create token:', tokenError)
-      return NextResponse.json(
-        { error: 'فشل في إنشاء التوكن: ' + tokenError.message },
-        { status: 500 }
-      )
-    }
-
-    // Step 9: Return success response
-    console.log('[LOGIN] Step 9 ✅: Preparing success response...')
+    // Step 8: Return success response
+    console.log('[LOGIN] Step 8 ✅: Preparing success response...')
     console.log(`[AUTH] ✅✅✅ User logged in: ${user.name} (${user.email}) as ${user.role}`)
     console.log('═══════════════════════════════════════')
-
-    const token = Buffer.from(JSON.stringify({
-      userId: user.id,
-      email: user.email,
-      role: user.role
-    })).toString('base64')
 
     return NextResponse.json({
       success: true,

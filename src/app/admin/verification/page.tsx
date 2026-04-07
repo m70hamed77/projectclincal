@@ -372,28 +372,50 @@ export default function AdminVerificationPage() {
                           </div>
                         )}
 
-                        <div className="flex gap-3 pt-4">
+                        <div className="flex gap-3 pt-4" style={{position: 'relative', zIndex: 10}}>
                           <Button
                             onClick={() => handleApprove(student.id)}
                             disabled={actionLoading === student.id}
-                            className="flex-1"
-                            style={{background: 'linear-gradient(135deg, #00BFA6, #008C7A)', boxShadow: '0 4px 14px rgba(0,191,166,0.4)'}}
+                            className="flex-1 !important"
+                            style={{
+                              background: 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%) !important',
+                              color: '#ffffff !important',
+                              border: '3px solid #ffffff !important',
+                              borderRadius: '12px !important',
+                              padding: '14px 24px !important',
+                              fontWeight: '700 !important',
+                              fontSize: '16px !important',
+                              textShadow: '0 2px 4px rgba(0, 0, 0, 0.4) !important',
+                              boxShadow: '0 6px 20px rgba(16, 185, 129, 0.5), 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important',
+                              transition: 'all 0.3s ease !important',
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.transform = 'translateY(-3px) scale(1.02) !important'
+                              e.currentTarget.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.6), 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4) !important'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.transform = 'translateY(0) scale(1) !important'
+                              e.currentTarget.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.5), 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important'
+                            }}
                           >
                             {actionLoading === student.id ? (
                               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                             ) : (
                               <>
-                                <Check className="w-4 h-4 ml-2" />
-                                موافقة
+                                <Check className="w-5 h-5 ml-2" />
+                                <span>موافقة</span>
                               </>
                             )}
                           </Button>
                           <Button
                             onClick={() => setRejectDialog({ open: true, studentId: student.id })}
                             disabled={actionLoading === student.id}
-                            variant="destructive"
                             className="flex-1"
-                            style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}
+                            style={{
+                              background: '#DC2626 !important',
+                              color: '#ffffff !important',
+                              border: 'none !important',
+                            }}
                           >
                             {actionLoading === student.id ? (
                               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -422,8 +444,8 @@ export default function AdminVerificationPage() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2" suppressHydrationWarning={true}>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}>
-                <AlertCircle className="w-4 h-4 text-white" />
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100">
+                <AlertCircle className="w-4 h-4 text-red-600" />
               </div>
               رفض طلب التحقق
             </DialogTitle>
@@ -447,10 +469,14 @@ export default function AdminVerificationPage() {
               إلغاء
             </Button>
             <Button
-              variant="destructive"
               onClick={handleReject}
               disabled={!rejectionReason.trim()}
               suppressHydrationWarning={true}
+              style={{
+                background: '#DC2626 !important',
+                color: '#ffffff !important',
+                border: 'none !important',
+              }}
             >
               تأكيد الرفض
             </Button>

@@ -1,62 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/lib/db'
 import { sendVerificationCode } from '@/lib/email'
-
-// تخزين الأكواد في الذاكرة (في الإنتاج، استخدم قاعدة البيانات أو Redis)
-const verificationCodes = new Map<string, { code: string; expiresAt: number; email: string }>()
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json()
+    const { email, name } = await request.json()
 
     if (!email) {
       return NextResponse.json({ error: 'البريد الإلكتروني مطلوب' }, { status: 400 })
     }
 
+    console.log('[VERIFICATION] Sending verification code to:', email)
+
     // توليد كود تحقق عشوائي من 6 أرقام
     const code = Math.floor(100000 + Math.random() * 900000).toString()
 
-    // حفظ الكود مع وقت انتهاء الصلاحية (10 دقائق)
-    verificationCodes.set(email, {
-      code,
-      expiresAt: Date.now() + 10 * 60 * 1000,
-      email,
+    // حساب وقت انتهاء الصلاحية (5 دقائق من الآن)
+    const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
+
+    // حذف أي كود قديم لنفس الإيميل
+    await db.verificationCode.deleteMany({
+      where: { email: email.toLowerCase() }
     })
 
-    // إرسال الإيميل فعلياً
-    await sendVerificationCode(email, code)
+    // حفظ الكود الجديد في قاعدة البيانات
+    await db.verificationCode.create({
+      data: {
+        email: email.toLowerCase(),
+        code,
+        expiresAt,
+        used: false
+      }
+    })
 
-    console.log(`[DEV][EMAIL] Verification code sent to ${email}: ${code}`)
+    console.log('[VERIFICATION] Code saved to database for:', email.toLowerCase())
+
+    // إرسال الإيميل فعلياً
+    await sendVerificationCode(email, code, name)
+
+    console.log('[VERIFICATION] Email sent successfully')
 
     return NextResponse.json({
       success: true,
-      message: 'تم إرسال كود التحقق إلى بريدك الإلكتروني',
-      // الكود يظهر فقط في وضع التطوير للأمان
-      ...(process.env.NODE_ENV === 'development' && { devCode: code })
+      message: 'تم إرسال كود التحقق إلى بريدك الإلكتروني'
     })
+
   } catch (error: any) {
-    console.error('[Send Verification Code Error]:', error)
+    console.error('[VERIFICATION ERROR]:', error)
     return NextResponse.json(
       { error: error.message || 'حدث خطأ أثناء إرسال كود التحقق' },
       { status: 500 }
     )
   }
-}
-
-// دالة مساعدة للحصول على الكود المخزن
-export function getVerificationCode(email: string): string | null {
-  const stored = verificationCodes.get(email)
-  if (!stored) return null
-  
-  // التحقق من عدم انتهاء صلاحية الكود
-  if (Date.now() > stored.expiresAt) {
-    verificationCodes.delete(email)
-    return null
-  }
-  
-  return stored.code
-}
-
-// دالة مساعدة لحذف الكود
-export function deleteVerificationCode(email: string): void {
-  verificationCodes.delete(email)
 }

@@ -641,13 +641,13 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              className="text-amber-600 hover:text-amber-700 border-amber-200 hover:bg-amber-50"
+                              style={{background: '#68580A', color: '#ffffff', border: 'none'}}
+                              className="hover:bg-amber-900 transition-all duration-300"
                             >
-                              <ShieldAlert className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                              {t('reports.warn')}
+                              <ShieldAlert className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
+                              <span style={{color: '#ffffff'}}>{t('reports.warn')}</span>
                             </Button>
                             <Button
-                              variant="outline"
                               size="sm"
                               onClick={() => {
                                 setSelectedReport(report)
@@ -655,13 +655,13 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              className="text-orange-600 hover:text-orange-700 border-orange-200 hover:bg-orange-50"
+                              style={{background: '#1B347A', color: '#ffffff', border: 'none'}}
+                              className="hover:bg-blue-900 transition-all duration-300"
                             >
-                              <Pause className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                              {t('reports.suspend')}
+                              <Pause className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
+                              <span style={{color: '#ffffff'}}>{t('reports.suspend')}</span>
                             </Button>
                             <Button
-                              variant="destructive"
                               size="sm"
                               onClick={() => {
                                 setSelectedReport(report)
@@ -669,9 +669,11 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
+                              style={{background: '#1B347A', color: '#ffffff', border: 'none'}}
+                              className="hover:bg-blue-900 transition-all duration-300"
                             >
-                              <Ban className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                              {t('reports.tempBan')}
+                              <Ban className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
+                              <span style={{color: '#ffffff'}}>{t('reports.tempBan')}</span>
                             </Button>
                             <Button
                               variant="destructive"
@@ -737,6 +739,19 @@ export default function AdminReportsPage() {
                 setResolutionText('')
                 setSelectedReport(null)
               }}
+              className="relative overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{
+                border: '2px solid rgba(107, 114, 128, 0.5)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(107, 114, 128, 0.3)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
               suppressHydrationWarning={true}
             >
               {t('common.cancel')}
@@ -744,10 +759,24 @@ export default function AdminReportsPage() {
             <Button
               onClick={handleResolve}
               disabled={!resolutionText.trim()}
-              className="bg-emerald-800 hover:bg-emerald-700"
+              className="relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
+                boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
               suppressHydrationWarning={true}
             >
-              {t('reports.confirmResolve')}
+              <span className="font-bold">{t('reports.confirmResolve')}</span>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -814,6 +843,19 @@ export default function AdminReportsPage() {
                 setActionForm({ reason: '', duration: 7 })
               }}
               disabled={actionLoading !== null}
+              className="relative overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
+              style={{
+                border: '2px solid rgba(107, 114, 128, 0.5)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(107, 114, 128, 0.3)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = 'none'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
               suppressHydrationWarning={true}
             >
               {t('common.cancel')}
@@ -822,6 +864,21 @@ export default function AdminReportsPage() {
               onClick={handleAction}
               disabled={actionLoading !== null || !actionForm.reason.trim()}
               variant="destructive"
+              className="relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
+              style={{
+                background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #B91C1C 100%)',
+                boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(239, 68, 68, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
             >
               {actionLoading === selectedReport?.id ? (
                 <>
@@ -829,7 +886,7 @@ export default function AdminReportsPage() {
                   {t('reports.executing')}
                 </>
               ) : (
-                t('common.confirm')
+                <span className="font-bold">{t('common.confirm')}</span>
               )}
             </Button>
           </DialogFooter>

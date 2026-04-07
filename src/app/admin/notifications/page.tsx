@@ -76,7 +76,7 @@ const getNotificationIcon = (type: string) => {
     case 'ADMIN_ACTION_RESOLVED':
       return <Shield className="w-5 h-5" style={{color: '#00BFA6'}} />
     case 'ADMIN_ACTION_WARNED':
-      return <AlertTriangle className="w-5 h-5" style={{color: '#f59e0b'}} />
+      return <AlertTriangle className="w-5 h-5" style={{color: '#68580A'}} />
     case 'ADMIN_ACTION_SUSPENDED':
       return <Clock className="w-5 h-5" style={{color: '#f97316'}} />
     case 'ADMIN_ACTION_TEMP_BANNED':
@@ -473,15 +473,14 @@ export default function AdminNotificationsPage() {
                 <span suppressHydrationWarning={true}>تحديد الكل كمقروء</span>
               </Button>
               <Button
-                variant="outline"
                 size="sm"
                 onClick={clearAll}
                 disabled={allNotifications.length === 0}
-                style={{borderColor: '#ef4444', color: '#ef4444'}}
-                className="hover:bg-red-50"
+                style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                className="hover:bg-red-700 transition-all duration-300"
               >
-                <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                <span suppressHydrationWarning={true}>حذف الكل</span>
+                <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} style={{color: '#ffffff'}} />
+                <span suppressHydrationWarning={true} style={{color: '#ffffff'}}>حذف الكل</span>
               </Button>
             </div>
           </div>
@@ -587,13 +586,12 @@ export default function AdminNotificationsPage() {
                                   </Button>
                                 )}
                                 <Button
-                                  variant="ghost"
                                   size="sm"
                                   onClick={() => deleteNotification(notification.id)}
-                                  style={{color: '#ef4444'}}
-                                  className="hover:bg-red-50"
+                                  style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                                  className="hover:bg-red-700 transition-all duration-300"
                                 >
-                                  <X className="w-4 h-4" />
+                                  <X className="w-4 h-4" style={{color: '#ffffff'}} />
                                 </Button>
                               </div>
                             </div>
@@ -680,13 +678,12 @@ export default function AdminNotificationsPage() {
                                   <span suppressHydrationWarning={true}>مقروء</span>
                                 </Button>
                                 <Button
-                                  variant="ghost"
                                   size="sm"
                                   onClick={() => deleteNotification(notification.id)}
-                                  style={{color: '#ef4444'}}
-                                  className="hover:bg-red-50"
+                                  style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                                  className="hover:bg-red-700 transition-all duration-300"
                                 >
-                                  <X className="w-4 h-4" />
+                                  <X className="w-4 h-4" style={{color: '#ffffff'}} />
                                 </Button>
                               </div>
                             </div>

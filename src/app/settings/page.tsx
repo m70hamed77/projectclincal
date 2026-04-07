@@ -1351,9 +1351,13 @@ export default function SettingsPage() {
                     <p className="text-sm text-red-700" suppressHydrationWarning={true}>
                       {t('profile.settingsPage.deleteAccountWarning')}
                     </p>
-                    <Button variant="destructive" onClick={handleDeleteAccount} className="gap-2 bg-gradient-to-r from-red-600 to-rose-600 hover:shadow-xl hover:shadow-2xl transition-all duration-300">
-                      <Trash2 className="w-4 h-4" />
-                      <span suppressHydrationWarning={true}>{t('profile.settingsPage.deleteAccount')}</span>
+                    <Button 
+                      onClick={handleDeleteAccount} 
+                      style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                      className="hover:bg-red-700 hover:shadow-xl hover:shadow-2xl transition-all duration-300"
+                    >
+                      <Trash2 className="w-4 h-4 mr-2" style={{color: '#ffffff'}} />
+                      <span suppressHydrationWarning={true} style={{color: '#ffffff'}}>{t('profile.settingsPage.deleteAccount')}</span>
                     </Button>
                   </div>
                 </CardContent>

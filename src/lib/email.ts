@@ -16,44 +16,29 @@ export interface SendEmailOptions {
  */
 export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
   try {
-    // في وضع التطوير بدون مفتاح API، نعرض الإيميل في console
-    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_test_placeholder') {
-      console.log('='.repeat(60))
-      console.log('[EMAIL SENDING SIMULATION - Development Mode]')
-      console.log('='.repeat(60))
-      console.log(`To: ${to}`)
-      console.log(`Subject: ${subject}`)
-      console.log('HTML Content:', html)
-      console.log('='.repeat(60))
-      console.log('NOTE: Email not sent because RESEND_API_KEY is not configured')
-      console.log('To send real emails, add RESEND_API_KEY to your .env file')
-      console.log('Get your API key from: https://resend.com/api-keys')
-      console.log('='.repeat(60))
-
-      return {
-        success: true,
-        messageId: `dev-${Date.now()}`,
-        note: 'Email simulated in development mode'
-      }
+    // تحقق من وجود مفتاح API
+    if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_your_api_key_here') {
+      console.error('[EMAIL ERROR] RESEND_API_KEY is not configured properly')
+      throw new Error('لم يتم إعداد خدمة البريد الإلكتروني بعد. يرجى إضافة RESEND_API_KEY في ملف .env')
     }
 
-    // إرسال الإيميل فعلياً في الإنتاج
+    // إرسال الإيميل فعلياً
     const data = await resend.emails.send({
-      from: 'Smiley Dental <no-reply@smiley-dental.com>',
+      from: 'onboarding@resend.dev',
       to,
       subject,
       html,
       text: text || html.replace(/<[^>]*>/g, ''),
     })
 
-    console.log('[Email Sent Successfully]:', data)
+    console.log('[EMAIL SENT SUCCESSFULLY]:', data)
     return {
       success: true,
       messageId: data.id,
       data
     }
   } catch (error: any) {
-    console.error('[Email Sending Error]:', error)
+    console.error('[EMAIL SENDING ERROR]:', error)
     throw new Error(error.message || 'فشل إرسال البريد الإلكتروني')
   }
 }
@@ -61,7 +46,7 @@ export async function sendEmail({ to, subject, html, text }: SendEmailOptions) {
 /**
  * إرسال كود التحقق
  */
-export async function sendVerificationCode(email: string, code: string) {
+export async function sendVerificationCode(email: string, code: string, name?: string) {
   const html = `
     <!DOCTYPE html>
     <html dir="rtl" lang="ar">
@@ -146,7 +131,7 @@ export async function sendVerificationCode(email: string, code: string) {
         </div>
 
         <div class="content">
-          <h2 style="color: #10b981; margin-top: 0;">مرحباً بك!</h2>
+          ${name ? `<h2 style="color: #10b981; margin-top: 0;">مرحباً بك، ${name}!</h2>` : '<h2 style="color: #10b981; margin-top: 0;">مرحباً بك!</h2>'}
 
           <p>شكراً لتسجيلك في منصة سمايلي لطب الأسنان.</p>
           <p>لإكمال عملية التسجيل، يرجى استخدام كود التحقق التالي:</p>
@@ -158,7 +143,7 @@ export async function sendVerificationCode(email: string, code: string) {
           <div class="info">
             <strong>⚠️ مهم:</strong>
             <ul style="margin: 10px 0 0 20px; padding: 0;">
-              <li>هذا الكود صالح لمدة 10 دقائق فقط</li>
+              <li>هذا الكود صالح لمدة 5 دقائق فقط</li>
               <li>لا تشارك هذا الكود مع أي شخص</li>
               <li>إذا لم تطلب هذا الكود، يمكنك تجاهل هذه الرسالة</li>
             </ul>
@@ -182,7 +167,7 @@ export async function sendVerificationCode(email: string, code: string) {
     to: email,
     subject: 'كود التحقق من سمايلي لطب الأسنان',
     html,
-    text: `كود التحقق الخاص بك هو: ${code}\nصالح لمدة 10 دقائق.`
+    text: `كود التحقق الخاص بك هو: ${code}\nصالح لمدة 5 دقائق.`
   })
 }
 

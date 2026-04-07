@@ -453,8 +453,8 @@ export default function AllApplicationsPage() {
                         <Button
                           onClick={() => handleReject(application.id, application.postId)}
                           disabled={actionLoading === application.id}
-                          variant="outline"
-                          className="flex-1 min-w-[140px] text-red-600 hover:text-red-700 hover:bg-red-50 whitespace-nowrap overflow-hidden text-ellipsis"
+                          variant="destructive"
+                          className="flex-1 min-w-[140px] whitespace-nowrap overflow-hidden text-ellipsis"
                           suppressHydrationWarning={true}
                         >
                           {actionLoading === application.id ? (

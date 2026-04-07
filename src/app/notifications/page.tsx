@@ -98,7 +98,7 @@ const getNotificationIcon = (type: string) => {
     case 'ADMIN_ACTION_RESOLVED':
       return <Shield className="w-5 h-5 text-emerald-600" />
     case 'ADMIN_ACTION_WARNED':
-      return <AlertTriangle className="w-5 h-5 text-amber-600" />
+      return <AlertTriangle className="w-5 h-5" style={{color: '#68580A'}} />
     case 'ADMIN_ACTION_SUSPENDED':
       return <Clock className="w-5 h-5 text-orange-600" />
     case 'ADMIN_ACTION_TEMP_BANNED':
@@ -454,14 +454,14 @@ export default function NotificationsPage() {
                       <span suppressHydrationWarning={true}>{t('notifications.markAllAsRead')}</span>
                     </Button>
                     <Button
-                      variant="outline"
                       size="sm"
                       onClick={clearAll}
                       disabled={allNotifications.length === 0}
-                      className="border-rose-300 text-rose-700 hover:bg-rose-50 hover:border-rose-400 transition-all duration-300"
+                      style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
+                      className="hover:bg-red-700 transition-all duration-300"
                     >
-                      <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span suppressHydrationWarning={true}>{t('notifications.clearAll')}</span>
+                      <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} style={{color: '#ffffff'}} />
+                      <span suppressHydrationWarning={true} style={{color: '#ffffff'}}>{t('notifications.clearAll')}</span>
                     </Button>
                   </div>
                 </div>
