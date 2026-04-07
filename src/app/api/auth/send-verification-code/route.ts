@@ -18,14 +18,15 @@ export async function POST(request: NextRequest) {
     // حساب وقت انتهاء الصلاحية (5 دقائق من الآن)
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000)
 
-    // حذف أي كود قديم لنفس الإيميل
-    await db.verificationCode.deleteMany({
-      where: { email: email.toLowerCase() }
-    })
-
-    // حفظ الكود الجديد في قاعدة البيانات
-    await db.verificationCode.create({
-      data: {
+    // حفظ الكود الجديد في قاعدة البيانات باستخدام upsert
+    await db.verificationCode.upsert({
+      where: { email: email.toLowerCase() },
+      update: {
+        code,
+        expiresAt,
+        used: false
+      },
+      create: {
         email: email.toLowerCase(),
         code,
         expiresAt,
