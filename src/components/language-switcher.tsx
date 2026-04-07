@@ -34,6 +34,15 @@ export function LanguageSwitcher() {
     } catch (e) {
       // Ignore
     }
+
+    // Emit custom event to notify all components
+    try {
+      const event = new CustomEvent('localeChanged', { detail: { locale: newLocale } })
+      window.dispatchEvent(event)
+      console.log('[LanguageSwitcher] Locale changed to:', newLocale)
+    } catch (e) {
+      console.error('[LanguageSwitcher] Error dispatching event:', e)
+    }
   }
 
   return (

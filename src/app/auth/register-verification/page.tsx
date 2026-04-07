@@ -1,12 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin, Sparkles, Shield, Zap, Heart } from 'lucide-react'
+import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin, Sparkles, Shield, Zap, Heart, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { useTranslations } from '@/hooks/useTranslations'
 import {
   Select,
   SelectContent,
@@ -15,38 +16,39 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-// قائمة المحافظات المصرية
-const EGYPTIAN_GOVERNORATES = [
-  "القاهرة",
-  "الجيزة",
-  "الإسكندرية",
-  "الدقهلية",
-  "الشرقية",
-  "المنوفية",
-  "القليوبية",
-  "البحيرة",
-  "الغربية",
-  "كفر الشيخ",
-  "الدلتا",
-  "الإسماعيلية",
-  "بور سعيد",
-  "السويس",
-  "الشرقية (شرق القناة)",
-  "شمال سيناء",
-  "جنوب سيناء",
-  "الجيزة (الواحة)",
-  "المنيا",
-  "أسيوط",
-  "سوهاج",
-  "قنا",
-  "الأقصر",
-  "أسوان",
-  "البحر الأحمر",
-  "الوادي الجديد",
-  "مطروح",
-]
+// قائمة المحافظات المصرية مع الترجمات
+const GOVERNORATES: Record<string, { ar: string; en: string }> = {
+  "cairo": { ar: "القاهرة", en: "Cairo" },
+  "giza": { ar: "الجيزة", en: "Giza" },
+  "alexandria": { ar: "الإسكندرية", en: "Alexandria" },
+  "dakahlia": { ar: "الدقهلية", en: "Dakahlia" },
+  "sharqia": { ar: "الشرقية", en: "Sharqia" },
+  "monufia": { ar: "المنوفية", en: "Monufia" },
+  "qalyubia": { ar: "القليوبية", en: "Qalyubia" },
+  "beheira": { ar: "البحيرة", en: "Beheira" },
+  "gharbia": { ar: "الغربية", en: "Gharbia" },
+  "kafr_elsheikh": { ar: "كفر الشيخ", en: "Kafr El Sheikh" },
+  "damietta": { ar: "الدلتا", en: "Damietta" },
+  "ismailia": { ar: "الإسماعيلية", en: "Ismailia" },
+  "port_said": { ar: "بور سعيد", en: "Port Said" },
+  "suez": { ar: "السويس", en: "Suez" },
+  "north_sinai": { ar: "شمال سيناء", en: "North Sinai" },
+  "south_sinai": { ar: "جنوب سيناء", en: "South Sinai" },
+  "fayoum": { ar: "الجيزة (الواحة)", en: "Fayoum" },
+  "minya": { ar: "المنيا", en: "Minya" },
+  "asyut": { ar: "أسيوط", en: "Asyut" },
+  "sohag": { ar: "سوهاج", en: "Sohag" },
+  "qena": { ar: "قنا", en: "Qena" },
+  "luxor": { ar: "الأقصر", en: "Luxor" },
+  "aswan": { ar: "أسوان", en: "Aswan" },
+  "red_sea": { ar: "البحر الأحمر", en: "Red Sea" },
+  "new_valley": { ar: "الوادي الجديد", en: "New Valley" },
+  "matrouh": { ar: "مطروح", en: "Matrouh" },
+}
 
 export default function RegisterWithVerificationPage() {
+  const { t, locale } = useTranslations()
+  const isRTL = locale === 'ar'
   const router = useRouter()
   const searchParams = useSearchParams()
   const type = searchParams.get('type') || 'patient'
@@ -375,7 +377,7 @@ export default function RegisterWithVerificationPage() {
   // Step 1: Registration Form
   if (step === 1) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
@@ -566,12 +568,12 @@ export default function RegisterWithVerificationPage() {
                       <SelectTrigger className={`w-full bg-slate-800/50 border-2 rounded-xl text-white focus:ring-0 transition-all duration-300 ${
                         errors.governorate ? 'border-red-500' : 'border-white/10'
                       }`}>
-                        <SelectValue placeholder="اختر المحافظة" />
+                        <SelectValue placeholder={isRTL ? "اختر المحافظة" : "Select Governorate"} />
                       </SelectTrigger>
                       <SelectContent className="max-h-64 overflow-y-auto bg-slate-800 border-white/10">
-                        {EGYPTIAN_GOVERNORATES.map((gov) => (
-                          <SelectItem key={gov} value={gov} className="text-white hover:bg-purple-500/20">
-                            {gov}
+                        {Object.entries(GOVERNORATES).map(([key, gov]) => (
+                          <SelectItem key={key} value={key} className="text-white hover:bg-purple-500/20">
+                            {isRTL ? gov.ar : gov.en}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -881,7 +883,7 @@ export default function RegisterWithVerificationPage() {
   // Step 2: Verification Code
   if (step === 2) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
@@ -1045,7 +1047,7 @@ export default function RegisterWithVerificationPage() {
   // Step 3: Success
   if (step === 3) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
         {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div

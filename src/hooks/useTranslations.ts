@@ -12,7 +12,7 @@ export function useTranslations() {
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
-    // Simplified initialization
+    // Initialize translations
     const initTranslations = () => {
       try {
         const storageLocale = localStorage.getItem('locale') || 'ar'
@@ -32,6 +32,21 @@ export function useTranslations() {
     }
 
     initTranslations()
+
+    // Listen for custom language change event
+    const handleLanguageChange = (event: CustomEvent) => {
+      const newLocale = event.detail.locale
+      console.log('[i18n] Language changed to:', newLocale)
+      setLocale(newLocale)
+      const translationData = newLocale === 'ar' ? arData : enData
+      setTranslations(translationData || {})
+    }
+
+    window.addEventListener('localeChanged', handleLanguageChange as EventListener)
+
+    return () => {
+      window.removeEventListener('localeChanged', handleLanguageChange as EventListener)
+    }
   }, [])
 
   const t = (key: string): string => {
