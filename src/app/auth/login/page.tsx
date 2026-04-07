@@ -243,9 +243,9 @@ export default function LoginPage() {
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
-                مرحباً بك في{' '}
+                {t('loginPage.welcomeToSmiley')}{' '}
                 <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                  سمايلي
+                  {t('loginPage.brandName')}
                 </span>
               </h1>
 
@@ -262,8 +262,8 @@ export default function LoginPage() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">أمان عالي</h3>
-                    <p className="text-gray-400 text-sm">بياناتك محمية بأحدث تقنيات التشفير</p>
+                    <h3 className="text-white font-bold text-lg">{t('loginPage.securityTitle')}</h3>
+                    <p className="text-gray-400 text-sm">{t('loginPage.securityDescFull')}</p>
                   </div>
                 </div>
               </div>
@@ -274,8 +274,8 @@ export default function LoginPage() {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">سرعة فائقة</h3>
-                    <p className="text-gray-400 text-sm">وصول سريع وسهل لجميع الخدمات</p>
+                    <h3 className="text-white font-bold text-lg">{t('loginPage.speedTitle')}</h3>
+                    <p className="text-gray-400 text-sm">{t('loginPage.speedDescFull')}</p>
                   </div>
                 </div>
               </div>
@@ -289,11 +289,11 @@ export default function LoginPage() {
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full px-4 py-2 mb-4 animate-bounce-slow">
                   <Sparkles className="w-4 h-4 text-purple-400" />
-                  <span className="text-purple-300 text-sm font-medium">سجّل الدخول الآن</span>
+                  <span className="text-purple-300 text-sm font-medium">{t('loginPage.loginNowBadge')}</span>
                   <Sparkles className="w-4 h-4 text-pink-400" />
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-2">مرحباً بعودتك!</h2>
-                <p className="text-gray-400">أدخل بياناتك للوصول إلى حسابك</p>
+                <h2 className="text-3xl font-bold text-white mb-2">{t('loginPage.welcomeBackTitle')}</h2>
+                <p className="text-gray-400">{t('loginPage.enterData')}</p>
               </div>
 
               {/* Form */}
@@ -301,7 +301,7 @@ export default function LoginPage() {
                 {/* Email */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-300">
-                    البريد الإلكتروني
+                    {t('loginPage.emailLabel')}
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
@@ -334,7 +334,7 @@ export default function LoginPage() {
                 {/* Password */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-300">
-                    كلمة المرور
+                    {t('loginPage.passwordLabel')}
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
@@ -386,13 +386,13 @@ export default function LoginPage() {
                         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">تذكرني</span>
+                    <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">{t('loginPage.rememberMe')}</span>
                   </label>
                   <Link
                     href="/forgot-password"
                     className="text-sm text-purple-400 hover:text-purple-300 transition-colors hover:underline font-medium"
                   >
-                    نسيت كلمة المرور؟
+                    {t('loginPage.forgotPassword')}
                   </Link>
                 </div>
 
@@ -410,12 +410,12 @@ export default function LoginPage() {
                   {isSubmitting ? (
                     <div className="flex items-center justify-center gap-3">
                       <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>جاري تسجيل الدخول...</span>
+                      <span>{t('loginPage.loggingIn')}</span>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center gap-3">
                       <LogIn className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span>تسجيل الدخول</span>
+                      <span>{t('loginPage.title')}</span>
                     </div>
                   )}
                 </button>
@@ -436,7 +436,7 @@ export default function LoginPage() {
                     <div className="w-full border-t border-white/10"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-slate-900/50 text-gray-400">أو</span>
+                    <span className="px-4 bg-slate-900/50 text-gray-400">{t('loginPage.or')}</span>
                   </div>
                 </div>
 
@@ -461,7 +461,7 @@ export default function LoginPage() {
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
-                    Facebook
+                    Google
                   </button>
                 </div>
               </form>
@@ -469,12 +469,12 @@ export default function LoginPage() {
               {/* Sign Up Link */}
               <div className="mt-8 text-center pt-6 border-t border-white/10">
                 <p className="text-gray-400 text-sm">
-                  ليس لديك حساب؟{' '}
+                  {t('loginPage.noAccount')}{' '}
                   <Link
                     href="/auth/register-verification"
                     className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline"
                   >
-                    إنشاء حساب جديد
+                    {t('loginPage.createNewAccount')}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </p>

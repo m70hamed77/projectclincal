@@ -428,13 +428,13 @@ export default function RegisterWithVerificationPage() {
                 </div>
 
                 <h1 className="text-3xl font-bold text-white mb-2 animate-gradient bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
-                  {userType === 'patient' ? 'تسجيل كمريض جديد' : 'تسجيل كطالب جديد'}
+                  {userType === 'patient' ? t('registerPage.registerAsPatient') : t('registerPage.registerAsStudent')}
                 </h1>
                 <p className="text-gray-300 flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4 text-pink-400 animate-pulse" />
                   {userType === 'patient'
-                    ? 'انضم إلينا وابدأ رحلة العناية بأسنانك'
-                    : 'انضم إلينا وابدأ رحلتك المهنية'}
+                    ? t('registerPage.patientDesc')
+                    : t('registerPage.studentDesc')}
                   <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" style={{ animationDelay: '0.5s' }} />
                 </p>
               </div>
@@ -453,7 +453,7 @@ export default function RegisterWithVerificationPage() {
                   }`}
                 >
                   <User className={`w-5 h-5 ${userType === 'patient' ? 'group-hover:scale-110 transition-transform' : ''}`} />
-                  مريض
+                  {t('registerPage.patient')}
                 </button>
                 <button
                   onClick={() => setUserType('student')}
@@ -464,13 +464,13 @@ export default function RegisterWithVerificationPage() {
                   }`}
                 >
                   <GraduationCap className={`w-5 h-5 ${userType === 'student' ? 'group-hover:scale-110 transition-transform' : ''}`} />
-                  طالب
+                  {t('registerPage.studentDoctor')}
                 </button>
               </div>
 
               {/* Name */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">الاسم الكامل *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.fullNameLabel')}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-center">
@@ -483,7 +483,7 @@ export default function RegisterWithVerificationPage() {
                       className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
                         errors.name ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
                       }`}
-                      placeholder="أدخل اسمك الكامل"
+                      placeholder={t('registerPage.fullNamePlaceholder')}
                     />
                   </div>
                 </div>
@@ -497,7 +497,7 @@ export default function RegisterWithVerificationPage() {
 
               {/* Email */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">البريد الإلكتروني *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.emailLabel')}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-center">
@@ -524,14 +524,14 @@ export default function RegisterWithVerificationPage() {
                 {!errors.email && formData.email && (
                   <p className="text-sm text-gray-400 flex items-center gap-1">
                     <CheckCircle className="w-4 h-4 text-green-400" />
-                    سيتم إرسال كود التحقق إلى هذا الإيميل
+                    {t('registerPage.codeSentTo' )}
                   </p>
                 )}
               </div>
 
               {/* Phone */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">رقم الهاتف *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.phoneLabel')}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-center">
@@ -560,7 +560,7 @@ export default function RegisterWithVerificationPage() {
 
               {/* Governorate */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">المحافظة *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.governorateLabel')}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative">
@@ -590,7 +590,7 @@ export default function RegisterWithVerificationPage() {
 
               {/* Address */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">العنوان بالتفصيل *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.addressLabel' )}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-start">
@@ -603,7 +603,7 @@ export default function RegisterWithVerificationPage() {
                       className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 resize-none ${
                         errors.address ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-purple-500'
                       }`}
-                      placeholder="أدخل العنوان بالتفصيل (الشارع، رقم المبنى، الطابق...)"
+                      placeholder={t('registerPage.addressPlaceholder' )}
                     />
                   </div>
                 </div>
@@ -617,7 +617,7 @@ export default function RegisterWithVerificationPage() {
 
               {/* Password */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">كلمة المرور *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.passwordLabel' )}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-center">
@@ -684,7 +684,7 @@ export default function RegisterWithVerificationPage() {
 
               {/* Confirm Password */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300">تأكيد كلمة المرور *</label>
+                <label className="block text-sm font-medium text-gray-300">{t('registerPage.confirmPasswordLabel' )}</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <div className="relative flex items-center">
@@ -723,7 +723,7 @@ export default function RegisterWithVerificationPage() {
               {userType === 'student' && (
                 <div className="space-y-4 pt-4 border-t border-white/10 animate-slide-in-down">
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-300">الجامعة *</label>
+                    <label className="block text-sm font-medium text-gray-300">{t('registerPage.universityLabel' )}</label>
                     <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                       <div className="relative flex items-center">
@@ -736,7 +736,7 @@ export default function RegisterWithVerificationPage() {
                           className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
                             errors.universityName ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-blue-500'
                           }`}
-                          placeholder="اسم الجامعة"
+                          placeholder={t('registerPage.universityPlaceholder' )}
                         />
                       </div>
                     </div>
@@ -749,7 +749,7 @@ export default function RegisterWithVerificationPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-300">التخصص *</label>
+                    <label className="block text-sm font-medium text-gray-300">{t('registerPage.specializationLabel' )}</label>
                     <div className="relative group">
                       <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                       <div className="relative flex items-center">
@@ -762,7 +762,7 @@ export default function RegisterWithVerificationPage() {
                           className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
                             errors.specialization ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-blue-500'
                           }`}
-                          placeholder="التخصص الجامعي"
+                          placeholder={t('registerPage.specializationPlaceholder' )}
                         />
                       </div>
                     </div>
@@ -790,7 +790,7 @@ export default function RegisterWithVerificationPage() {
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    جاري الإرسال...
+                    {t('registerPage.sending' )}
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
@@ -804,7 +804,7 @@ export default function RegisterWithVerificationPage() {
               <p className="text-center text-gray-400">
                 لديك حساب بالفعل؟{' '}
                 <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline">
-                  تسجيل الدخول
+                  {t('auth.loginButton' )}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </p>
@@ -924,9 +924,9 @@ export default function RegisterWithVerificationPage() {
                   </div>
                 </div>
 
-                <h1 className="text-2xl font-bold text-white mb-2">أدخل كود التحقق</h1>
+                <h1 className="text-2xl font-bold text-white mb-2">{t('registerPage.verifyCode' )}</h1>
                 <p className="text-gray-300 text-sm">
-                  تم إرسال كود 4 أرقام إلى {formData.email}
+                  {t('registerPage.codeSentTo' )} {formData.email}
                 </p>
               </div>
             </div>
@@ -934,7 +934,7 @@ export default function RegisterWithVerificationPage() {
             {/* Form */}
             <div className="p-8 space-y-6">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-300 text-center">كود التحقق (صالح لمدة 10 دقائق)</label>
+                <label className="block text-sm font-medium text-gray-300 text-center">{t('registerPage.verifyCode' )} (صالح لمدة 10 دقائق)</label>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
                   <input
@@ -1000,7 +1000,7 @@ export default function RegisterWithVerificationPage() {
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    جاري التحقق والتسجيل...
+                    {t('registerPage.submitting' )}...
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
@@ -1087,12 +1087,12 @@ export default function RegisterWithVerificationPage() {
 
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold text-white">
-                  {userType === 'patient' ? 'تم إنشاء حسابك!' : 'تم استلام طلبك!'}
+                  {userType === 'patient' ? t('registerPage.patientRegisteredSuccessfully') : t('registerPage.studentRegisteredSuccessfully')}
                 </h1>
                 <p className="text-gray-300 leading-relaxed">
                   {userType === 'patient'
-                    ? 'حسابك الآن مفعل ويمكنك تسجيل الدخول فوراً'
-                    : 'حسابك الآن قيد المراجعة من قبل الإدارة. سيتم إشعارك عند الموافقة'}
+                    ? t('registerPage.accountActivated' )
+                    : t('registerPage.studentPendingReview')}
                 </p>
               </div>
 
@@ -1104,7 +1104,7 @@ export default function RegisterWithVerificationPage() {
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
                   <span className="flex items-center gap-2">
                     <LogIn className="w-5 h-5" />
-                    تسجيل الدخول
+                    {t('auth.loginButton')}
                   </span>
                 </Button>
               </div>
