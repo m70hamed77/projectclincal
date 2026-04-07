@@ -134,20 +134,19 @@ export default function LoginPage() {
       let data
       try {
         const contentType = response.headers.get('content-type')
-        if (!contentType || !contentType.includes('application/json')) {
-          console.error('❌ [Login] Server returned non-JSON response:', {
-            status: response.status,
-            statusText: response.statusText,
-            contentType
-          })
-          throw new Error(t('loginPage.errors.invalidResponse'))
-        }
-
         const responseText = await response.text()
-        console.log('📄 [Login] Response text length:', responseText.length)
 
+        console.log('📡 [Login] Response details:', {
+          status: response.status,
+          statusText: response.statusText,
+          contentType,
+          textLength: responseText.length,
+          textPreview: responseText.substring(0, 200)
+        })
+
+        // Try to parse as JSON
         data = JSON.parse(responseText)
-        console.log('📦 [Login] Parsed data:', { success: data.success, hasUser: !!data.user, hasError: !!data.error })
+        console.log('📦 [Login] Parsed data successfully:', { success: data.success, hasUser: !!data.user, hasError: !!data.error })
       } catch (parseError) {
         console.error('❌ [Login] Failed to parse response:', parseError)
         throw new Error(t('loginPage.errors.parseError'))

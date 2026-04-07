@@ -1,0 +1,12 @@
+يرجى تشغيل الأمر التالي يدوياً في الـ terminal لتشغيل الخادم:
+
+cd /home/z/my-project && bun run dev
+
+أو:
+
+npx cross-env TURBOPACK=0 next dev -p 3000
+
+بعد تشغيل الخادم، سيعمل على: http://localhost:3000
+
+إذا كان المنفذ 3000 مستخدم، يمكن قتل العملية باستخدام:
+kill $(lsof -ti:3000)
