@@ -275,13 +275,37 @@ export default function ForgotPasswordPage() {
         <LanguageSwitcher />
       </div>
 
-      {/* Back Button */}
+      {/* Back Button - Stylish */}
       <Link
-        href="/auth/login"
-        className="absolute top-6 left-6 z-20 flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
+        href="/"
+        className="absolute top-6 left-6 z-20 group"
       >
-        {isRTL ? <ArrowRight className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> : <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />}
-        <span className="text-sm font-medium">{t('forgotPasswordPage.back')}</span>
+        <div
+          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-semibold text-sm text-white transition-all duration-500 hover:scale-110 active:scale-95"
+          style={{
+            background: "rgba(147, 51, 234, 0.2)",
+            backdropFilter: "blur(10px)",
+            border: "2px solid rgba(147, 51, 234, 0.4)",
+            boxShadow: "0 4px 14px rgba(147, 51, 234, 0.3)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(147, 51, 234, 0.4)";
+            e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.6)";
+            e.currentTarget.style.boxShadow = "0 8px 24px rgba(147, 51, 234, 0.5)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
+            e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.4)";
+            e.currentTarget.style.boxShadow = "0 4px 14px rgba(147, 51, 234, 0.3)";
+          }}
+        >
+          <ArrowRight
+            className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`}
+          />
+          <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            {t('loginPage.back')}
+          </span>
+        </div>
       </Link>
 
       {/* Main Container */}
