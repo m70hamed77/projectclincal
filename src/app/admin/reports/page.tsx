@@ -641,8 +641,8 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              style={{background: '#68580A', color: '#ffffff', border: 'none'}}
-                              className="hover:bg-amber-900 transition-all duration-300"
+                              style={{background: '#D4AF37', color: '#ffffff', border: 'none'}}
+                              className="hover:bg-yellow-600 transition-all duration-300"
                             >
                               <ShieldAlert className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
                               <span style={{color: '#ffffff'}}>{t('reports.warn')}</span>

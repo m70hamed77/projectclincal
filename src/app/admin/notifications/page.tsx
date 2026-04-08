@@ -76,7 +76,7 @@ const getNotificationIcon = (type: string) => {
     case 'ADMIN_ACTION_RESOLVED':
       return <Shield className="w-5 h-5" style={{color: '#00BFA6'}} />
     case 'ADMIN_ACTION_WARNED':
-      return <AlertTriangle className="w-5 h-5" style={{color: '#68580A'}} />
+      return <AlertTriangle className="w-5 h-5" style={{color: '#D4AF37'}} />
     case 'ADMIN_ACTION_SUSPENDED':
       return <Clock className="w-5 h-5" style={{color: '#f97316'}} />
     case 'ADMIN_ACTION_TEMP_BANNED':
