@@ -207,6 +207,8 @@
       "validity": "Code valid for: 10 minutes"
     },
     "successMessage": "Password changed successfully. You can now login with your new password.",
+    "haveAccount": "Already have an account?",
+    "login": "Login",
     "errors": {
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email address",
