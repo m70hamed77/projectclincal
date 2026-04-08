@@ -585,10 +585,10 @@ export default function AdminUsersPage() {
                               {t('users.approve')}
                             </Button>
                             <Button
-                              variant="destructive"
                               size="sm"
                               onClick={() => setRejectDialog({ open: true, studentId: userData.id })}
                               disabled={actionLoading === userData.id}
+                              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
                             >
                               <X className="w-4 h-4 ml-1" />
                               {t('users.reject')}
@@ -741,10 +741,9 @@ export default function AdminUsersPage() {
                     )}
                   </Button>
                   <Button
-                    variant="destructive"
                     onClick={() => setRejectDialog({ open: true, studentId: selectedUser.id })}
                     disabled={actionLoading === selectedUser.id}
-                    className="flex-1"
+                    className="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold"
                   >
                     {actionLoading === selectedUser.id ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -792,9 +791,9 @@ export default function AdminUsersPage() {
               {t('common.cancel')}
             </Button>
             <Button
-              variant="destructive"
               onClick={handleReject}
               disabled={!rejectionReason.trim()}
+              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
               suppressHydrationWarning={true}
             >
               {t('users.confirmReject')}

@@ -690,10 +690,10 @@ export default function AdminReportsPage() {
                               {t('reports.permBan')}
                             </Button>
                             <Button
-                              variant="outline"
                               size="sm"
                               onClick={() => handleDismiss(report.id)}
                               disabled={actionLoading === report.id}
+                              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
                             >
                               <XCircle className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                               {t('reports.dismiss')}

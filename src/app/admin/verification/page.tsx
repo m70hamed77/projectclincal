@@ -410,12 +410,7 @@ export default function AdminVerificationPage() {
                           <Button
                             onClick={() => setRejectDialog({ open: true, studentId: student.id })}
                             disabled={actionLoading === student.id}
-                            className="flex-1"
-                            style={{
-                              background: '#DC2626 !important',
-                              color: '#ffffff !important',
-                              border: 'none !important',
-                            }}
+                            className="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold"
                           >
                             {actionLoading === student.id ? (
                               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -471,12 +466,8 @@ export default function AdminVerificationPage() {
             <Button
               onClick={handleReject}
               disabled={!rejectionReason.trim()}
+              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
               suppressHydrationWarning={true}
-              style={{
-                background: '#DC2626 !important',
-                color: '#ffffff !important',
-                border: 'none !important',
-              }}
             >
               تأكيد الرفض
             </Button>

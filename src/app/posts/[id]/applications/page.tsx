@@ -422,13 +422,8 @@ export default function ApplicationsPage() {
                         <Button
                           onClick={() => handleReject(application.id)}
                           disabled={actionLoading === application.id}
-                          className="flex-1"
+                          className="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold"
                           suppressHydrationWarning={true}
-                          style={{
-                            background: '#DC2626 !important',
-                            color: '#ffffff !important',
-                            border: 'none !important',
-                          }}
                         >
                           {actionLoading === application.id ? (
                             <>جاري المعالجة...</>

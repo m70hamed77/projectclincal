@@ -331,12 +331,7 @@ export default function AdminDashboard() {
                             <Button
                               onClick={() => handleRejectClick(user)}
                               disabled={isProcessing}
-                              className="w-full gap-2"
-                              style={{
-                                background: '#DC2626 !important',
-                                color: '#ffffff !important',
-                                border: 'none !important',
-                              }}
+                              className="w-full gap-2 bg-gray-700 hover:bg-gray-800 text-white font-bold"
                             >
                               <XCircle className="w-4 h-4" />
                               رفض
@@ -397,12 +392,7 @@ export default function AdminDashboard() {
             <Button
               onClick={handleReject}
               disabled={isProcessing}
-              className="gap-2"
-              style={{
-                background: '#DC2626 !important',
-                color: '#ffffff !important',
-                border: 'none !important',
-              }}
+              className="gap-2 bg-gray-700 hover:bg-gray-800 text-white font-bold"
             >
               {isProcessing ? (
                 <>
