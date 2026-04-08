@@ -389,7 +389,7 @@ export default function LoginPage() {
                     <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">{t('loginPage.rememberMe')}</span>
                   </label>
                   <Link
-                    href="/forgot-password"
+                    href="/auth/forgot-password"
                     className="text-sm text-purple-400 hover:text-purple-300 transition-colors hover:underline font-medium"
                   >
                     {t('loginPage.forgotPassword')}
