@@ -1286,60 +1286,148 @@ export default function Home() {
            FOOTER
       ========================================== */}
       <footer
-        className="py-12 relative"
+        className="py-16 relative overflow-hidden"
         style={{
-          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 100%)",
-          borderTop: "2px solid rgba(147, 51, 234, 0.2)",
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
+          borderTop: "2px solid rgba(147, 51, 234, 0.3)",
         }}
       >
-        <div className="container-full text-center">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+          <div className="absolute top-10 right-10 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '0s' }} />
+          <div className="absolute bottom-10 left-10 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow" />
+        </div>
+
+        <div className="container-full relative z-10">
           <AnimatedSection>
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center"
-                style={{
-                  background: "linear-gradient(135deg, #9333ea, #ec4899)",
-                  boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
-                }}
-              >
-                <span className="text-2xl">🦷</span>
+            {/* Main Logo Section */}
+            <div className="flex flex-col items-center justify-center gap-6 mb-12">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"></div>
+                <div
+                  className="relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6"
+                  style={{
+                    background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                    boxShadow: "0 8px 24px rgba(236, 72, 153, 0.5)",
+                  }}
+                >
+                  <span className="text-3xl transition-transform duration-300 group-hover:scale-125">🦷</span>
+                </div>
               </div>
-              <span
-                className="text-xl font-bold"
+
+              <div className="text-center">
+                <span
+                  className="text-3xl font-bold block mb-2"
+                  style={{
+                    background: "linear-gradient(135deg, #a855f7, #ec4899, #06b6d4)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundSize: "200% 200%",
+                    animation: "gradient 3s ease infinite",
+                  }}
+                >
+                  {t("home.brand")}
+                </span>
+                <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm">
+                  {t("home.tagline") || "منصة تجمع الطلاب والمرضى لعلاج أسنان مميز"}
+                </p>
+              </div>
+            </div>
+
+            {/* Team Info Cards */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
+              {/* Team Card */}
+              <div
+                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
                 style={{
-                  background: "linear-gradient(135deg, #a855f7, #ec4899)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  background: "rgba(147, 51, 234, 0.1)",
+                  border: "2px solid rgba(147, 51, 234, 0.3)",
+                  backdropFilter: "blur(8px)"
                 }}
               >
-                {t("home.brand")}
-              </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10 text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #9333ea, #a855f7)" }}>
+                    <User className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg mb-2">تيم التخرج</h3>
+                  <p className="text-purple-300 font-semibold text-xl">Team 22 CS</p>
+                </div>
+              </div>
+
+              {/* Year Card */}
+              <div
+                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
+                style={{
+                  background: "rgba(236, 72, 153, 0.1)",
+                  border: "2px solid rgba(236, 72, 153, 0.3)",
+                  backdropFilter: "blur(8px)"
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10 text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ec4899, #f472b6)" }}>
+                    <Star className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg mb-2">تخرج</h3>
+                  <p className="text-pink-300 font-semibold text-xl">2026</p>
+                </div>
+              </div>
+
+              {/* Copyright Card */}
+              <div
+                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
+                style={{
+                  background: "rgba(6, 182, 212, 0.1)",
+                  border: "2px solid rgba(6, 182, 212, 0.3)",
+                  backdropFilter: "blur(8px)"
+                }}
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative z-10 text-center">
+                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)" }}>
+                    <Shield className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-white font-bold text-lg mb-2">الحقوق</h3>
+                  <p className="text-cyan-300 font-semibold text-sm">© 2026 All Rights Reserved</p>
+                </div>
+              </div>
             </div>
-            <p style={{ color: "rgba(255,255,255,0.6)" }} className="mb-4">
-              © 2024 Smiley Dental. {t("home.allRightsReserved") || "All rights reserved."}
-            </p>
-            <div className="flex items-center justify-center gap-6">
-              <Link
-                href="#features"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
-                style={{ color: "rgba(255,255,255,0.6)" }}
-              >
-                {t("home.features")}
-              </Link>
-              <Link
-                href="#how-it-works"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
-                style={{ color: "rgba(255,255,255,0.6)" }}
-              >
-                {t("home.howItWorks")}
-              </Link>
-              <Link
-                href="#faq"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
-                style={{ color: "rgba(255,255,255,0.6)" }}
-              >
-                {t("home.faq")}
-              </Link>
+
+            {/* Navigation Links */}
+            <div className="flex flex-wrap items-center justify-center gap-8 mb-8">
+              {[
+                { href: "#features", label: t("home.features") },
+                { href: "#how-it-works", label: t("home.howItWorks") },
+                { href: "#faq", label: t("home.faq") },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="relative group"
+                >
+                  <span
+                    className="text-sm transition-colors duration-200 hover:text-purple-400 inline-block"
+                    style={{ color: "rgba(255,255,255,0.8)" }}
+                  >
+                    {item.label}
+                  </span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Bottom Bar */}
+            <div
+              className="pt-8 border-t border-white/10"
+              style={{
+                background: "linear-gradient(to right, transparent, rgba(147, 51, 234, 0.2), transparent)",
+              }}
+            >
+              <p style={{ color: "rgba(255,255,255,0.6)" }} className="text-center text-sm">
+                © 2026 Smiley Dental. {t("home.allRightsReserved") || "All rights reserved."}
+              </p>
             </div>
           </AnimatedSection>
         </div>
