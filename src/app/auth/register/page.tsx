@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Eye, EyeOff, Upload, X, Check, ArrowRight, ArrowLeft, User, UserPlus, Send, Lock, Mail, Phone, AlertCircle, GraduationCap } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/hooks/useTranslations'
 
 export default function SignupPage() {
@@ -540,11 +539,6 @@ export default function SignupPage() {
         }}
         aria-hidden="true"
       />
-
-      {/* Language Switcher */}
-      <div className="absolute top-4 right-4 md:top-8 md:right-8 z-20">
-        <LanguageSwitcher />
-      </div>
 
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none" suppressHydrationWarning={true} aria-hidden="true">

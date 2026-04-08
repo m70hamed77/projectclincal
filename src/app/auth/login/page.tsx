@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Eye, EyeOff, Lock, Mail, AlertCircle, LogIn, User, ArrowRight, Sparkles, Shield, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/hooks/useTranslations'
 
 export default function LoginPage() {
@@ -222,11 +221,6 @@ export default function LoginPage() {
         <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-blue-400 rounded-full animate-particle-2" />
         <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400 rounded-full animate-particle-3" />
         <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
-      </div>
-
-      {/* Language Switcher */}
-      <div className="absolute top-6 right-6 z-20">
-        <LanguageSwitcher />
       </div>
 
       {/* Back Button - Stylish */}
