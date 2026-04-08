@@ -233,33 +233,41 @@ export default function ForgotPasswordPage() {
   const IconComponent = stepInfo.icon
 
   return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, #020617 0%, #581c87 50%, #020617 100%)' }}>
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Gradient Orbs */}
         <div
-          className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
+          className="absolute top-20 left-20 w-96 h-96 rounded-full blur-3xl"
           style={{
+            background: 'rgba(147, 51, 234, 0.2)',
+            animation: 'float 6s ease-in-out infinite',
             animationDelay: '0s',
             transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
           }}
         />
         <div
-          className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-float"
+          className="absolute bottom-20 right-20 w-96 h-96 rounded-full blur-3xl"
           style={{
+            background: 'rgba(59, 130, 246, 0.2)',
+            animation: 'float 6s ease-in-out infinite',
             animationDelay: '2s',
             transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
           }}
         />
         <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/10 rounded-full blur-3xl animate-pulse-slow"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl"
+          style={{
+            background: 'rgba(236, 72, 153, 0.1)',
+            animation: 'pulse-slow 8s ease-in-out infinite'
+          }}
         />
 
         {/* Floating Particles */}
-        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-particle-1" />
-        <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-blue-400 rounded-full animate-particle-2" />
-        <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400 rounded-full animate-particle-3" />
-        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full" style={{ animation: 'particle-1 15s ease-in-out infinite' }} />
+        <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-blue-400 rounded-full" style={{ animation: 'particle-2 18s ease-in-out infinite' }} />
+        <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400 rounded-full" style={{ animation: 'particle-3 12s ease-in-out infinite' }} />
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full" style={{ animation: 'particle-4 20s ease-in-out infinite' }} />
       </div>
 
       {/* Language Switcher */}
@@ -279,16 +287,16 @@ export default function ForgotPasswordPage() {
       {/* Main Container */}
       <div className="relative w-full max-w-lg z-10">
         {/* Card */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl hover:shadow-purple-500/20 transition-all duration-500 hover:border-purple-500/30 animate-slide-in">
+        <div className="backdrop-blur-xl border rounded-3xl p-8 shadow-2xl transition-all duration-500" style={{ background: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' }}>
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full px-4 py-2 mb-4 animate-bounce-slow">
-              <Sparkles className="w-4 h-4 text-purple-400" />
-              <span className="text-purple-300 text-sm font-medium">Smiley Dental</span>
-              <Sparkles className="w-4 h-4 text-pink-400" />
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-2 mb-4" style={{ background: 'linear-gradient(90deg, rgba(147, 51, 234, 0.2), rgba(236, 72, 153, 0.2))', animation: 'bounce-slow 3s ease-in-out infinite' }}>
+              <Sparkles className="w-4 h-4" style={{ color: '#c084fc' }} />
+              <span className="text-sm font-medium" style={{ color: '#d8b4fe' }}>Smiley Dental</span>
+              <Sparkles className="w-4 h-4" style={{ color: '#f472b6' }} />
             </div>
 
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl mb-4 animate-float-slow">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4" style={{ background: 'linear-gradient(135deg, #9333ea, #ec4899)', animation: 'float-slow 4s ease-in-out infinite' }}>
               <IconComponent className="w-8 h-8 text-white" />
             </div>
 
@@ -298,7 +306,7 @@ export default function ForgotPasswordPage() {
 
           {/* Error/Success Messages */}
           {error && (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-xl p-4 mb-6 animate-shake">
+            <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
               <p className="text-red-400 text-sm text-center flex items-center justify-center gap-2">
                 <AlertCircle className="w-4 h-4" />
                 {error}
@@ -307,7 +315,7 @@ export default function ForgotPasswordPage() {
           )}
 
           {success && (
-            <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4 mb-6">
+            <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(34, 197, 94, 0.1)', borderColor: 'rgba(34, 197, 94, 0.3)' }}>
               <p className="text-green-400 text-sm text-center flex items-center justify-center gap-2">
                 <CheckCircle className="w-4 h-4" />
                 {success}
@@ -323,7 +331,7 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.emailLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <div className="relative flex items-center">
                     <Mail className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -333,7 +341,8 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setEmail(e.target.value)}
                       required
                       dir="ltr"
-                      className="w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all duration-300"
+                      className="w-full px-4 py-3.5 pr-12 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300"
+                      style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                       autoComplete="email"
                     />
                   </div>
@@ -343,13 +352,10 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
-                  loading
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98]'
-                }`}
+                className="w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed"
+                style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)' }} />
                 {loading ? (
                   <div className="flex items-center justify-center gap-3">
                     <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -373,7 +379,7 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.otpLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <input
                     type="text"
                     placeholder={t('forgotPasswordPage.otpPlaceholder')}
@@ -382,7 +388,8 @@ export default function ForgotPasswordPage() {
                     maxLength={6}
                     required
                     dir="ltr"
-                    className="w-full px-4 py-3.5 bg-slate-800/50 border-2 border-white/10 rounded-xl text-white placeholder-gray-500 text-center text-2xl tracking-widest focus:outline-none focus:border-purple-500 transition-all duration-300"
+                    className="w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-500 text-center text-2xl tracking-widest focus:outline-none transition-all duration-300"
+                    style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                   />
                 </div>
 
@@ -390,7 +397,8 @@ export default function ForgotPasswordPage() {
                   type="button"
                   onClick={handleResendOTP}
                   disabled={loading}
-                  className="w-full mt-2 text-sm text-purple-400 hover:text-purple-300 flex items-center justify-center gap-2 transition-colors group"
+                  className="w-full mt-2 text-sm flex items-center justify-center gap-2 transition-colors group"
+                  style={{ color: '#c084fc' }}
                 >
                   <RefreshCw className="w-3 h-3 group-hover:rotate-180 transition-transform duration-500" />
                   {t('forgotPasswordPage.resendCode')}
@@ -399,7 +407,7 @@ export default function ForgotPasswordPage() {
 
               {/* Dev OTP Display */}
               {devOtp && (
-                <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4">
+                <div className="rounded-xl p-4" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)' }}>
                   <p className="text-sm text-amber-400 text-center">
                     🔐 {t('forgotPasswordPage.checkConsole')} <strong className="text-xl ml-2">{devOtp}</strong>
                   </p>
@@ -410,7 +418,8 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={() => setStep('email')}
-                  className="flex-1 py-3 px-4 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/20 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 group"
+                  className="flex-1 py-3 px-4 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 group"
+                  style={{ background: 'rgba(255, 255, 255, 0.05)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                 >
                   {isRTL ? <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> : <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />}
                   {t('forgotPasswordPage.back')}
@@ -418,11 +427,8 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group ${
-                    loading
-                      ? 'bg-gray-600 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50'
-                  }`}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group hover:scale-105 disabled:cursor-not-allowed"
+                  style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">
@@ -448,7 +454,7 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.newPasswordLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <div className="relative flex items-center">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -458,7 +464,8 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full px-4 py-3.5 pr-12 pl-12 bg-slate-800/50 border-2 border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all duration-300"
+                      className="w-full px-4 py-3.5 pr-12 pl-12 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300"
+                      style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                     />
                     <button
                       type="button"
@@ -476,7 +483,7 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.confirmPasswordLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <div className="relative flex items-center">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -486,7 +493,8 @@ export default function ForgotPasswordPage() {
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       minLength={6}
-                      className="w-full px-4 py-3.5 pr-12 pl-12 bg-slate-800/50 border-2 border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-all duration-300"
+                      className="w-full px-4 py-3.5 pr-12 pl-12 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300"
+                      style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                     />
                     <button
                       type="button"
@@ -503,7 +511,8 @@ export default function ForgotPasswordPage() {
                 <button
                   type="button"
                   onClick={() => setStep('otp')}
-                  className="flex-1 py-3 px-4 bg-white/5 hover:bg-white/10 border-2 border-white/10 hover:border-white/20 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 group"
+                  className="flex-1 py-3 px-4 rounded-xl text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 group"
+                  style={{ background: 'rgba(255, 255, 255, 0.05)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                 >
                   {isRTL ? <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> : <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />}
                   {t('forgotPasswordPage.back')}
@@ -511,11 +520,8 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group ${
-                    loading
-                      ? 'bg-gray-600 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/50'
-                  }`}
+                  className="flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group hover:scale-105 disabled:cursor-not-allowed"
+                  style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">
@@ -536,11 +542,11 @@ export default function ForgotPasswordPage() {
           {/* Step 4: Success */}
           {step === 'success' && (
             <div className="text-center space-y-6">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-green-500/20 border-2 border-green-500/30 rounded-full">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full" style={{ background: 'rgba(34, 197, 94, 0.2)', border: '2px solid rgba(34, 197, 94, 0.3)' }}>
                 <CheckCircle className="w-10 h-10 text-green-400" />
               </div>
 
-              <div className="bg-green-500/10 border border-green-500/30 rounded-xl p-4">
+              <div className="rounded-xl p-4" style={{ background: 'rgba(34, 197, 94, 0.1)', borderColor: 'rgba(34, 197, 94, 0.3)' }}>
                 <p className="text-green-400 text-sm">
                   {t('forgotPasswordPage.successMessage')}
                 </p>
@@ -548,9 +554,10 @@ export default function ForgotPasswordPage() {
 
               <button
                 onClick={() => router.push('/auth/login')}
-                className="w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98]"
+                className="w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group hover:scale-[1.02] active:scale-[0.98]"
+                style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }}
               >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+                <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)' }} />
                 <div className="flex items-center justify-center gap-3">
                   {isRTL ? <ArrowLeft className="w-5 h-5" /> : <ArrowRight className="w-5 h-5" />}
                   <span>{t('forgotPasswordPage.goToLogin')}</span>
@@ -560,12 +567,13 @@ export default function ForgotPasswordPage() {
           )}
 
           {/* Bottom Link */}
-          <div className="mt-8 pt-6 border-t border-white/10 text-center">
+          <div className="mt-8 pt-6 border-t text-center" style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}>
             <p className="text-gray-400 text-sm">
               {t('forgotPasswordPage.haveAccount')}{' '}
               <Link
                 href="/auth/login"
-                className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline"
+                className="font-semibold transition-all inline-flex items-center gap-1 group hover:underline"
+                style={{ color: '#c084fc' }}
               >
                 {t('forgotPasswordPage.login')}
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -576,14 +584,14 @@ export default function ForgotPasswordPage() {
 
         {/* Security Info */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2">
-            <Shield className="w-4 h-4 text-purple-400" />
+          <div className="inline-flex items-center gap-2 backdrop-blur-sm border rounded-full px-4 py-2" style={{ background: 'rgba(255, 255, 255, 0.05)', borderColor: 'rgba(255, 255, 255, 0.1)' }}>
+            <Shield className="w-4 h-4" style={{ color: '#c084fc' }} />
             <span className="text-sm text-gray-400">{t('loginPage.securityNote')}</span>
           </div>
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
@@ -614,11 +622,6 @@ export default function ForgotPasswordPage() {
           50% { transform: translate(-100px, -60px) scale(1.2); opacity: 1; }
         }
 
-        @keyframes slide-in {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }
@@ -627,52 +630,6 @@ export default function ForgotPasswordPage() {
         @keyframes float-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-5px); }
-        }
-
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-          20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-
-        .animate-float {
-          animation: float 6s ease-in-out infinite;
-        }
-
-        .animate-pulse-slow {
-          animation: pulse-slow 8s ease-in-out infinite;
-        }
-
-        .animate-particle-1 {
-          animation: particle-1 15s ease-in-out infinite;
-        }
-
-        .animate-particle-2 {
-          animation: particle-2 18s ease-in-out infinite;
-        }
-
-        .animate-particle-3 {
-          animation: particle-3 12s ease-in-out infinite;
-        }
-
-        .animate-particle-4 {
-          animation: particle-4 20s ease-in-out infinite;
-        }
-
-        .animate-slide-in {
-          animation: slide-in 0.6s ease-out;
-        }
-
-        .animate-bounce-slow {
-          animation: bounce-slow 3s ease-in-out infinite;
-        }
-
-        .animate-float-slow {
-          animation: float-slow 4s ease-in-out infinite;
-        }
-
-        .animate-shake {
-          animation: shake 0.5s ease-in-out;
         }
       `}</style>
     </div>
