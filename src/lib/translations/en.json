@@ -532,6 +532,9 @@
     "contactUsButton": "Contact Us",
     "footerDescription": "A platform that connects dental students with patients",
     "copyright": "© 2026 Team CS-22 | Graduation Project | Obour | All rights reserved",
+    "teamSection": "Team",
+    "graduationTeam": "Graduation Team",
+    "graduationProject": "Graduation Project",
     "userTypes": {
       "eyebrow": "Who is it for?",
       "title": "The platform is for you whether...",

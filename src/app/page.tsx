@@ -1323,27 +1323,27 @@ export default function Home() {
                         WebkitTextFillColor: "transparent",
                       }}
                     >
-                      سمايلي
+                      {t("home.brand")}
                     </span>
                   </div>
                   <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm leading-relaxed">
-                    منصة تربط بين طلاب طب الأسنان والمرضى
+                    {t("home.footerDescription")}
                   </p>
                 </div>
               </div>
 
               {/* Quick Links */}
               <div>
-                <h3 className="text-white font-bold text-lg mb-4">روابط سريعة</h3>
+                <h3 className="text-white font-bold text-lg mb-4">{t("home.quickLinks")}</h3>
                 <ul className="space-y-3">
                   {[
-                    { href: "#features", label: "المميزات" },
-                    { href: "#how-it-works", label: "كيف يعمل؟" },
-                    { href: "#faq", label: "الأسئلة الشائعة" },
-                    { href: "#", label: "الدعم" },
-                    { href: "#", label: "اتصل بنا" },
-                    { href: "#", label: "الشروط والأحكام" },
-                    { href: "#", label: "سياسة الخصوصية" },
+                    { href: "#features", label: t("home.features") },
+                    { href: "#how-it-works", label: t("home.howItWorks") },
+                    { href: "#faq", label: t("home.faq") },
+                    { href: "#", label: t("home.support") },
+                    { href: "#", label: t("home.contactUs") },
+                    { href: "#", label: t("home.termsAndConditions") },
+                    { href: "#", label: t("home.privacyPolicy") },
                   ].map((item) => (
                     <li key={item.label}>
                       <Link
@@ -1360,9 +1360,9 @@ export default function Home() {
 
               {/* Contact */}
               <div>
-                <h3 className="text-white font-bold text-lg mb-4">اتصل بنا</h3>
+                <h3 className="text-white font-bold text-lg mb-4">{t("home.contactUs")}</h3>
                 <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm leading-relaxed mb-4">
-                  هل لديك أي استفسار؟
+                  {t("home.contactUsQuestion")}
                 </p>
                 <button
                   className="px-6 py-2 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:scale-105"
@@ -1371,20 +1371,20 @@ export default function Home() {
                     boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
                   }}
                 >
-                  تواصل معنا
+                  {t("home.contactUsButton")}
                 </button>
               </div>
 
               {/* Team Info */}
               <div>
-                <h3 className="text-white font-bold text-lg mb-4">الفريق</h3>
+                <h3 className="text-white font-bold text-lg mb-4">{t("home.teamSection")}</h3>
                 <div className="space-y-3">
                   <div className="p-3 rounded-xl" style={{ background: "rgba(147, 51, 234, 0.1)", border: "1px solid rgba(147, 51, 234, 0.2)" }}>
-                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>تيم التخرج</p>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>{t("home.graduationTeam")}</p>
                     <p className="text-purple-300 font-bold text-lg">Team CS-22</p>
                   </div>
                   <div className="p-3 rounded-xl" style={{ background: "rgba(236, 72, 153, 0.1)", border: "1px solid rgba(236, 72, 153, 0.2)" }}>
-                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>مشروع التخرج</p>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>{t("home.graduationProject")}</p>
                     <p className="text-pink-300 font-bold text-lg">2026</p>
                   </div>
                 </div>
@@ -1396,7 +1396,7 @@ export default function Home() {
               className="pt-8 border-t border-white/10"
             >
               <p style={{ color: "rgba(255,255,255,0.6)" }} className="text-center text-sm">
-                © 2026 Team CS-22 | مشروع التخرج | العبور | جميع الحقوق محفوظة.
+                {t("home.copyright")}
               </p>
             </div>
           </AnimatedSection>
