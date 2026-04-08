@@ -395,10 +395,8 @@ export default function Home() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-responsive-sm font-semibold transition-colors duration-200"
+                className="text-responsive-sm font-semibold transition-all duration-200 hover:text-purple-400"
                 style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none" }}
-                onMouseEnter={(e) => handleHoverColor(e, "#a855f7")}
-                onMouseLeave={handleLeaveColor}
               >
                 {item.label}
               </a>
@@ -1321,21 +1319,21 @@ export default function Home() {
             <div className="flex items-center justify-center gap-6">
               <Link
                 href="#features"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                className="text-sm transition-all duration-200 hover:text-purple-400"
                 style={{ color: "rgba(255,255,255,0.6)" }}
               >
                 {t("home.features")}
               </Link>
               <Link
                 href="#how-it-works"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                className="text-sm transition-all duration-200 hover:text-purple-400"
                 style={{ color: "rgba(255,255,255,0.6)" }}
               >
                 {t("home.howItWorks")}
               </Link>
               <Link
                 href="#faq"
-                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                className="text-sm transition-all duration-200 hover:text-purple-400"
                 style={{ color: "rgba(255,255,255,0.6)" }}
               >
                 {t("home.faq")}
