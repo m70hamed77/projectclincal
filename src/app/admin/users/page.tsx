@@ -601,12 +601,11 @@ export default function AdminUsersPage() {
                           size="sm"
                           onClick={() => handleDeleteClick(userData.userId)}
                           disabled={actionLoading === userData.userId}
-                          style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
-                          className="hover:bg-red-700 transition-all duration-300"
+                          className="bg-red-800 hover:bg-red-900 text-white font-bold transition-all duration-300"
                           suppressHydrationWarning={true}
                         >
-                          <Trash2 className="w-4 h-4 ml-1" style={{color: '#ffffff'}} />
-                          <span style={{color: '#ffffff'}}>{t('users.delete')}</span>
+                          <Trash2 className="w-4 h-4 ml-1" />
+                          <span>{t('users.delete')}</span>
                         </Button>
                       </div>
                     </div>
@@ -865,21 +864,20 @@ export default function AdminUsersPage() {
               {t('common.cancel')}
             </Button>
             <Button
-              style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
-              className="hover:bg-red-700 transition-all duration-300"
+              className="bg-red-800 hover:bg-red-900 text-white font-bold transition-all duration-300"
               onClick={handleDelete}
               disabled={actionLoading !== null || !deleteReason.trim()}
             >
               {actionLoading === deleteDialog.userId ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                  <span style={{color: '#ffffff'}}>{t('users.deleting')}</span>
+                  <span>{t('users.deleting')}</span>
                   <span suppressHydrationWarning={true} />
                 </>
               ) : (
                 <>
-                  <Trash2 className="w-4 h-4 mr-2" style={{color: '#ffffff'}} />
-                  <span style={{color: '#ffffff'}}>{t('users.deleteAccount')}</span>
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  <span>{t('users.deleteAccount')}</span>
                 </>
               )}
             </Button>

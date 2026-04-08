@@ -417,9 +417,9 @@ export default function TravelTypesPage() {
                         تعديل
                       </Button>
                       <Button
-                        variant="destructive"
                         size="sm"
                         onClick={() => handleDelete(type.id)}
+                        className="bg-red-800 hover:bg-red-900 text-white font-bold"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>

@@ -457,11 +457,10 @@ export default function NotificationsPage() {
                       size="sm"
                       onClick={clearAll}
                       disabled={allNotifications.length === 0}
-                      style={{background: '#ef4444', color: '#ffffff', border: 'none'}}
-                      className="hover:bg-red-700 transition-all duration-300"
+                      className="bg-red-800 hover:bg-red-900 text-white font-bold transition-all duration-300"
                     >
-                      <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} style={{color: '#ffffff'}} />
-                      <span suppressHydrationWarning={true} style={{color: '#ffffff'}}>{t('notifications.clearAll')}</span>
+                      <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                      <span suppressHydrationWarning={true}>{t('notifications.clearAll')}</span>
                     </Button>
                   </div>
                 </div>
