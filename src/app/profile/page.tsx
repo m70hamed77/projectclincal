@@ -1503,7 +1503,7 @@ function ProfileContent() {
 
                     <Button
                       onClick={handleSaveMedicalForm}
-                      className="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white border-0 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
+                      className="w-full bg-green-700 text-white hover:bg-green-800 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
                     >
                       <Save className="w-4 h-4 ml-2" />
                       {applyToPostId ? t('profile.medicalRecord.saveAndSend') : t('profile.medicalRecord.saveMedicalRecord')}
@@ -2516,7 +2516,7 @@ function ProfileContent() {
                         <X className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                         {t('profile.uploadModal.cancel')}
                       </Button>
-                      <Button type="submit" disabled={loadingCases} className="bg-gradient-to-r from-purple-500 to-violet-600 hover:from-purple-600 hover:to-violet-700 text-white border-0 hover:shadow-lg transition-all duration-300">
+                      <Button type="submit" disabled={loadingCases} className="bg-green-700 text-white hover:bg-green-800 hover:shadow-lg transition-all duration-300">
                         {loadingCases ? t('profile.uploadModal.uploading') : t('profile.uploadModal.uploadPhotos')}
                       </Button>
                     </div>

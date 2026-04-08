@@ -322,7 +322,7 @@ export default function CreatePostPage() {
               <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-emerald-700 to-teal-800 hover:from-emerald-600 hover:to-teal-700 shadow-lg hover:shadow-xl transition-all duration-300 text-white font-semibold"
+                  className="flex-1 bg-green-700 text-white hover:bg-green-800 shadow-lg hover:shadow-xl transition-all duration-300 font-semibold"
                   disabled={isLoading}
                 >
                   {isLoading ? (

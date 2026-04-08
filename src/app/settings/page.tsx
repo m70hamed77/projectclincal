@@ -897,7 +897,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={() => handleSave('account')} disabled={isLoading} className="gap-2 bg-gradient-to-r from-teal-500 to-emerald-500 hover:shadow-xl transition-all duration-300">
+                  <Button onClick={() => handleSave('account')} disabled={isLoading} className="gap-2 bg-green-700 text-white hover:bg-green-800 transition-all duration-300">
                     <Save className="w-4 h-4" />
                     {isLoading ? t('profile.settingsPage.updating') : t('profile.settingsPage.updateData')}
                   </Button>
@@ -1085,7 +1085,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={() => handleSave('notifications')} disabled={isLoading} className="gap-2 bg-gradient-to-r from-blue-500 to-sky-500 hover:shadow-xl transition-all duration-300">
+                  <Button onClick={() => handleSave('notifications')} disabled={isLoading} className="gap-2 bg-green-700 text-white hover:bg-green-800 transition-all duration-300">
                     <Save className="w-4 h-4" />
                     {isLoading ? t('common.loading') : t('common.save')}
                   </Button>
@@ -1206,7 +1206,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={() => handleSave('privacy')} disabled={isLoading} className="gap-2 bg-gradient-to-r from-purple-500 to-violet-500 hover:shadow-xl transition-all duration-300">
+                  <Button onClick={() => handleSave('privacy')} disabled={isLoading} className="gap-2 bg-green-700 text-white hover:bg-green-800 transition-all duration-300">
                     <Save className="w-4 h-4" />
                     {isLoading ? t('common.loading') : t('common.save')}
                   </Button>
@@ -1439,7 +1439,7 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="flex justify-end">
-                  <Button onClick={() => handleSave('preferences')} disabled={isLoading} className="gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:shadow-xl transition-all duration-300">
+                  <Button onClick={() => handleSave('preferences')} disabled={isLoading} className="gap-2 bg-green-700 text-white hover:bg-green-800 transition-all duration-300">
                     <Save className="w-4 h-4" />
                     {isLoading ? t('common.loading') : t('common.save')}
                   </Button>

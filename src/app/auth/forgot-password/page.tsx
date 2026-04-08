@@ -376,8 +376,8 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed"
-                style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
+                className="w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group disabled:cursor-not-allowed hover:bg-green-800"
+                style={{ background: loading ? '#4b5563' : '#16a34a' }}
               >
                 <div className="absolute inset-0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)' }} />
                 {loading ? (
@@ -452,7 +452,7 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={loading}
                   className="flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group hover:scale-105 disabled:cursor-not-allowed"
-                  style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
+                  style={{ background: loading ? '#4b5563' : '#16a34a' }}
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">
@@ -545,7 +545,7 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={loading}
                   className="flex-1 py-3 px-4 rounded-xl font-bold text-white transition-all duration-300 relative overflow-hidden group hover:scale-105 disabled:cursor-not-allowed"
-                  style={{ background: loading ? '#4b5563' : 'linear-gradient(90deg, #9333ea, #ec4899)' }}
+                  style={{ background: loading ? '#4b5563' : '#16a34a' }}
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">

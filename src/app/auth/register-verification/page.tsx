@@ -778,7 +778,7 @@ export default function RegisterWithVerificationPage() {
                 disabled={!isFormValid() || isSubmitting}
                 className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
                   !isSubmitting && isFormValid()
-                    ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-purple-500/50 active:scale-[0.98]'
+                    ? 'bg-green-700 hover:bg-green-800 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98]'
                     : 'bg-gray-600 cursor-not-allowed opacity-50'
                 }`}
               >
@@ -1021,7 +1021,7 @@ export default function RegisterWithVerificationPage() {
                 disabled={!/^\d{4}$/.test(formData.verificationCode) || isSubmitting}
                 className={`w-full py-4 rounded-xl font-bold text-white text-lg transition-all duration-300 relative overflow-hidden group ${
                   !isSubmitting && /^\d{4}$/.test(formData.verificationCode)
-                    ? 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 hover:scale-[1.02] hover:shadow-2xl hover:shadow-cyan-500/50 active:scale-[0.98]'
+                    ? 'bg-green-700 hover:bg-green-800 hover:scale-[1.02] hover:shadow-2xl active:scale-[0.98]'
                     : 'bg-gray-600 cursor-not-allowed opacity-50'
                 }`}
               >

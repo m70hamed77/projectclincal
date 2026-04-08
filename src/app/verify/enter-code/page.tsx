@@ -209,7 +209,7 @@ export default function EnterCodePage() {
             <Button
               onClick={verifyCode}
               disabled={isVerifying || userCode.length !== 6}
-              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 gap-2"
+              className="w-full h-12 text-base font-semibold bg-green-700 text-white hover:bg-green-800 gap-2"
             >
               {isVerifying ? (
                 <>

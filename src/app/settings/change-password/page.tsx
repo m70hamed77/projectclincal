@@ -227,7 +227,7 @@ export default function ChangePasswordPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                  className="w-full bg-green-700 text-white hover:bg-green-800 transition-all"
                   disabled={loading}
                 >
                   {loading ? 'جاري التغيير...' : 'تغيير كلمة السر'}

@@ -250,7 +250,7 @@ export default function ForgotPasswordPage() {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-gradient-primary btn-hover-lift shadow-lg hover:shadow-xl"
+                className="w-full bg-green-700 text-white hover:bg-green-800 shadow-lg hover:shadow-xl transition-all"
                 disabled={loading}
               >
                 <span suppressHydrationWarning={true}>{loading ? t('forgotPasswordPage.sending') : t('forgotPasswordPage.sendCode')}</span>
@@ -312,7 +312,7 @@ export default function ForgotPasswordPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-primary btn-hover-lift shadow-lg hover:shadow-xl"
+                  className="flex-1 bg-green-700 text-white hover:bg-green-800 shadow-lg hover:shadow-xl transition-all"
                   disabled={loading}
                 >
                   <span suppressHydrationWarning={true}>{loading ? t('forgotPasswordPage.verifying') : t('forgotPasswordPage.verify')}</span>
@@ -377,7 +377,7 @@ export default function ForgotPasswordPage() {
                 </Button>
                 <Button
                   type="submit"
-                  className="flex-1 bg-gradient-primary btn-hover-lift shadow-lg hover:shadow-xl"
+                  className="flex-1 bg-green-700 text-white hover:bg-green-800 shadow-lg hover:shadow-xl transition-all"
                   disabled={loading}
                 >
                   <span suppressHydrationWarning={true}>{loading ? t('forgotPasswordPage.changing') : t('forgotPasswordPage.resetPassword')}</span>

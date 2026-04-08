@@ -785,7 +785,7 @@ function ChatPageContent() {
                     <Button
                       type="submit"
                       size="icon"
-                      className="shrink-0 bg-gradient-to-r from-emerald-800 to-teal-800 hover:from-emerald-900 hover:to-teal-900"
+                      className="shrink-0 bg-green-700 text-white hover:bg-green-800 transition-all"
                       disabled={(!message.trim() && !selectedFile) || sending || uploadingFile}
                     >
                       {sending || uploadingFile ? (
