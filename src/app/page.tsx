@@ -22,6 +22,8 @@ import {
   Stethoscope,
   Play,
   Loader2,
+  Sparkles,
+  Zap,
 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useTranslations } from "@/hooks/useTranslations";
@@ -33,7 +35,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 function useScrolled(threshold = 20) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold);
+    const onScroll = () => setScrollEd(window.scrollY > threshold);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, [threshold]);
@@ -214,6 +216,9 @@ export default function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const scrolled = useScrolled(20);
 
+  // Mouse position for parallax effect
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
   // Stats state
   const [stats, setStats] = useState<HomeStats>({
     activeStudents: 0,
@@ -224,6 +229,19 @@ export default function Home() {
   const [statsLoading, setStatsLoading] = useState(true);
 
   const { ref: heroStatsRef, inView: heroStatsInView } = useInView();
+
+  // Parallax effect
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
 
   // Fetch real-time statistics with auto-refresh
   useEffect(() => {
@@ -312,9 +330,9 @@ export default function Home() {
 
   if (loading || !isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0D1B40" }} suppressHydrationWarning>
-        <div className="text-center fade-in" style={{ animationDuration: "0.3s" }}>
-          <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4" style={{ color: "#00BFA6" }} />
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950" suppressHydrationWarning>
+        <div className="text-center animate-slide-in-left">
+          <Loader2 className="w-12 h-12 animate-spin mx-auto mb-4 text-purple-400" />
           <p className="text-responsive-base" style={{ color: "rgba(255,255,255,0.6)" }}>Loading...</p>
         </div>
       </div>
@@ -322,7 +340,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen" style={{ background: "#F8F4FF" }} suppressHydrationWarning>
+    <div className="min-h-screen" style={{ background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)" }} suppressHydrationWarning>
 
       {/* ==========================================
            HEADER
@@ -330,21 +348,21 @@ export default function Home() {
       <header
         className={`sticky top-0 z-50 transition-all duration-500 ${scrolled ? "py-2" : "py-4"}`}
         style={{
-          background: "rgba(255,255,255,0.95)",
+          background: "rgba(13, 27, 64, 0.95)",
           backdropFilter: "blur(12px)",
-          borderBottom: "2px solid #E0FAF7",
-          boxShadow: "0 2px 20px rgba(0,191,166,0.12)",
+          borderBottom: "2px solid rgba(147, 51, 234, 0.3)",
+          boxShadow: "0 2px 20px rgba(108, 63, 197, 0.2)",
         }}
       >
         <div className="container-full flex items-center justify-between">
 
           {/* Logo */}
-          <div className="flex items-center gap-3 fade-in" style={{ animationDelay: "50ms" }}>
+          <div className="flex items-center gap-3 animate-slide-in-left" style={{ animationDelay: "50ms" }}>
             <div
               className={`rounded-xl flex items-center justify-center transition-all duration-500 ${scrolled ? "w-9 h-9" : "w-11 h-11"}`}
               style={{
-                background: "linear-gradient(135deg, #00BFA6, #6C3FC5)",
-                boxShadow: "0 4px 14px rgba(108,63,197,0.3)",
+                background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
               }}
             >
               <span
@@ -358,7 +376,7 @@ export default function Home() {
             <span
               className="text-responsive-xl font-bold"
               style={{
-                background: "linear-gradient(135deg, #008C7A, #6C3FC5)",
+                background: "linear-gradient(135deg, #a855f7, #ec4899)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -368,7 +386,7 @@ export default function Home() {
           </div>
 
           {/* Nav */}
-          <nav className="hidden md:flex items-center gap-8 fade-in" style={{ animationDelay: "100ms" }}>
+          <nav className="hidden md:flex items-center gap-8 animate-slide-in-left" style={{ animationDelay: "100ms" }}>
             {[
               { href: "#features",     label: t("home.features")   },
               { href: "#how-it-works", label: t("home.howItWorks") },
@@ -378,8 +396,8 @@ export default function Home() {
                 key={item.href}
                 href={item.href}
                 className="text-responsive-sm font-semibold transition-colors duration-200"
-                style={{ color: "#444", textDecoration: "none" }}
-                onMouseEnter={(e) => handleHoverColor(e, "#00BFA6")}
+                style={{ color: "rgba(255,255,255,0.8)", textDecoration: "none" }}
+                onMouseEnter={(e) => handleHoverColor(e, "#a855f7")}
                 onMouseLeave={handleLeaveColor}
               >
                 {item.label}
@@ -388,13 +406,13 @@ export default function Home() {
           </nav>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3 fade-in" style={{ animationDelay: "150ms" }}>
+          <div className="flex items-center gap-3 animate-slide-in-left" style={{ animationDelay: "150ms" }}>
             <LanguageSwitcher />
             <Button
               variant="ghost"
               asChild
               className="font-semibold text-responsive-sm"
-              style={{ color: "#444" }}
+              style={{ color: "rgba(255,255,255,0.8)" }}
             >
               <Link href="/auth/login">{t("home.login")}</Link>
             </Button>
@@ -402,15 +420,15 @@ export default function Home() {
               asChild
               className="font-bold text-responsive-sm text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
               style={{
-                background: "linear-gradient(135deg, #00BFA6, #008C7A)",
-                boxShadow: "0 4px 14px rgba(0,191,166,0.4)",
+                background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
                 border: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,191,166,0.6)";
+                e.currentTarget.style.boxShadow = "0 8px 24px rgba(236, 72, 153, 0.6)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,191,166,0.4)";
+                e.currentTarget.style.boxShadow = "0 4px 14px rgba(236, 72, 153, 0.4)";
               }}
             >
               <Link href="/auth/register-verification">{t("home.getStarted")}</Link>
@@ -422,44 +440,50 @@ export default function Home() {
       {/* ==========================================
            HERO SECTION
       ========================================== */}
-      <section
-        className="section-spacing-lg relative overflow-hidden"
-        style={{
-          background: "linear-gradient(145deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
-        }}
-      >
-        {/* Glow blobs */}
+      <section className="section-spacing-lg relative overflow-hidden">
+        {/* Animated Background Orbs with Parallax */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
           <div
-            className="absolute rounded-full"
+            className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
             style={{
-              top: -80, left: -80, width: 400, height: 400,
-              background: "radial-gradient(circle, rgba(0,191,166,0.25) 0%, transparent 70%)",
+              animationDelay: '0s',
+              transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
             }}
           />
           <div
-            className="absolute rounded-full"
+            className="absolute bottom-20 right-20 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-float"
             style={{
-              bottom: -60, right: -60, width: 350, height: 350,
-              background: "radial-gradient(circle, rgba(108,63,197,0.3) 0%, transparent 70%)",
+              animationDelay: '2s',
+              transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
             }}
           />
+          <div
+            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"
+          />
+
+          {/* Floating Particles */}
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-particle-1" />
+          <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-pink-400 rounded-full animate-particle-2" />
+          <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-particle-3" />
+          <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
         </div>
 
         <div className="container-full relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
 
             {/* Left */}
-            <div className="space-y-8 fade-in" style={{ animationDelay: "200ms" }}>
+            <div className="space-y-8 animate-slide-in-left" style={{ animationDelay: "200ms" }}>
               <div
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold"
                 style={{
-                  background: "rgba(0,191,166,0.2)",
-                  border: "1px solid rgba(0,191,166,0.4)",
-                  color: "#00BFA6",
+                  background: "rgba(147, 51, 234, 0.2)",
+                  border: "1px solid rgba(147, 51, 234, 0.4)",
+                  color: "#a855f7",
                 }}
               >
+                <Sparkles className="w-4 h-4" />
                 🚀 {t("home.badge")}
+                <Sparkles className="w-4 h-4" />
               </div>
 
               <h1 className="text-responsive-5xl font-bold leading-tight text-white">
@@ -467,9 +491,11 @@ export default function Home() {
                 <span
                   className="block pt-2"
                   style={{
-                    background: "linear-gradient(135deg, #00BFA6, #64f4e8)",
+                    background: "linear-gradient(135deg, #a855f7, #ec4899, #06b6d4)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
+                    backgroundSize: "200% 200%",
+                    animation: "gradient 3s ease infinite",
                   }}
                 >
                   {t("home.titleHighlight")}
@@ -486,15 +512,15 @@ export default function Home() {
                   asChild
                   className="font-bold text-responsive-base text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
                   style={{
-                    background: "linear-gradient(135deg, #00BFA6, #008C7A)",
-                    boxShadow: "0 6px 24px rgba(0,191,166,0.5)",
+                    background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                    boxShadow: "0 6px 24px rgba(236, 72, 153, 0.5)",
                     border: "none",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = "0 10px 32px rgba(0,191,166,0.7)";
+                    e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.7)";
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,191,166,0.5)";
+                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.5)";
                   }}
                 >
                   <Link href="/auth/register-verification?type=student">
@@ -511,12 +537,14 @@ export default function Home() {
                     border: "2px solid rgba(255,255,255,0.4)",
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.15)";
-                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,255,255,0.2)";
+                    e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
+                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(147, 51, 234, 0.3)";
+                    e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.5)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = "transparent";
                     e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
                   }}
                 >
                   <Link href="/auth/register-verification?type=patient">
@@ -532,11 +560,11 @@ export default function Home() {
                     <div
                       className="w-8 h-8 rounded-full flex items-center justify-center"
                       style={{
-                        background: "rgba(0,191,166,0.2)",
-                        border: "2px solid #00BFA6",
+                        background: "rgba(147, 51, 234, 0.2)",
+                        border: "2px solid #a855f7",
                       }}
                     >
-                      <CheckCircle2 className="w-4 h-4" style={{ color: "#00BFA6" }} />
+                      <CheckCircle2 className="w-4 h-4" style={{ color: "#a855f7" }} />
                     </div>
                     <span>{item}</span>
                   </div>
@@ -547,7 +575,7 @@ export default function Home() {
             {/* Right: stat cards */}
             <div
               ref={heroStatsRef}
-              className="grid grid-cols-2 gap-6 fade-in"
+              className="grid grid-cols-2 gap-6 animate-slide-in-right"
               style={{ animationDelay: "300ms" }}
             >
               <StatCard
@@ -611,50 +639,47 @@ export default function Home() {
           minHeight: "100vh",
           padding: "80px 5vw",
           position: "relative",
-          backgroundImage: "url('/img/forYou.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
         }}
       >
-        {/* Overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundColor: "rgba(245, 240, 232, .3)",
-            zIndex: 0,
-          }}
-        />
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+          <div
+            className="absolute top-20 right-20 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '1s' }}
+          />
+          <div
+            className="absolute bottom-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '3s' }}
+          />
+        </div>
 
         {/* Content */}
         <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 10 }}>
-          <div
-            className="eyebrow"
-            style={{
-              display: "inline-block",
-              padding: "4px 16px",
-              borderRadius: "100px",
-              fontSize: "14px",
-              fontWeight: "bold",
-              marginBottom: "16px",
-              background: "#00BFA6",
-              color: "white",
-            }}
-          >
-            {t("home.userTypes.eyebrow") || "من لأجله؟"}
-          </div>
-          <h2
-            style={{
-              fontSize: "clamp(32px, 5vw, 48px)",
-              fontWeight: "bold",
-              marginBottom: "16px",
-              fontFamily: "'Playfair Display', serif",
-              color: "#1a1a2e",
-            }}
-          >
-            {t("home.userTypes.title") || "المنصة لك سواء كنت..."}
-          </h2>
+          <AnimatedSection>
+            <div
+              className="eyebrow inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+              style={{
+                background: "rgba(147, 51, 234, 0.2)",
+                border: "1px solid rgba(147, 51, 234, 0.4)",
+                color: "#a855f7",
+              }}
+            >
+              <Sparkles className="w-4 h-4" />
+              {t("home.userTypes.eyebrow") || "من لأجله؟"}
+              <Sparkles className="w-4 h-4" />
+            </div>
+            <h2
+              style={{
+                fontSize: "clamp(32px, 5vw, 48px)",
+                fontWeight: "bold",
+                marginBottom: "16px",
+                color: "#fff",
+              }}
+            >
+              {t("home.userTypes.title") || "المنصة لك سواء كنت..."}
+            </h2>
+          </AnimatedSection>
         </div>
 
         <div
@@ -670,180 +695,184 @@ export default function Home() {
           }}
         >
           {/* Patient Card */}
-          <div
-            className="user-card patient"
-            onClick={() => window.location.href = "/auth/register-verification?type=patient"}
-            style={{
-              background: "#E8F8F5",
-              borderRadius: "24px",
-              padding: "40px 32px",
-              cursor: "pointer",
-              transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
-              border: "2px solid #C0EAE4",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
-              e.currentTarget.style.boxShadow = "0 24px 40px rgba(0,191,166,0.15)";
-              e.currentTarget.style.borderColor = "#00BFA6";
-              e.currentTarget.style.background = "linear-gradient(135deg, #E8F8F5, #D0F4EF)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0) scale(1)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,0,0,0.08)";
-              e.currentTarget.style.borderColor = "#C0EAE4";
-              e.currentTarget.style.background = "#E8F8F5";
-            }}
-          >
-            <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
-              {t("home.userTypes.patient.icon") || "🏥"}
-            </span>
-            <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#1a1a2e" }}>
-              {t("home.userTypes.patient.title") || "مريض يبحث عن علاج"}
-            </h3>
-            <p style={{ fontSize: "14px", color: "#555", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
-              {t("home.userTypes.patient.description") || "تصفّح الحالات المتاحة، قدّم على ما يناسبك، وتواصل مع الطالب مباشرة"}
-            </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
-              {(() => {
-                const patientFeatures = getData("home.userTypes.patient.features");
-                const safeFeatures = Array.isArray(patientFeatures)
-                  ? patientFeatures
-                  : [
-                      "علاج مجاني أو بأسعار منخفضة",
-                      "طلاب موثّقون وذوو تقييمات عالية",
-                      "تتبع حالتك خطوة بخطوة",
-                      "نظام إبلاغ لضمان سلامتك",
-                    ];
-                return safeFeatures.map((feature, index) => (
-                  <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                    <span style={{ color: "#00BFA6", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
-                    <span style={{ fontSize: "14px", color: "#444" }}>{feature}</span>
-                  </li>
-                ));
-              })()}
-            </ul>
-            <button
-              className="btn-primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.location.href = "/auth/register-verification?type=patient";
-              }}
+          <AnimatedSection delay={100}>
+            <div
+              className="user-card patient"
+              onClick={() => window.location.href = "/auth/register-verification?type=patient"}
               style={{
-                width: "100%",
-                padding: "14px",
-                background: "linear-gradient(135deg, #00BFA6, #008C7A)",
-                color: "white",
-                border: "none",
-                borderRadius: "12px",
-                fontSize: "15px",
-                fontWeight: "bold",
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "24px",
+                padding: "40px 32px",
                 cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: "0 6px 24px rgba(0,191,166,0.35)",
+                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                border: "2px solid rgba(147, 51, 234, 0.2)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = "0 10px 32px rgba(0,191,166,0.5)";
-                e.currentTarget.style.background = "linear-gradient(135deg, #00D4BA, #00A389)";
+                e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 24px 40px rgba(147, 51, 234, 0.3)";
+                e.currentTarget.style.borderColor = "#a855f7";
+                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 24px rgba(0,191,166,0.35)";
-                e.currentTarget.style.background = "linear-gradient(135deg, #00BFA6, #008C7A)";
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.2)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
               }}
             >
-              {t("home.userTypes.patient.button") || "سجّل كمريض ←"}
-            </button>
-          </div>
+              <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
+                {t("home.userTypes.patient.icon") || "🏥"}
+              </span>
+              <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
+                {t("home.userTypes.patient.title") || "مريض يبحث عن علاج"}
+              </h3>
+              <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
+                {t("home.userTypes.patient.description") || "تصفّح الحالات المتاحة، قدّم على ما يناسبك، وتواصل مع الطالب مباشرة"}
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
+                {(() => {
+                  const patientFeatures = getData("home.userTypes.patient.features");
+                  const safeFeatures = Array.isArray(patientFeatures)
+                    ? patientFeatures
+                    : [
+                        "علاج مجاني أو بأسعار منخفضة",
+                        "طلاب موثّقون وذوو تقييمات عالية",
+                        "تتبع حالتك خطوة بخطوة",
+                        "نظام إبلاغ لضمان سلامتك",
+                      ];
+                  return safeFeatures.map((feature, index) => (
+                    <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                      <span style={{ color: "#a855f7", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
+                      <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
+                    </li>
+                  ));
+                })()}
+              </ul>
+              <button
+                className="btn-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.location.href = "/auth/register-verification?type=patient";
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "12px",
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #a855f7, #f472b6)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #9333ea, #ec4899)";
+                }}
+              >
+                {t("home.userTypes.patient.button") || "سجّل كمريض ←"}
+              </button>
+            </div>
+          </AnimatedSection>
 
           {/* Student Card */}
-          <div
-            className="user-card student"
-            onClick={() => window.location.href = "/auth/register-verification?type=student"}
-            style={{
-              background: "#FFF8E7",
-              borderRadius: "24px",
-              padding: "40px 32px",
-              cursor: "pointer",
-              transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
-              border: "2px solid #F0E6C8",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
-              e.currentTarget.style.boxShadow = "0 24px 40px rgba(200,168,75,0.15)";
-              e.currentTarget.style.borderColor = "#C8A84B";
-              e.currentTarget.style.background = "linear-gradient(135deg, #FFF8E7, #FFEFC7)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0) scale(1)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,0,0,0.08)";
-              e.currentTarget.style.borderColor = "#F0E6C8";
-              e.currentTarget.style.background = "#FFF8E7";
-            }}
-          >
-            <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
-              {t("home.userTypes.student.icon") || "🎓"}
-            </span>
-            <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#1a1a2e" }}>
-              {t("home.userTypes.student.title") || "طالب طب أسنان"}
-            </h3>
-            <p style={{ fontSize: "14px", color: "#666", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
-              {t("home.userTypes.student.description") || "انشر حالاتك المطلوبة، اقبل المرضى المناسبين، وطوّر مهاراتك مع كل حالة"}
-            </p>
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
-              {(() => {
-                const studentFeatures = getData("home.userTypes.student.features");
-                const safeFeatures = Array.isArray(studentFeatures)
-                  ? studentFeatures
-                  : [
-                      "حالات عملية متنوعة ومصنّفة",
-                      "نظام نقاط وشارات تحفيزي",
-                      "بورتفوليو احترافي للإنجازات",
-                      "لوحة تحكم شاملة للحالات",
-                    ];
-                return safeFeatures.map((feature, index) => (
-                  <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                    <span style={{ color: "#C8A84B", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
-                    <span style={{ fontSize: "14px", color: "#444" }}>{feature}</span>
-                  </li>
-                ));
-              })()}
-            </ul>
-            <button
-              className="btn-primary"
-              onClick={(e) => {
-                e.stopPropagation();
-                window.location.href = "/auth/register-verification?type=student";
-              }}
+          <AnimatedSection delay={200}>
+            <div
+              className="user-card student"
+              onClick={() => window.location.href = "/auth/register-verification?type=student"}
               style={{
-                width: "100%",
-                padding: "14px",
-                background: "linear-gradient(135deg, #C8A84B, #B8960A)",
-                color: "white",
-                border: "none",
-                borderRadius: "12px",
-                fontSize: "15px",
-                fontWeight: "bold",
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(10px)",
+                borderRadius: "24px",
+                padding: "40px 32px",
                 cursor: "pointer",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: "0 6px 24px rgba(200,168,75,0.35)",
+                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+                border: "2px solid rgba(236, 72, 153, 0.2)",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-3px)";
-                e.currentTarget.style.boxShadow = "0 10px 32px rgba(200,168,75,0.5)";
-                e.currentTarget.style.background = "linear-gradient(135deg, #D8B85B, #C8A61A)";
+                e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
+                e.currentTarget.style.boxShadow = "0 24px 40px rgba(236, 72, 153, 0.3)";
+                e.currentTarget.style.borderColor = "#ec4899";
+                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 6px 24px rgba(200,168,75,0.35)";
-                e.currentTarget.style.background = "linear-gradient(135deg, #C8A84B, #B8960A)";
+                e.currentTarget.style.transform = "translateY(0) scale(1)";
+                e.currentTarget.style.boxShadow = "none";
+                e.currentTarget.style.borderColor = "rgba(236, 72, 153, 0.2)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
               }}
             >
-              {t("home.userTypes.student.button") || "سجّل كطالب ←"}
-            </button>
-          </div>
+              <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
+                {t("home.userTypes.student.icon") || "🎓"}
+              </span>
+              <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
+                {t("home.userTypes.student.title") || "طالب طب أسنان"}
+              </h3>
+              <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
+                {t("home.userTypes.student.description") || "انشر حالاتك المطلوبة، اقبل المرضى المناسبين، وطوّر مهاراتك مع كل حالة"}
+              </p>
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
+                {(() => {
+                  const studentFeatures = getData("home.userTypes.student.features");
+                  const safeFeatures = Array.isArray(studentFeatures)
+                    ? studentFeatures
+                    : [
+                        "حالات عملية متنوعة ومصنّفة",
+                        "نظام نقاط وشارات تحفيزي",
+                        "بورتفوليو احترافي للإنجازات",
+                        "لوحة تحكم شاملة للحالات",
+                      ];
+                  return safeFeatures.map((feature, index) => (
+                    <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                      <span style={{ color: "#ec4899", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
+                      <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
+                    </li>
+                  ));
+                })()}
+              </ul>
+              <button
+                className="btn-primary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.location.href = "/auth/register-verification?type=student";
+                }}
+                style={{
+                  width: "100%",
+                  padding: "14px",
+                  background: "linear-gradient(135deg, #ec4899, #f472b6)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "12px",
+                  fontSize: "15px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #f472b6, #fb7185)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
+                  e.currentTarget.style.background = "linear-gradient(135deg, #ec4899, #f472b6)";
+                }}
+              >
+                {t("home.userTypes.student.button") || "سجّل كطالب ←"}
+              </button>
+            </div>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -863,10 +892,12 @@ export default function Home() {
         <div className="container-full relative z-10">
           <AnimatedSection className="text-center mb-16">
             <span
-              className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4"
-              style={{ background: "rgba(0,191,166,0.2)", color: "#00BFA6", border: "1px solid rgba(0,191,166,0.35)" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+              style={{ background: "rgba(147, 51, 234, 0.2)", color: "#a855f7", border: "1px solid rgba(147, 51, 234, 0.35)" }}
             >
+              <Play className="w-4 h-4" />
               Demo
+              <Play className="w-4 h-4" />
             </span>
             <h2 className="text-responsive-4xl font-bold mb-6 text-white" suppressHydrationWarning>
               {t("home.videoSection.title")}
@@ -881,7 +912,7 @@ export default function Home() {
               className="relative rounded-3xl overflow-hidden shadow-2xl transition-all duration-500"
               style={{
                 background: "#0a0a0a",
-                border: "2px solid rgba(0,191,166,0.3)",
+                border: "2px solid rgba(147, 51, 234, 0.3)",
               }}
             >
               <video className="w-full aspect-video" controls poster="/img/video-poster.jpg" preload="metadata">
@@ -893,23 +924,23 @@ export default function Home() {
                 className="absolute bottom-6 right-6 px-5 py-3 rounded-xl text-sm font-semibold text-white flex items-center gap-2"
                 style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
               >
-                <Play className="w-4 h-4" style={{ color: "#00BFA6" }} />
+                <Play className="w-4 h-4" style={{ color: "#a855f7" }} />
                 <span suppressHydrationWarning>{t("home.videoSection.watchFull")}</span>
               </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 mt-12">
               {[
-                { icon: Clock,        bg: "linear-gradient(135deg,#00BFA6,#008C7A)", title: t("home.videoSection.quick"),  desc: t("home.videoSection.quickDesc")  },
-                { icon: CheckCircle2, bg: "linear-gradient(135deg,#a78bfa,#6C3FC5)", title: t("home.videoSection.easy"),   desc: t("home.videoSection.easyDesc")   },
-                { icon: Shield,       bg: "linear-gradient(135deg,#00BFA6,#008C7A)", title: t("home.videoSection.secure"), desc: t("home.videoSection.secureDesc") },
+                { icon: Clock,        bg: "linear-gradient(135deg,#a855f7,#ec4899)", title: t("home.videoSection.quick"),  desc: t("home.videoSection.quickDesc")  },
+                { icon: CheckCircle2, bg: "linear-gradient(135deg,#ec4899,#f472b6)", title: t("home.videoSection.easy"),   desc: t("home.videoSection.easyDesc")   },
+                { icon: Shield,       bg: "linear-gradient(135deg,#a855f7,#8b5cf6)", title: t("home.videoSection.secure"), desc: t("home.videoSection.secureDesc") },
               ].map(({ icon: Icon, bg, title, desc }, i) => (
                 <Card
                   key={i}
                   className="text-center transition-all duration-300 hover:scale-105 hover:shadow-xl group"
                   style={{
-                    background: "rgba(255,255,255,0.07)",
-                    border: "1px solid rgba(255,255,255,0.15)",
+                    background: "rgba(255,255,255,0.05)",
+                    border: "1px solid rgba(147, 51, 234, 0.2)",
                     backdropFilter: "blur(8px)",
                   }}
                 >
@@ -937,62 +968,76 @@ export default function Home() {
         id="features"
         className="section-spacing relative"
         style={{
-          backgroundImage: "url('/img/features.PNG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
         }}
       >
-        <div className="absolute inset-0 bg-white/65" />
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+          <div
+            className="absolute bottom-20 right-20 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '2s' }}
+          />
+        </div>
 
         <div className="container-full relative z-10">
           <AnimatedSection className="text-center mb-16">
             <span
-              className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4"
-              style={{ background: "#E0FAF7", color: "#008C7A" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+              style={{ background: "rgba(147, 51, 234, 0.2)", color: "#a855f7", border: "1px solid rgba(147, 51, 234, 0.35)" }}
             >
+              <Star className="w-4 h-4" />
               Features
+              <Star className="w-4 h-4" />
             </span>
-            <h2 className="text-responsive-4xl font-bold mb-4" style={{ color: "#0D1B40" }}>
+            <h2 className="text-responsive-4xl font-bold mb-4 text-white">
               {t("home.whySmiley")}
             </h2>
-            <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "#666", lineHeight: 1.7 }}>
+            <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
               {t("home.platformOffers")}
             </p>
           </AnimatedSection>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Shield,        iconBg: "#E0FAF7", iconColor: "#008C7A", title: t("home.verifiedStudents"),     desc: t("home.verifiedStudentsDesc")     },
-              { icon: Star,          iconBg: "#FFF8E1", iconColor: "#B8860B", title: t("home.comprehensiveRating"),  desc: t("home.comprehensiveRatingDesc")  },
-              { icon: MapPin,        iconBg: "#EDE6FF", iconColor: "#6C3FC5", title: t("home.locationBasedSearch"),  desc: t("home.locationBasedSearchDesc")  },
-              { icon: MessageCircle, iconBg: "#E0FAF7", iconColor: "#008C7A", title: t("home.directMessaging"),      desc: t("home.directMessagingDesc")      },
-              { icon: Clock,         iconBg: "#FFF0EF", iconColor: "#C0392B", title: t("home.appointmentReminders"), desc: t("home.appointmentRemindersDesc") },
-              { icon: Heart,         iconBg: "#FFF8E1", iconColor: "#B8860B", title: t("home.freeTreatment"),        desc: t("home.freeTreatmentDesc")        },
-            ].map(({ icon: Icon, iconBg, iconColor, title, desc }, i) => (
+              { icon: Shield,        iconBg: "linear-gradient(135deg, #a855f7, #8b5cf6)", title: t("home.verifiedStudents"),     desc: t("home.verifiedStudentsDesc")     },
+              { icon: Star,          iconBg: "linear-gradient(135deg, #fbbf24, #f59e0b)", title: t("home.comprehensiveRating"),  desc: t("home.comprehensiveRatingDesc")  },
+              { icon: MapPin,        iconBg: "linear-gradient(135deg, #ec4899, #f472b6)", title: t("home.locationBasedSearch"),  desc: t("home.locationBasedSearchDesc")  },
+              { icon: MessageCircle, iconBg: "linear-gradient(135deg, #8b5cf6, #a855f7)", title: t("home.directMessaging"),      desc: t("home.directMessagingDesc")      },
+              { icon: Clock,         iconBg: "linear-gradient(135deg, #f97316, #ea580c)", title: t("home.appointmentReminders"), desc: t("home.appointmentRemindersDesc") },
+              { icon: Heart,         iconBg: "linear-gradient(135deg, #ec4899, #f43f5e)", title: t("home.freeTreatment"),        desc: t("home.freeTreatmentDesc")        },
+            ].map(({ icon: Icon, iconBg, title, desc }, i) => (
               <AnimatedSection key={i} delay={i * 80}>
                 <Card
                   className="h-full transition-all duration-300 hover:scale-[1.03] hover:shadow-2xl group cursor-default"
-                  style={{ border: "2px solid #f0f0f0", background: "white" }}
-                  onMouseEnter={(e) => {
-                    handleHoverBorderColor(e, "#00BFA6");
-                    e.currentTarget.style.transform = "translateY(-4px) scale(1.03)";
+                  style={{
+                    border: "2px solid rgba(147, 51, 234, 0.2)",
+                    background: "rgba(255,255,255,0.05)",
+                    backdropFilter: "blur(8px)"
                   }}
-                  onMouseLeave={handleLeaveBorderColor}
+                  onMouseEnter={(e) => {
+                    handleHoverBorderColor(e, "#a855f7");
+                    e.currentTarget.style.transform = "translateY(-4px) scale(1.03)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                  }}
+                  onMouseLeave={(e) => {
+                    handleLeaveBorderColor(e);
+                    e.currentTarget.style.transform = "translateY(0) scale(1)";
+                    e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                  }}
                 >
                   <CardHeader>
                     <div
                       className="w-14 h-14 rounded-2xl flex items-center justify-center mb-4 shadow-sm transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
                       style={{ background: iconBg }}
                     >
-                      <Icon className="w-7 h-7" style={{ color: iconColor }} />
+                      <Icon className="w-7 h-7 text-white" />
                     </div>
-                    <CardTitle className="text-responsive-lg font-bold" style={{ color: "#0D1B40" }}>
+                    <CardTitle className="text-responsive-lg font-bold text-white">
                       {title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <CardDescription className="text-responsive-base leading-relaxed" style={{ color: "#777" }}>
+                    <CardDescription className="text-responsive-base leading-relaxed" style={{ color: "rgba(255,255,255,0.7)" }}>
                       {desc}
                     </CardDescription>
                   </CardContent>
@@ -1010,26 +1055,31 @@ export default function Home() {
         id="how-it-works"
         className="section-spacing relative"
         style={{
-          backgroundImage: "url('/img/register.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
         }}
       >
-        <div className="absolute inset-0 bg-white/60" />
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+          <div
+            className="absolute top-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '1.5s' }}
+          />
+        </div>
 
         <div className="container-full relative z-10">
           <AnimatedSection className="text-center mb-16">
             <span
-              className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4"
-              style={{ background: "#EDE6FF", color: "#6C3FC5" }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+              style={{ background: "rgba(236, 72, 153, 0.2)", color: "#ec4899", border: "1px solid rgba(236, 72, 153, 0.35)" }}
             >
+              <Zap className="w-4 h-4" />
               Process
+              <Zap className="w-4 h-4" />
             </span>
-            <h2 className="text-responsive-4xl font-bold mb-4" style={{ color: "#0D1B40" }}>
+            <h2 className="text-responsive-4xl font-bold mb-4 text-white">
               {t("home.howItWorks")}
             </h2>
-            <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "#666", lineHeight: 1.7 }}>
+            <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.7 }}>
               {t("home.howItWorksSubtitle") || "Simple steps to get started with your dental journey"}
             </p>
           </AnimatedSection>
@@ -1037,10 +1087,10 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Patients */}
             <AnimatedSection delay={100}>
-              <h3 className="text-responsive-2xl font-bold mb-8 flex items-center gap-4" style={{ color: "#0D1B40" }}>
+              <h3 className="text-responsive-2xl font-bold mb-8 flex items-center gap-4 text-white">
                 <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
-                  style={{ background: "linear-gradient(135deg, #00BFA6, #008C7A)" }}
+                  style={{ background: "linear-gradient(135deg, #a855f7, #8b5cf6)" }}
                 >
                   <User className="w-6 h-6 text-white" />
                 </div>
@@ -1053,23 +1103,32 @@ export default function Home() {
                 ].map((step, i) => (
                   <AnimatedSection key={i} delay={i * 80}>
                     <Card
-                      className="shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-x-1 group"
-                      style={{ border: "1.5px solid #e8e8e8", background: "white" }}
-                      onMouseEnter={(e) => {
-                        handleHoverBorderColor(e, "#00BFA6");
-                        e.currentTarget.style.transform = "translateY(-2px) translateX(-4px)";
+                      className="shadow-sm transition-all duration-300 hover:shadow-lg group"
+                      style={{
+                        border: "1.5px solid rgba(147, 51, 234, 0.2)",
+                        background: "rgba(255,255,255,0.05)",
+                        backdropFilter: "blur(8px)"
                       }}
-                      onMouseLeave={handleLeaveBorderColor}
+                      onMouseEnter={(e) => {
+                        handleHoverBorderColor(e, "#a855f7");
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                      }}
+                      onMouseLeave={(e) => {
+                        handleLeaveBorderColor(e);
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                      }}
                     >
                       <CardContent className="p-5">
                         <div className="flex gap-4 items-start">
                           <div
                             className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
-                            style={{ background: "linear-gradient(135deg, #00BFA6, #008C7A)" }}
+                            style={{ background: "linear-gradient(135deg, #a855f7, #8b5cf6)" }}
                           >
                             {i + 1}
                           </div>
-                          <span className="font-semibold text-responsive-base leading-relaxed pt-1" style={{ color: "#333" }}>
+                          <span className="font-semibold text-responsive-base leading-relaxed pt-1" style={{ color: "rgba(255,255,255,0.85)" }}>
                             {step}
                           </span>
                         </div>
@@ -1082,10 +1141,10 @@ export default function Home() {
 
             {/* Students */}
             <AnimatedSection delay={200}>
-              <h3 className="text-responsive-2xl font-bold mb-8 flex items-center gap-4" style={{ color: "#0D1B40" }}>
+              <h3 className="text-responsive-2xl font-bold mb-8 flex items-center gap-4 text-white">
                 <div
                   className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
-                  style={{ background: "linear-gradient(135deg, #a78bfa, #6C3FC5)" }}
+                  style={{ background: "linear-gradient(135deg, #ec4899, #f472b6)" }}
                 >
                   <Stethoscope className="w-6 h-6 text-white" />
                 </div>
@@ -1098,23 +1157,32 @@ export default function Home() {
                 ].map((step, i) => (
                   <AnimatedSection key={i} delay={i * 80}>
                     <Card
-                      className="shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-x-1 group"
-                      style={{ border: "1.5px solid #e8e8e8", background: "white" }}
-                      onMouseEnter={(e) => {
-                        handleHoverBorderColor(e, "#6C3FC5");
-                        e.currentTarget.style.transform = "translateY(-2px) translateX(-4px)";
+                      className="shadow-sm transition-all duration-300 hover:shadow-lg group"
+                      style={{
+                        border: "1.5px solid rgba(236, 72, 153, 0.2)",
+                        background: "rgba(255,255,255,0.05)",
+                        backdropFilter: "blur(8px)"
                       }}
-                      onMouseLeave={handleLeaveBorderColor}
+                      onMouseEnter={(e) => {
+                        handleHoverBorderColor(e, "#ec4899");
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                      }}
+                      onMouseLeave={(e) => {
+                        handleLeaveBorderColor(e);
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                      }}
                     >
                       <CardContent className="p-5">
                         <div className="flex gap-4 items-start">
                           <div
                             className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-sm font-bold flex-shrink-0 shadow-md transition-all duration-300 group-hover:scale-110 group-hover:rotate-12"
-                            style={{ background: "linear-gradient(135deg, #a78bfa, #6C3FC5)" }}
+                            style={{ background: "linear-gradient(135deg, #ec4899, #f472b6)" }}
                           >
                             {i + 1}
                           </div>
-                          <span className="font-semibold text-responsive-base leading-relaxed pt-1" style={{ color: "#333" }}>
+                          <span className="font-semibold text-responsive-base leading-relaxed pt-1" style={{ color: "rgba(255,255,255,0.85)" }}>
                             {step}
                           </span>
                         </div>
@@ -1135,28 +1203,32 @@ export default function Home() {
         id="faq"
         className="section-spacing relative"
         style={{
-          backgroundImage: "url('/img/faq.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundColor: "#fff",
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
         }}
       >
-        <div className="absolute inset-0 bg-white/60" />
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+          <div
+            className="absolute bottom-20 left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: '2.5s' }}
+          />
+        </div>
 
         <div className="container-full relative z-10">
           <div className="container-medium">
             <AnimatedSection className="text-center mb-16">
               <span
-                className="inline-block px-4 py-2 rounded-full text-sm font-bold mb-4"
-                style={{ background: "#E0FAF7", color: "#008C7A" }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+                style={{ background: "rgba(168, 85, 247, 0.2)", color: "#a855f7", border: "1px solid rgba(168, 85, 247, 0.35)" }}
               >
+                <MessageCircle className="w-4 h-4" />
                 FAQ
+                <MessageCircle className="w-4 h-4" />
               </span>
-              <h2 className="text-responsive-4xl font-bold mb-4" style={{ color: "#0D1B40" }}>
+              <h2 className="text-responsive-4xl font-bold mb-4 text-white">
                 {t("home.faqTitle")}
               </h2>
-              <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "#666" }}>
+              <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.7)" }}>
                 {t("home.faqSubtitle") || "Find answers to frequently asked questions"}
               </p>
             </AnimatedSection>
@@ -1170,18 +1242,27 @@ export default function Home() {
                 <AnimatedSection key={i} delay={i * 100}>
                   <Card
                     className="transition-all duration-300 hover:shadow-lg group"
-                    style={{ border: "2px solid #eee", background: "white" }}
-                    onMouseEnter={(e) => {
-                      handleHoverBorderColor(e, "#00BFA6");
-                      e.currentTarget.style.transform = "translateY(-2px)";
+                    style={{
+                      border: "2px solid rgba(147, 51, 234, 0.2)",
+                      background: "rgba(255,255,255,0.05)",
+                      backdropFilter: "blur(8px)"
                     }}
-                    onMouseLeave={handleLeaveBorderColor}
+                    onMouseEnter={(e) => {
+                      handleHoverBorderColor(e, "#a855f7");
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    }}
+                    onMouseLeave={(e) => {
+                      handleLeaveBorderColor(e);
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                    }}
                   >
                     <CardHeader>
-                      <CardTitle className="text-responsive-base font-bold flex items-start gap-3" style={{ color: "#0D1B40" }}>
+                      <CardTitle className="text-responsive-base font-bold flex items-start gap-3 text-white">
                         <span
                           className="font-black transition-all duration-300 group-hover:scale-125 inline-block"
-                          style={{ color: "#00BFA6" }}
+                          style={{ color: "#a855f7" }}
                         >
                           Q{i + 1}.
                         </span>
@@ -1189,7 +1270,7 @@ export default function Home() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-responsive-sm leading-relaxed pl-7" style={{ color: "#666" }}>
+                      <p className="text-responsive-sm leading-relaxed pl-7" style={{ color: "rgba(255,255,255,0.7)" }}>
                         {item.a}
                       </p>
                     </CardContent>
@@ -1202,257 +1283,165 @@ export default function Home() {
       </section>
 
       {/* ==========================================
-           CTA SECTION
+           FOOTER
       ========================================== */}
-      <section className="section-spacing" style={{ background: "#F8F4FF" }}>
-        <div className="container-full">
+      <footer
+        className="py-12 relative"
+        style={{
+          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 100%)",
+          borderTop: "2px solid rgba(147, 51, 234, 0.2)",
+        }}
+      >
+        <div className="container-full text-center">
           <AnimatedSection>
-            <div
-              className="relative overflow-hidden text-center"
-              style={{
-                background: "linear-gradient(135deg, #0D1B40 0%, #134a3a 50%, #1a4a40 100%)",
-                borderRadius: "24px",
-                padding: "60px",
-                margin: "0 0 80px",
-              }}
-            >
-              {/* 🦷 watermark */}
-              <span
-                className="absolute pointer-events-none select-none"
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center"
                 style={{
-                  fontSize: 200,
-                  opacity: 0.04,
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  lineHeight: 1,
-                  fontFamily: 'system-ui, -apple-system, "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
+                  background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                  boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
                 }}
               >
-                🦷
-              </span>
-
-              <div className="relative z-10">
-                <h2
-                  className="font-bold text-white mb-4"
-                  style={{
-                    fontFamily: "'Playfair Display', serif",
-                    fontSize: "clamp(26px, 4vw, 36px)",
-                    fontWeight: 700,
-                  }}
-                >
-                  {t("home.ctaTitle")}
-                </h2>
-
-                <p
-                  className="mb-8 mx-auto"
-                  style={{
-                    fontSize: 16,
-                    color: "rgba(255,255,255,0.65)",
-                    maxWidth: 520,
-                    lineHeight: 1.7,
-                  }}
-                >
-                  {t("home.ctaDescription")}
-                </p>
-
-                <div className="flex flex-wrap gap-4 justify-center">
-                  <Button
-                    size="lg"
-                    asChild
-                    className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95"
-                    style={{
-                      background: "white",
-                      color: "#0D1B40",
-                      fontWeight: 800,
-                      fontSize: 15,
-                      padding: "14px 32px",
-                      borderRadius: 10,
-                      border: "none",
-                      fontFamily: "inherit",
-                      boxShadow: "0 4px 14px rgba(255,255,255,0.2)",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(255,255,255,0.35)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 14px rgba(255,255,255,0.2)";
-                    }}
-                  >
-                    <Link href="/auth/register-verification">
-                      {t("home.registerAsPatient")}
-                    </Link>
-                  </Button>
-
-                  <Button
-                    size="lg"
-                    asChild
-                    className="transition-all duration-300 hover:-translate-y-1 hover:shadow-xl active:scale-95"
-                    style={{
-                      background: "transparent",
-                      color: "white",
-                      fontWeight: 800,
-                      fontSize: 15,
-                      padding: "14px 32px",
-                      borderRadius: 10,
-                      border: "2px solid rgba(255,255,255,0.4)",
-                      fontFamily: "inherit",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.15)";
-                      (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.6)";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.background = "transparent";
-                    }}
-                  >
-                    <Link href="/auth/login">
-                      {t("home.login")}
-                    </Link>
-                  </Button>
-                </div>
+                <span className="text-2xl">🦷</span>
               </div>
+              <span
+                className="text-xl font-bold"
+                style={{
+                  background: "linear-gradient(135deg, #a855f7, #ec4899)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                }}
+              >
+                {t("home.brand")}
+              </span>
+            </div>
+            <p style={{ color: "rgba(255,255,255,0.6)" }} className="mb-4">
+              © 2024 Smiley Dental. {t("home.allRightsReserved") || "All rights reserved."}
+            </p>
+            <div className="flex items-center justify-center gap-6">
+              <Link
+                href="#features"
+                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+              >
+                {t("home.features")}
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+              >
+                {t("home.howItWorks")}
+              </Link>
+              <Link
+                href="#faq"
+                className="text-sm transition-colors duration-200 hover:text-purple-400"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+              >
+                {t("home.faq")}
+              </Link>
             </div>
           </AnimatedSection>
         </div>
-      </section>
-
-      {/* ==========================================
-           FOOTER
-      ========================================== */}
-      <footer style={{ background: "#0D1B40", padding: "60px 5% 30px" }}>
-        <div className="container-full">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
-
-            {/* Brand */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300 hover:scale-110 hover:rotate-6"
-                  style={{ background: "linear-gradient(135deg, #00BFA6, #6C3FC5)" }}
-                >
-                  <span
-                    className="text-2xl"
-                    style={{
-                      fontFamily: 'system-ui, -apple-system, "Segoe UI Emoji", "Segoe UI Symbol", sans-serif',
-                      fontSize: 'inherit'
-                    }}
-                  >🦷</span>
-                </div>
-                <span
-                  className="text-responsive-xl font-bold"
-                  style={{
-                    background: "linear-gradient(135deg, #00BFA6, #a78bfa)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  {t("home.brand")}
-                </span>
-              </div>
-              <p className="text-responsive-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
-                {t("home.footerDescription")}
-              </p>
-            </div>
-
-            {/* Quick Links */}
-            <div>
-              <h4
-                className="font-bold mb-6 text-responsive-base uppercase tracking-wider"
-                style={{ color: "white", letterSpacing: "0.8px" }}
-              >
-                {t("home.quickLinks")}
-              </h4>
-              <ul className="space-y-3">
-                {[
-                  { href: "#features",     label: t("home.features")   },
-                  { href: "#how-it-works", label: t("home.howItWorks") },
-                  { href: "#faq",          label: t("home.faq")        },
-                ].map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      className="text-responsive-sm transition-colors duration-200"
-                      style={{ color: "rgba(255,255,255,0.55)", textDecoration: "none" }}
-                      onMouseEnter={(e) => handleHoverColor(e, "#00BFA6")}
-                      onMouseLeave={handleLeaveColor}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Support */}
-            <div>
-              <h4
-                className="font-bold mb-6 text-responsive-base uppercase tracking-wider"
-                style={{ color: "white", letterSpacing: "0.8px" }}
-              >
-                {t("home.support")}
-              </h4>
-              <ul className="space-y-3">
-                {[t("home.contactUs"), t("home.termsAndConditions"), t("home.privacyPolicy")].map((label) => (
-                  <li key={label}>
-                    <a
-                      href="#"
-                      className="text-responsive-sm transition-colors duration-200"
-                      style={{ color: "rgba(255,255,255,0.55)", textDecoration: "none" }}
-                      onMouseEnter={(e) => handleHoverColor(e, "#00BFA6")}
-                      onMouseLeave={handleLeaveColor}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h4
-                className="font-bold mb-6 text-responsive-base uppercase tracking-wider"
-                style={{ color: "white", letterSpacing: "0.8px" }}
-              >
-                {t("home.contactUs")}
-              </h4>
-              <p className="text-responsive-sm mb-6 leading-relaxed" style={{ color: "rgba(255,255,255,0.5)" }}>
-                {t("home.contactUsQuestion")}
-              </p>
-              <Button
-                variant="outline"
-                className="w-full font-bold transition-all duration-300 hover:scale-105"
-                style={{
-                  border: "1.5px solid rgba(255,255,255,0.2)",
-                  color: "white",
-                  background: "transparent",
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#00BFA6";
-                  (e.currentTarget as HTMLElement).style.color = "#00BFA6";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.2)";
-                  (e.currentTarget as HTMLElement).style.color = "white";
-                }}
-              >
-                {t("home.contactUsButton")}
-              </Button>
-            </div>
-          </div>
-
-          <div
-            className="pt-8 text-center text-responsive-sm"
-            style={{
-              borderTop: "1px solid rgba(255,255,255,0.1)",
-              color: "rgba(255,255,255,0.35)",
-            }}
-          >
-            {t("home.copyright")}
-          </div>
-        </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 0.1; transform: translate(-50%, -50%) scale(1); }
+          50% { opacity: 0.2; transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        @keyframes particle-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(100px, -50px) scale(1.5); opacity: 1; }
+        }
+
+        @keyframes particle-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(-80px, 100px) scale(1.3); opacity: 1; }
+        }
+
+        @keyframes particle-3 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(120px, 80px) scale(1.4); opacity: 1; }
+        }
+
+        @keyframes particle-4 {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(-100px, -60px) scale(1.2); opacity: 1; }
+        }
+
+        @keyframes slide-in-left {
+          from { opacity: 0; transform: translateX(-50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes slide-in-right {
+          from { opacity: 0; transform: translateX(50px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .animate-float {
+          animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-pulse-slow {
+          animation: pulse-slow 8s ease-in-out infinite;
+        }
+
+        .animate-particle-1 {
+          animation: particle-1 15s ease-in-out infinite;
+        }
+
+        .animate-particle-2 {
+          animation: particle-2 18s ease-in-out infinite;
+        }
+
+        .animate-particle-3 {
+          animation: particle-3 12s ease-in-out infinite;
+        }
+
+        .animate-particle-4 {
+          animation: particle-4 20s ease-in-out infinite;
+        }
+
+        .animate-slide-in-left {
+          animation: slide-in-left 0.8s ease-out;
+        }
+
+        .animate-slide-in-right {
+          animation: slide-in-right 0.8s ease-out;
+        }
+
+        .animate-gradient {
+          background-size: 200% 200%;
+          animation: gradient 3s ease infinite;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+
+        .fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 }
