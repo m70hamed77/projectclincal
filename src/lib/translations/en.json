@@ -29,6 +29,7 @@
     "totalDoctors": "Total Doctors",
     "activeDoctor": "Active Doctor",
     "totalPatients": "Total Patients",
+    "registeredPatient": "Registered Patient",
     "activePatient": "Active Patient",
     "pendingVerifications": "Requests Under Review",
     "waitingApproval": "Waiting for Approval",

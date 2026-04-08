@@ -29,6 +29,7 @@
     "totalDoctors": "إجمالي الدكاترة",
     "activeDoctor": "دكتور نشط",
     "totalPatients": "إجمالي المرضى",
+    "registeredPatient": "مريض مسجل",
     "activePatient": "مريض نشط",
     "pendingVerifications": "طلبات قيد المراجعة",
     "waitingApproval": "بانتظار الموافقة",

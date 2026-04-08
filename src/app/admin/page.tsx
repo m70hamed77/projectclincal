@@ -16,7 +16,6 @@ import {
   Clock,
   TrendingUp,
   Shield,
-  UserCheck,
   FileText,
   ArrowRight,
   XCircle,
@@ -403,7 +402,7 @@ export default function AdminDashboardPage() {
             {/* Total Patients */}
             <Card style={{background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)', border: '2px solid rgba(147, 51, 234, 0.2)'}}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>إجمالي المرضى</CardTitle>
+                <CardTitle className="text-sm font-medium" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.totalPatients')}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center justify-between">
@@ -413,31 +412,10 @@ export default function AdminDashboardPage() {
                     </div>
                     <div>
                       <div className="text-3xl font-bold" style={{color: '#9333ea'}}>{stats.totalPatients}</div>
-                      <div className="text-xs" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>مريض مسجل</div>
+                      <div className="text-xs" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.registeredPatient')}</div>
                     </div>
                   </div>
                   <TrendingUp className="w-5 h-5" style={{color: '#7C3AED'}} />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Active Patients */}
-            <Card style={{background: 'linear-gradient(135deg, #E0F2FE 0%, #BAE6FD 100%)', border: '2px solid rgba(14, 165, 233, 0.2)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#0EA5E9'}} suppressHydrationWarning={true}>المرضى النشطين</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #0EA5E9, #0284C7)'}}>
-                      <UserCheck className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#0EA5E9'}}>{stats.activePatients}</div>
-                      <div className="text-xs" style={{color: '#0284C7'}} suppressHydrationWarning={true}>مريض نشط</div>
-                    </div>
-                  </div>
-                  <CheckCircle className="w-5 h-5" style={{color: '#0EA5E9'}} />
                 </div>
               </CardContent>
             </Card>
