@@ -441,9 +441,6 @@ export default function DoctorProfilePage() {
                           </Badge>
                         )}
                       </h1>
-                      {student.specialization && (
-                        <p className="text-muted-foreground text-lg">{student.specialization}</p>
-                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1 bg-amber-50 px-3 py-1.5 rounded-full">
@@ -684,15 +681,6 @@ export default function DoctorProfilePage() {
                         <div>
                           <p className="text-sm text-muted-foreground">السنة الدراسية</p>
                           <p className="font-medium">الفرقة {student.academicYear}</p>
-                        </div>
-                      </div>
-                    )}
-                    {student.specialization && (
-                      <div className="flex items-start gap-3">
-                        <Stethoscope className="w-5 h-5 text-emerald-800 mt-0.5" />
-                        <div>
-                          <p className="text-sm text-muted-foreground">التخصص</p>
-                          <p className="font-medium">{student.specialization}</p>
                         </div>
                       </div>
                     )}

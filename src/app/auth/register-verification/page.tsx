@@ -66,7 +66,6 @@ export default function RegisterWithVerificationPage() {
     confirmPassword: '',
     verificationCode: '',
     universityName: '',
-    specialization: '',
   })
 
   const [showPassword, setShowPassword] = useState(false)
@@ -175,14 +174,6 @@ export default function RegisterWithVerificationPage() {
         }
         break
 
-      case 'specialization':
-        if (!value.trim()) {
-          newErrors.specialization = 'التخصص مطلوب'
-        } else {
-          delete newErrors.specialization
-        }
-        break
-
       case 'password':
         if (!value) {
           newErrors.password = 'كلمة المرور مطلوبة'
@@ -286,7 +277,6 @@ export default function RegisterWithVerificationPage() {
 
     if (userType === 'student') {
       if (!formData.universityName.trim()) newErrors.universityName = 'الجامعة مطلوبة'
-      if (!formData.specialization.trim()) newErrors.specialization = 'التخصص مطلوب'
     }
 
     if (formData.email && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
@@ -339,7 +329,6 @@ export default function RegisterWithVerificationPage() {
           address: formData.address.trim(),
           ...(userType === 'student' && {
             universityName: formData.universityName,
-            specialization: formData.specialization,
             city: formData.governorate.trim(),
           }),
           ...(userType === 'patient' && {
@@ -371,7 +360,7 @@ export default function RegisterWithVerificationPage() {
            formData.address.trim().length >= 10 &&
            formData.password.length >= 8 &&
            formData.password === formData.confirmPassword &&
-           (userType === 'student' ? formData.universityName.trim().length > 0 && formData.specialization.trim().length > 0 : true)
+           (userType === 'student' ? formData.universityName.trim().length > 0 : true)
   }
 
   // Step 1: Registration Form
@@ -777,32 +766,6 @@ export default function RegisterWithVerificationPage() {
                       <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
                         <AlertCircle className="w-4 h-4" />
                         {errors.universityName}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-300">{t('registerPage.specializationLabel' )}</label>
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
-                      <div className="relative flex items-center">
-                        <Shield className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
-                        <input
-                          type="text"
-                          name="specialization"
-                          value={formData.specialization}
-                          onChange={handleChange}
-                          className={`w-full px-4 py-3.5 pr-12 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 ${
-                            errors.specialization ? 'border-red-500 group-focus-within:border-red-500' : 'border-white/10 group-focus-within:border-blue-500'
-                          }`}
-                          placeholder={t('registerPage.specializationPlaceholder' )}
-                        />
-                      </div>
-                    </div>
-                    {errors.specialization && (
-                      <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
-                        <AlertCircle className="w-4 h-4" />
-                        {errors.specialization}
                       </p>
                     )}
                   </div>

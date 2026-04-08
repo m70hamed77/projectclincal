@@ -161,7 +161,6 @@ function ProfileContent() {
     showReviews: true,
     showActivePosts: true,
     showLocation: true,
-    showSpecialization: true,
     showBio: true,
     showCompletedCount: true
   })
@@ -308,7 +307,6 @@ function ProfileContent() {
               showReviews: profileData.student.showReviews ?? true,
               showActivePosts: profileData.student.showActivePosts ?? true,
               showLocation: profileData.student.showLocation ?? true,
-              showSpecialization: profileData.student.showSpecialization ?? true,
               showBio: profileData.student.showBio ?? true,
               showCompletedCount: profileData.student.showCompletedCount ?? true
             })
@@ -1134,12 +1132,6 @@ function ProfileContent() {
                         <Label suppressHydrationWarning={true} className="text-teal-700">{t('profile.academicInfo.studentId')}</Label>
                         <div className="text-sm text-teal-900">
                           {studentProfile?.studentIdNumber || t('profile.academicInfo.notAddedYet')}
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <Label suppressHydrationWarning={true} className="text-teal-700">{t('profile.academicInfo.specialization')}</Label>
-                        <div className="text-sm text-teal-900">
-                          {studentProfile?.specialization || t('profile.academicInfo.notSpecifiedYet')}
                         </div>
                       </div>
                       <div className="space-y-2">
@@ -2317,22 +2309,6 @@ function ProfileContent() {
                     <div className="space-y-4">
                       <h4 className="font-semibold text-sm">{t('profile.privacySettings.personalInfo')}</h4>
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium">{t('profile.privacySettings.showSpecialization')}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {t('profile.privacySettings.showSpecializationDesc')}
-                            </p>
-                          </div>
-                          <Switch
-                            checked={privacySettings.showSpecialization}
-                            disabled={updatingPrivacySetting === 'showSpecialization'}
-                            onCheckedChange={(checked) =>
-                              updatePrivacySetting('showSpecialization', checked)
-                            }
-                          />
-                        </div>
-
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="font-medium">{t('profile.privacySettings.showBio')}</p>
