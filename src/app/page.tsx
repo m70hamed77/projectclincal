@@ -1301,132 +1301,102 @@ export default function Home() {
 
         <div className="container-full relative z-10">
           <AnimatedSection>
-            {/* Main Logo Section */}
-            <div className="flex flex-col items-center justify-center gap-6 mb-12">
-              <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-2xl blur-xl opacity-30 group-hover:opacity-60 transition-all duration-500 group-hover:scale-110"></div>
-                <div
-                  className="relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-6"
+            <div className="grid md:grid-cols-4 gap-12 mb-12">
+              {/* Brand Section */}
+              <div className="md:col-span-1">
+                <div className="flex flex-col items-start gap-4">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center"
+                      style={{
+                        background: "linear-gradient(135deg, #9333ea, #ec4899)",
+                        boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
+                      }}
+                    >
+                      <span className="text-2xl">🦷</span>
+                    </div>
+                    <span
+                      className="text-2xl font-bold"
+                      style={{
+                        background: "linear-gradient(135deg, #a855f7, #ec4899)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                      }}
+                    >
+                      سمايلي
+                    </span>
+                  </div>
+                  <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm leading-relaxed">
+                    منصة تربط بين طلاب طب الأسنان والمرضى
+                  </p>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">روابط سريعة</h3>
+                <ul className="space-y-3">
+                  {[
+                    { href: "#features", label: "المميزات" },
+                    { href: "#how-it-works", label: "كيف يعمل؟" },
+                    { href: "#faq", label: "الأسئلة الشائعة" },
+                    { href: "#", label: "الدعم" },
+                    { href: "#", label: "اتصل بنا" },
+                    { href: "#", label: "الشروط والأحكام" },
+                    { href: "#", label: "سياسة الخصوصية" },
+                  ].map((item) => (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        className="text-sm transition-all duration-200 hover:text-purple-400 hover:translate-x-1 inline-block"
+                        style={{ color: "rgba(255,255,255,0.7)" }}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Contact */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">اتصل بنا</h3>
+                <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm leading-relaxed mb-4">
+                  هل لديك أي استفسار؟
+                </p>
+                <button
+                  className="px-6 py-2 rounded-xl font-semibold text-sm text-white transition-all duration-300 hover:scale-105"
                   style={{
                     background: "linear-gradient(135deg, #9333ea, #ec4899)",
-                    boxShadow: "0 8px 24px rgba(236, 72, 153, 0.5)",
+                    boxShadow: "0 4px 14px rgba(236, 72, 153, 0.4)",
                   }}
                 >
-                  <span className="text-3xl transition-transform duration-300 group-hover:scale-125">🦷</span>
-                </div>
+                  تواصل معنا
+                </button>
               </div>
 
-              <div className="text-center">
-                <span
-                  className="text-3xl font-bold block mb-2"
-                  style={{
-                    background: "linear-gradient(135deg, #a855f7, #ec4899, #06b6d4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundSize: "200% 200%",
-                    animation: "gradient 3s ease infinite",
-                  }}
-                >
-                  {t("home.brand")}
-                </span>
-                <p style={{ color: "rgba(255,255,255,0.7)" }} className="text-sm">
-                  {t("home.tagline") || "منصة تجمع الطلاب والمرضى لعلاج أسنان مميز"}
-                </p>
-              </div>
-            </div>
-
-            {/* Team Info Cards */}
-            <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-              {/* Team Card */}
-              <div
-                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
-                style={{
-                  background: "rgba(147, 51, 234, 0.1)",
-                  border: "2px solid rgba(147, 51, 234, 0.3)",
-                  backdropFilter: "blur(8px)"
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #9333ea, #a855f7)" }}>
-                    <User className="w-6 h-6 text-white" />
+              {/* Team Info */}
+              <div>
+                <h3 className="text-white font-bold text-lg mb-4">الفريق</h3>
+                <div className="space-y-3">
+                  <div className="p-3 rounded-xl" style={{ background: "rgba(147, 51, 234, 0.1)", border: "1px solid rgba(147, 51, 234, 0.2)" }}>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>تيم التخرج</p>
+                    <p className="text-purple-300 font-bold text-lg">Team CS-22</p>
                   </div>
-                  <h3 className="text-white font-bold text-lg mb-2">تيم التخرج</h3>
-                  <p className="text-purple-300 font-semibold text-xl">Team 22 CS</p>
-                </div>
-              </div>
-
-              {/* Year Card */}
-              <div
-                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
-                style={{
-                  background: "rgba(236, 72, 153, 0.1)",
-                  border: "2px solid rgba(236, 72, 153, 0.3)",
-                  backdropFilter: "blur(8px)"
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-pink-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #ec4899, #f472b6)" }}>
-                    <Star className="w-6 h-6 text-white" />
+                  <div className="p-3 rounded-xl" style={{ background: "rgba(236, 72, 153, 0.1)", border: "1px solid rgba(236, 72, 153, 0.2)" }}>
+                    <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>مشروع التخرج</p>
+                    <p className="text-pink-300 font-bold text-lg">2026</p>
                   </div>
-                  <h3 className="text-white font-bold text-lg mb-2">تخرج</h3>
-                  <p className="text-pink-300 font-semibold text-xl">2026</p>
                 </div>
               </div>
-
-              {/* Copyright Card */}
-              <div
-                className="relative group overflow-hidden rounded-2xl p-6 transition-all duration-500 hover:scale-105"
-                style={{
-                  background: "rgba(6, 182, 212, 0.1)",
-                  border: "2px solid rgba(6, 182, 212, 0.3)",
-                  backdropFilter: "blur(8px)"
-                }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative z-10 text-center">
-                  <div className="w-12 h-12 mx-auto mb-3 rounded-xl flex items-center justify-center" style={{ background: "linear-gradient(135deg, #06b6d4, #3b82f6)" }}>
-                    <Shield className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-white font-bold text-lg mb-2">الحقوق</h3>
-                  <p className="text-cyan-300 font-semibold text-sm">© 2026 All Rights Reserved</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation Links */}
-            <div className="flex flex-wrap items-center justify-center gap-8 mb-8">
-              {[
-                { href: "#features", label: t("home.features") },
-                { href: "#how-it-works", label: t("home.howItWorks") },
-                { href: "#faq", label: t("home.faq") },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="relative group"
-                >
-                  <span
-                    className="text-sm transition-colors duration-200 hover:text-purple-400 inline-block"
-                    style={{ color: "rgba(255,255,255,0.8)" }}
-                  >
-                    {item.label}
-                  </span>
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-purple-500 to-pink-500 group-hover:w-full transition-all duration-300"></span>
-                </Link>
-              ))}
             </div>
 
             {/* Bottom Bar */}
             <div
               className="pt-8 border-t border-white/10"
-              style={{
-                background: "linear-gradient(to right, transparent, rgba(147, 51, 234, 0.2), transparent)",
-              }}
             >
               <p style={{ color: "rgba(255,255,255,0.6)" }} className="text-center text-sm">
-                © 2026 Smiley Dental. {t("home.allRightsReserved") || "All rights reserved."}
+                © 2026 Team CS-22 | مشروع التخرج | العبور | جميع الحقوق محفوظة.
               </p>
             </div>
           </AnimatedSection>
