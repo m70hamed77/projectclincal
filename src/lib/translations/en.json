@@ -28,6 +28,8 @@
     "newReports": "New Report",
     "totalDoctors": "Total Doctors",
     "activeDoctor": "Active Doctor",
+    "totalPatients": "Total Patients",
+    "activePatient": "Active Patient",
     "pendingVerifications": "Requests Under Review",
     "waitingApproval": "Waiting for Approval",
     "new": "New",

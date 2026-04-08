@@ -28,6 +28,8 @@
     "newReports": "بلاغ جديد",
     "totalDoctors": "إجمالي الدكاترة",
     "activeDoctor": "دكتور نشط",
+    "totalPatients": "إجمالي المرضى",
+    "activePatient": "مريض نشط",
     "pendingVerifications": "طلبات قيد المراجعة",
     "waitingApproval": "بانتظار الموافقة",
     "new": "جديد",

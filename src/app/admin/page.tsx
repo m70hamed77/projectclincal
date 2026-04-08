@@ -33,7 +33,8 @@ interface DashboardStats {
   deletedUsers: number         // 🗑️ عدد الحسابات المحذوفة
   bannedUsers: number          // 🚫 عدد الحسابات المحظورة
   suspendedUsers: number       // ⏸️ عدد الحسابات الموقوفة
-  activePatients: number
+  totalPatients: number        // 👥 إجمالي المرضى
+  activePatients: number       // ✅ المرضى النشطين
   pendingReports: number
   resolvedReports: number
   dismissedReports: number     // 📤 عدد البلاغات المتجاهلة
@@ -56,6 +57,7 @@ export default function AdminDashboardPage() {
     deletedUsers: 0,
     bannedUsers: 0,
     suspendedUsers: 0,
+    totalPatients: 0,
     activePatients: 0,
     pendingReports: 0,
     resolvedReports: 0,

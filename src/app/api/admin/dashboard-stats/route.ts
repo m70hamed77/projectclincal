@@ -80,6 +80,9 @@ export async function GET(request: NextRequest) {
       where: { status: 'SUSPENDED' }
     })
 
+    // Get total patients (all patients regardless of status)
+    const totalPatients = await db.patient.count()
+
     // Get active patients
     const activePatients = await db.patient.count({
       where: {
@@ -121,6 +124,7 @@ export async function GET(request: NextRequest) {
       deletedUsers,
       bannedUsers,
       suspendedUsers,
+      totalPatients,
       activePatients,
       pendingReports,
       resolvedReports,
@@ -139,6 +143,7 @@ export async function GET(request: NextRequest) {
         deletedUsers,
         bannedUsers,
         suspendedUsers,
+        totalPatients,
         activePatients,
         pendingReports,
         resolvedReports,
