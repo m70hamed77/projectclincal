@@ -313,8 +313,8 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.emailLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
-                  <div className="relative flex items-center">
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none -z-10" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
+                  <div className="relative flex items-center z-10">
                     <Mail className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
                       type="email"
@@ -430,8 +430,8 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.newPasswordLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
-                  <div className="relative flex items-center">
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none -z-10" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
+                  <div className="relative flex items-center z-10">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
                       type={showPassword ? 'text' : 'password'}
@@ -459,8 +459,8 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.confirmPasswordLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
-                  <div className="relative flex items-center">
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none -z-10" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
+                  <div className="relative flex items-center z-10">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
                       type={showConfirmPassword ? 'text' : 'password'}
