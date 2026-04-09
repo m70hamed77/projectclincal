@@ -441,15 +441,23 @@ export default function RegisterWithVerificationPage() {
 
         // Check if error is related to email or phone
         if (errorMessage.includes('البريد الإلكتروني')) {
-          setErrors({ email: errorMessage })
           // Go back to step 1 to show the email error
           setStep(1)
+          // Clear all errors first, then set email error
+          setErrors({})
+          setTimeout(() => {
+            setErrors({ email: errorMessage })
+          }, 0)
         } else if (errorMessage.includes('رقم الهاتف')) {
-          setErrors({ phone: errorMessage })
           // Go back to step 1 to show the phone error
           setStep(1)
+          // Clear all errors first, then set phone error
+          setErrors({})
+          setTimeout(() => {
+            setErrors({ phone: errorMessage })
+          }, 0)
         } else {
-          // Other errors show in verification code field
+          // Other errors show in verification code field (stay on step 2)
           setErrors({ verificationCode: errorMessage })
         }
       }
@@ -1116,7 +1124,10 @@ export default function RegisterWithVerificationPage() {
 
               {/* Back Button */}
               <button
-                onClick={() => setStep(1)}
+                onClick={() => {
+                  setStep(1)
+                  setErrors({})
+                }}
                 className="w-full py-3.5 border-2 border-white/10 text-gray-300 font-semibold rounded-xl hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98]"
               >
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
