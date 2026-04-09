@@ -1231,7 +1231,7 @@ export default function RegisterWithVerificationPage() {
 
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold text-white">
-                  {userType === 'patient' ? t('registerPage.patientRegisteredSuccessfully') : t('registerPage.studentRegisteredSuccessfully')}
+                  {t('registerPage.RegisteredSuccessfully')}
                 </h1>
                 <p className="text-gray-300 leading-relaxed">
                   {userType === 'patient'

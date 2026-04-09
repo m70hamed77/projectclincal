@@ -404,8 +404,7 @@
       "sendCodeFailed": "فشل إرسال كود التحقق. حاول مرة أخرى.",
       "connectionError": "حدث خطأ في الاتصال. حاول مرة أخرى.",
       "registrationError": "حدث خطأ أثناء التسجيل",
-      "studentRegisteredSuccessfully": "تم إنشاء الحساب ✓",
-      "patientRegisteredSuccessfully": "✅ تم تسجيل المريض بنجاح",
+      "RegisteredSuccessfully": "✅ تم التسجيل بنجاح",
       "accountCreated": "تم إنشاء حسابك بنجاح!"
     },
     "codeSentTo": "تم إرسال الكود إلى",
