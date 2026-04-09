@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { storeOTP, generateOTP } from '@/lib/password'
+import { sendVerificationCode } from '@/lib/email'
 
 /**
  * API لطلب OTP عند نسيان كلمة المرور
@@ -39,12 +40,18 @@ export async function POST(request: NextRequest) {
     // 4. حفظ OTP مع صلاحية 10 دقائق
     storeOTP(email, otp, 10)
 
-    // 5. طباعة OTP في Console فقط (محاكاة إرسال الإيميل)
+    // 5. طباعة OTP في Console (للتتبع)
     console.log(`🔐 OTP for ${email}: ${otp}`)
     console.log(`⏰ Expires at: ${new Date(Date.now() + 10 * 60 * 1000).toLocaleString('ar-EG')}`)
 
-    // 6. في الإنتاج، هنا نرسل OTP عبر البريد الإلكتروني
-    // sendOTPEmail(email, otp)
+    // 6. إرسال OTP عبر البريد الإلكتروني
+    try {
+      await sendVerificationCode(email, otp, user.name || undefined)
+      console.log(`[EMAIL] Verification code sent to ${email}`)
+    } catch (emailError: any) {
+      console.error('[EMAIL ERROR]:', emailError)
+      // نستمر حتى لو فشل الإيميل (للتطوير)
+    }
 
     return NextResponse.json({
       success: true,

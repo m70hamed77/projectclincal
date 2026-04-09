@@ -364,12 +364,15 @@ export default function ForgotPasswordPage() {
                   <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <input
                     type="text"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     placeholder={t('forgotPasswordPage.otpPlaceholder')}
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                     maxLength={6}
                     required
                     dir="ltr"
+                    autoComplete="one-time-code"
                     className="w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-500 text-center text-2xl tracking-widest focus:outline-none transition-all duration-300"
                     style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                   />
