@@ -361,7 +361,7 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.otpLabel')}
                 </label>
                 <div className="relative group">
-                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
+                  <div className="absolute inset-0 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none -z-10" style={{ background: 'linear-gradient(90deg, #9333ea, #ec4899)' }} />
                   <input
                     type="text"
                     inputMode="numeric"
@@ -373,7 +373,7 @@ export default function ForgotPasswordPage() {
                     required
                     dir="ltr"
                     autoComplete="one-time-code"
-                    className="w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-500 text-center text-2xl tracking-widest focus:outline-none transition-all duration-300"
+                    className="w-full px-4 py-3.5 rounded-xl text-white placeholder-gray-500 text-center text-2xl tracking-widest focus:outline-none transition-all duration-300 z-10 relative"
                     style={{ background: 'rgba(30, 41, 59, 0.5)', border: '2px solid rgba(255, 255, 255, 0.1)' }}
                   />
                 </div>
