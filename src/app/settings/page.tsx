@@ -82,7 +82,6 @@ export default function SettingsPage() {
   // Notification settings
   const [notificationSettings, setNotificationSettings] = useState({
     emailNotifications: true,
-    smsNotifications: true,
     pushNotifications: true,
     appointmentReminders: true,
     newApplications: true,
@@ -965,24 +964,6 @@ export default function SettingsPage() {
                       checked={notificationSettings.emailNotifications}
                       onCheckedChange={(checked) =>
                         setNotificationSettings({ ...notificationSettings, emailNotifications: checked })
-                      }
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between p-4 border-2 border-sky-200 rounded-lg bg-white/50 hover:bg-white/70 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-sky-200 to-blue-300 rounded-lg flex items-center justify-center shadow-md">
-                        <MessageSquare className="w-5 h-5 text-sky-600" />
-                      </div>
-                      <div>
-                        <p className="font-medium text-sky-800">{t('profile.settingsPage.smsNotificationsLabel')}</p>
-                        <p className="text-sm text-sky-600">{t('profile.settingsPage.smsNotificationsDesc')}</p>
-                      </div>
-                    </div>
-                    <Switch
-                      checked={notificationSettings.smsNotifications}
-                      onCheckedChange={(checked) =>
-                        setNotificationSettings({ ...notificationSettings, smsNotifications: checked })
                       }
                     />
                   </div>

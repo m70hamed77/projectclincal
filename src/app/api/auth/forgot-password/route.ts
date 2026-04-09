@@ -39,13 +39,12 @@ export async function POST(request: NextRequest) {
     // 4. حفظ OTP مع صلاحية 10 دقائق
     storeOTP(email, otp, 10)
 
-    // 5. طباعة OTP في Console فقط (محاكاة إرسال الإيميل/SMS)
+    // 5. طباعة OTP في Console فقط (محاكاة إرسال الإيميل)
     console.log(`🔐 OTP for ${email}: ${otp}`)
     console.log(`⏰ Expires at: ${new Date(Date.now() + 10 * 60 * 1000).toLocaleString('ar-EG')}`)
 
-    // 6. في الإنتاج، هنا نرسل OTP عبر البريد الإلكتروني أو SMS
+    // 6. في الإنتاج، هنا نرسل OTP عبر البريد الإلكتروني
     // sendOTPEmail(email, otp)
-    // sendOTPSMS(user.phone, otp)
 
     return NextResponse.json({
       success: true,

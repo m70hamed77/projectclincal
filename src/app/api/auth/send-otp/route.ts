@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     console.log(`📍 IP: ${request.headers.get('x-forwarded-for') || 'Unknown'}`)
     console.log('='.repeat(70) + '\n')
 
-    // TODO: إرسال الكود عبر البريد الإلكتروني أو SMS في الإنتاج
+    // TODO: إرسال الكود عبر البريد الإلكتروني في الإنتاج
 
     return NextResponse.json({
       success: true,

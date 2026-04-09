@@ -14,7 +14,6 @@ const LANDING_AUTH_PAGES = [
   '/auth/login',
   '/auth/register',
   '/auth/verify',
-  '/auth/verify-sms',
 ]
 
 /**

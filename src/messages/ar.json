@@ -295,8 +295,6 @@
       "generalNotifications": "الإشعارات العامة",
       "emailNotificationsLabel": "إشعارات البريد الإلكتروني",
       "emailNotificationsDesc": "استقبال تحديثات على بريدك الإلكتروني",
-      "smsNotificationsLabel": "إشعارات SMS",
-      "smsNotificationsDesc": "استقبال رسائل نصية",
       "appNotifications": "إشعارات التطبيق",
       "appNotificationsDesc": "إشعارات فورية داخل التطبيق",
       "notificationTypes": "أنواع الإشعارات",

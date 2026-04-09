@@ -295,8 +295,6 @@
       "generalNotifications": "General Notifications",
       "emailNotificationsLabel": "Email Notifications",
       "emailNotificationsDesc": "Receive updates on your email",
-      "smsNotificationsLabel": "SMS Notifications",
-      "smsNotificationsDesc": "Receive text messages",
       "appNotifications": "App Notifications",
       "appNotificationsDesc": "In-app instant notifications",
       "notificationTypes": "Notification Types",

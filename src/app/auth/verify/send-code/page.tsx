@@ -56,7 +56,7 @@ export default function SendVerificationCodePage() {
       console.log('⏰ صالحية: 5 دقائق من الآن')
       console.log('=====================================')
 
-      // في الإنتاج، هنا سيتم إرسال الكود عبر البريد/الـ SMS
+      // في الإنتاج، هنا سيتم إرسال الكود عبر البريد الإلكتروني
 
       setCodeSent(true)
       setError('')

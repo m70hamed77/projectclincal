@@ -2393,16 +2393,6 @@ function ProfileContent() {
                       <Separator />
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-medium">{t('profile.accountSettings.smsNotifications')}</p>
-                          <p className="text-sm text-muted-foreground">{t('profile.accountSettings.smsNotificationsDesc')}</p>
-                        </div>
-                        <Badge variant="outline" className="bg-gradient-to-r from-emerald-100 to-green-100 text-emerald-700 border-2 border-emerald-300 hover:shadow-md transition-all duration-300">
-                          {t('profile.accountSettings.enabled')}
-                        </Badge>
-                      </div>
-                      <Separator />
-                      <div className="flex items-center justify-between">
-                        <div>
                           <p className="font-medium">{t('profile.accountSettings.appointmentReminders')}</p>
                           <p className="text-sm text-muted-foreground">{t('profile.accountSettings.appointmentRemindersDesc')}</p>
                         </div>
