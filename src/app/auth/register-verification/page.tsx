@@ -425,6 +425,7 @@ export default function RegisterWithVerificationPage() {
             idCardUrl: idCardUrl,
           }),
           ...(userType === 'patient' && {
+            governorate: formData.governorate.trim(),
             gender: null,
             age: null,
           })
