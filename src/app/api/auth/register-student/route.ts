@@ -73,23 +73,68 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'رقم الهاتف غير صحيح' }, { status: 400 })
     }
 
-    // Step 4: Validate password strength
+    // Step 4: Verify the verification code BEFORE validating password
+    // This ensures code errors are shown instead of password errors
+    try {
+      console.log('[REGISTER STUDENT] Step 4: Verifying code...')
+
+      const verificationRecord = await db.verificationCode.findUnique({
+        where: { email: email.trim().toLowerCase() }
+      })
+
+      if (!verificationRecord) {
+        console.log('[REGISTER STUDENT] Step 4 ❌: No verification code found')
+        return NextResponse.json({
+          error: 'لم يتم العثور على كود تحقق. يرجى طلب كود جديد.'
+        }, { status: 400 })
+      }
+
+      if (verificationRecord.used) {
+        console.log('[REGISTER STUDENT] Step 4 ❌: Code already used')
+        return NextResponse.json({
+          error: 'هذا الكود تم استخدامه من قبل. يرجى طلب كود جديد.'
+        }, { status: 400 })
+      }
+
+      if (verificationRecord.expiresAt < new Date()) {
+        console.log('[REGISTER STUDENT] Step 4 ❌: Code expired')
+        return NextResponse.json({
+          error: 'انتهت صلاحية كود التحقق. يرجى طلب كود جديد.'
+        }, { status: 400 })
+      }
+
+      if (verificationRecord.code !== verificationCode) {
+        console.log('[REGISTER STUDENT] Step 4 ❌: Invalid code')
+        return NextResponse.json({
+          error: 'كود التحقق غير صحيح. يرجى المحاولة مرة أخرى.'
+        }, { status: 400 })
+      }
+
+      console.log('[REGISTER STUDENT] Step 4 ✅: Verification code validated')
+    } catch (verifyError: any) {
+      console.error('[REGISTER STUDENT] Step 4 ❌: Verification error:', verifyError)
+      return NextResponse.json({
+        error: 'خطأ في التحقق من الكود'
+      }, { status: 500 })
+    }
+
+    // Step 5: Validate password strength
     const passwordValidation = await import('@/lib/password').then(m => m.validatePasswordStrength(password))
     if (!passwordValidation.valid) {
-      console.log('[REGISTER STUDENT] Step 4 ❌: Password too weak:', passwordValidation.message)
+      console.log('[REGISTER STUDENT] Step 5 ❌: Password too weak:', passwordValidation.message)
       return NextResponse.json({ error: passwordValidation.message }, { status: 400 })
     }
-    console.log('[REGISTER STUDENT] Step 4 ✅: Password validated')
+    console.log('[REGISTER STUDENT] Step 5 ✅: Password validated')
 
-    // Step 5: Check if user already exists (BEFORE verifying code to prevent giving hints about codes)
+    // Step 6: Check if user already exists (AFTER verifying code to prevent giving hints about codes)
     try {
-      console.log('[REGISTER STUDENT] Step 5: Checking if user already exists...')
+      console.log('[REGISTER STUDENT] Step 6: Checking if user already exists...')
       const existingUser = await db.user.findUnique({
         where: { email: email.trim().toLowerCase() }
       })
 
       if (existingUser) {
-        console.log('[REGISTER STUDENT] Step 5 ❌: Email already registered')
+        console.log('[REGISTER STUDENT] Step 6 ❌: Email already registered')
         return NextResponse.json({ error: 'البريد الإلكتروني مسجل مسبقاً' }, { status: 409 })
       }
 
@@ -99,7 +144,7 @@ export async function POST(request: NextRequest) {
           where: { universityEmail: universityEmail.trim().toLowerCase() }
         })
         if (existingUniversityEmail) {
-          console.log('[REGISTER STUDENT] Step 5 ❌: University email already registered')
+          console.log('[REGISTER STUDENT] Step 6 ❌: University email already registered')
           return NextResponse.json({
             error: 'البريد الجامعي مسجل مسبقاً'
           }, { status: 409 })
@@ -111,61 +156,17 @@ export async function POST(request: NextRequest) {
         where: { phone: phone.trim() }
       })
       if (existingPhone) {
-        console.log('[REGISTER STUDENT] Step 5 ❌: Phone already registered')
+        console.log('[REGISTER STUDENT] Step 6 ❌: Phone already registered')
         return NextResponse.json({ error: 'رقم الهاتف مسجل مسبقاً' }, { status: 409 })
       }
 
-      console.log('[REGISTER STUDENT] Step 5 ✅: Email, phone, and university email are available')
+      console.log('[REGISTER STUDENT] Step 6 ✅: Email, phone, and university email are available')
     } catch (dbError: any) {
-      console.error('[REGISTER STUDENT] Step 5 ❌: Database error:', dbError)
+      console.error('[REGISTER STUDENT] Step 6 ❌: Database error:', dbError)
       return NextResponse.json(
         { error: 'خطأ في قاعدة البيانات: ' + dbError.message },
         { status: 500 }
       )
-    }
-
-    // Step 6: Verify the verification code (AFTER checking if user exists)
-    try {
-      console.log('[REGISTER STUDENT] Step 6: Verifying code...')
-
-      const verificationRecord = await db.verificationCode.findUnique({
-        where: { email: email.trim().toLowerCase() }
-      })
-
-      if (!verificationRecord) {
-        console.log('[REGISTER STUDENT] Step 6 ❌: No verification code found')
-        return NextResponse.json({
-          error: 'لم يتم العثور على كود تحقق. يرجى طلب كود جديد.'
-        }, { status: 400 })
-      }
-
-      if (verificationRecord.used) {
-        console.log('[REGISTER STUDENT] Step 6 ❌: Code already used')
-        return NextResponse.json({
-          error: 'هذا الكود تم استخدامه من قبل. يرجى طلب كود جديد.'
-        }, { status: 400 })
-      }
-
-      if (verificationRecord.expiresAt < new Date()) {
-        console.log('[REGISTER STUDENT] Step 6 ❌: Code expired')
-        return NextResponse.json({
-          error: 'انتهت صلاحية كود التحقق. يرجى طلب كود جديد.'
-        }, { status: 400 })
-      }
-
-      if (verificationRecord.code !== verificationCode) {
-        console.log('[REGISTER STUDENT] Step 6 ❌: Invalid code')
-        return NextResponse.json({
-          error: 'كود التحقق غير صحيح. يرجى المحاولة مرة أخرى.'
-        }, { status: 400 })
-      }
-
-      console.log('[REGISTER STUDENT] Step 6 ✅: Verification code validated')
-    } catch (verifyError: any) {
-      console.error('[REGISTER STUDENT] Step 6 ❌: Verification error:', verifyError)
-      return NextResponse.json({
-        error: 'خطأ في التحقق من الكود'
-      }, { status: 500 })
     }
 
     // Step 7: Hash password

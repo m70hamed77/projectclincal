@@ -242,3 +242,30 @@ Stage Summary:
 - ✅ Clear error messages in Arabic for users
 - ✅ System now properly prevents duplicate registrations
 
+---
+Task ID: verification-code-error-fix
+Agent: Z.ai Code
+Task: Fix verification code error message showing as password error
+
+Work Log:
+- Identified the issue: When user enters incorrect verification code, the system shows "كلمة السر طويلة جداً" (Password is too long) instead of "كود التحقق غير صحيح" (Code is incorrect)
+- Root cause: The registration flow in `/api/auth/register-patient` and `/api/auth/register-student` was validating password (Step 4) BEFORE verifying the code (Step 6)
+- When user enters wrong code, if password also has any issue (like being too long), the password validation error is shown first
+- Fixed by reordering the validation steps:
+  - Step 4: Verify the verification code FIRST (moved from Step 6)
+  - Step 5: Validate password strength (moved from Step 4)
+  - Step 6: Check if user already exists (updated from Step 5)
+  - Step 7: Hash password (updated from Step 7)
+  - Step 8: Create user and transaction (updated from Step 8)
+  - Step 9/10: Notify admins and return success (no changes needed)
+- Modified files:
+  - `/home/z/my-project/src/app/api/auth/register-patient/route.ts`
+  - `/home/z/my-project/src/app/api/auth/register-student/route.ts`
+- Now when code is incorrect, user will see the correct error message: "كود التحقق غير صحيح. يرجى المحاولة مرة أخرى."
+- Password validation only runs AFTER the code is verified successfully
+
+Stage Summary:
+- ✅ Verification code validation moved before password validation
+- ✅ Users will now see correct error messages when entering wrong code
+- ✅ Improved user experience by showing the right error at the right time
+- ✅ Both patient and student registration flows fixed
