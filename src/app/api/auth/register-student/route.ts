@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Check if phone number already exists
-      const existingPhone = await db.user.findUnique({
+      const existingPhone = await db.user.findFirst({
         where: { phone: phone.trim() }
       })
       if (existingPhone) {
