@@ -1169,3 +1169,265 @@
     }
   }
 }
+
+/* Admin Dashboard Animations */
+@keyframes float-up {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer-glow {
+  0% {
+    background-position: -200% center;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 200% center;
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+  50% {
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+}
+
+@keyframes slide-in-stagger {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@layer utilities {
+  /* Admin card hover effects */
+  .admin-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .admin-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transition: left 0.6s ease;
+    pointer-events: none;
+  }
+
+  .admin-card:hover::before {
+    left: 100%;
+  }
+
+  .admin-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15),
+                0 0 0 1px rgba(99, 102, 241, 0.1);
+  }
+
+  /* Stat card special hover */
+  .stat-card-glow {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(168, 85, 247, 0.05));
+    border: 1px solid rgba(99, 102, 241, 0.1);
+  }
+
+  .stat-card-glow:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 16px 32px rgba(99, 102, 241, 0.2),
+                0 0 20px rgba(168, 85, 247, 0.1);
+  }
+
+  /* User card enhanced hover */
+  .user-card-hover {
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(168, 85, 247, 0.2)) border-box;
+  }
+
+  .user-card-hover:hover {
+    transform: translateY(-4px);
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(168, 85, 247, 0.4)) border-box;
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.12),
+                0 0 0 4px rgba(99, 102, 241, 0.05);
+  }
+
+  /* Button glow effects */
+  .btn-approve-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-approve-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+  }
+
+  .btn-approve-glow:hover::after {
+    transform: translateX(100%);
+  }
+
+  .btn-approve-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+  }
+
+  .btn-reject-glow {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-reject-glow:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 20px rgba(107, 114, 128, 0.4);
+  }
+
+  /* Text shadow effects */
+  .text-glow-primary {
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3),
+                 0 0 40px rgba(99, 102, 241, 0.2);
+  }
+
+  .text-glow-emerald {
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.3),
+                 0 0 40px rgba(16, 185, 129, 0.2);
+  }
+
+  .text-glow-amber {
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.3),
+                 0 0 40px rgba(245, 158, 11, 0.2);
+  }
+
+  .text-subtle-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Avatar pulse effect */
+  .avatar-pulse {
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+
+  /* Staggered fade in */
+  .stagger-fade-in {
+    animation: slide-in-stagger 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  .stagger-delay-1 { animation-delay: 100ms; }
+  .stagger-delay-2 { animation-delay: 200ms; }
+  .stagger-delay-3 { animation-delay: 300ms; }
+  .stagger-delay-4 { animation-delay: 400ms; }
+  .stagger-delay-5 { animation-delay: 500ms; }
+  .stagger-delay-6 { animation-delay: 600ms; }
+
+  /* Refresh button spin */
+  .refresh-spin:hover .refresh-icon {
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* Badge shine effect */
+  .badge-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .badge-shine::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.3) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%) rotate(45deg);
+    transition: transform 0.8s ease;
+  }
+
+  .badge-shine:hover::after {
+    transform: translateX(100%) rotate(45deg);
+  }
+
+  /* Floating icon */
+  .icon-float {
+    animation: float-up 3s ease-in-out infinite;
+  }
+
+  /* Gradient border on hover */
+  .hover-gradient-border {
+    position: relative;
+    transition: all 0.3s ease;
+  }
+
+  .hover-gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    -webkit-mask-composite: xor;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .hover-gradient-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Glass card for admin */
+  .glass-card-admin {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card-admin:hover {
+    background: rgba(255, 255, 255, 0.98);
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
+  }
+}

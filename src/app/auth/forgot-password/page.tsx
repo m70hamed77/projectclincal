@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Eye, EyeOff, Lock, Mail, AlertCircle, ArrowRight, ArrowLeft, CheckCircle, Sparkles, Shield, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/hooks/useTranslations'
 
 type Step = 'email' | 'otp' | 'reset' | 'success'
@@ -269,44 +268,6 @@ export default function ForgotPasswordPage() {
         <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-pink-400 rounded-full" style={{ animation: 'particle-3 12s ease-in-out infinite' }} />
         <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full" style={{ animation: 'particle-4 20s ease-in-out infinite' }} />
       </div>
-
-      {/* Language Switcher */}
-      <div className="absolute top-6 right-6 z-20">
-        <LanguageSwitcher />
-      </div>
-
-      {/* Back Button - Stylish */}
-      <Link
-        href="/"
-        className="absolute top-6 left-6 z-20 group"
-      >
-        <div
-          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-semibold text-sm text-white transition-all duration-500 hover:scale-110 active:scale-95"
-          style={{
-            background: "rgba(147, 51, 234, 0.2)",
-            backdropFilter: "blur(10px)",
-            border: "2px solid rgba(147, 51, 234, 0.4)",
-            boxShadow: "0 4px 14px rgba(147, 51, 234, 0.3)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(147, 51, 234, 0.4)";
-            e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.6)";
-            e.currentTarget.style.boxShadow = "0 8px 24px rgba(147, 51, 234, 0.5)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
-            e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.4)";
-            e.currentTarget.style.boxShadow = "0 4px 14px rgba(147, 51, 234, 0.3)";
-          }}
-        >
-          <ArrowRight
-            className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`}
-          />
-          <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            {t('loginPage.back')}
-          </span>
-        </div>
-      </Link>
 
       {/* Main Container */}
       <div className="relative w-full max-w-lg z-10">

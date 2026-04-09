@@ -297,7 +297,6 @@ export default function AdminVerificationPage() {
                 <Card 
                   key={student.id}
                   style={{background: 'linear-gradient(135deg, #FFF8E1 0%, #FFEDD5 100%)', border: '2px solid rgba(245, 158, 11, 0.3)'}}
-                  className="hover:shadow-lg transition-all"
                 >
                   <CardContent className="p-6">
                     <div className="grid md:grid-cols-2 gap-6">
@@ -345,7 +344,15 @@ export default function AdminVerificationPage() {
                           {student.academicYear && (
                             <div className="flex items-center gap-2 text-sm">
                               <Badge variant="secondary" className="font-medium">
-                                السنة الدراسية: {student.academicYear}
+                                السنة الدراسية: {
+                                  student.academicYear === 1 ? 'السنة الأولى' :
+                                  student.academicYear === 2 ? 'السنة الثانية' :
+                                  student.academicYear === 3 ? 'السنة الثالثة' :
+                                  student.academicYear === 4 ? 'السنة الرابعة' :
+                                  student.academicYear === 5 ? 'السنة الخامسة' :
+                                  student.academicYear === 6 ? 'سنة الامتياز 🌟' :
+                                  `السنة ${student.academicYear}`
+                                }
                               </Badge>
                             </div>
                           )}
@@ -365,7 +372,7 @@ export default function AdminVerificationPage() {
                                 src={student.idCardUrl || ''}
                                 alt="صورة الكارنيه"
                                 suppressHydrationWarning={true}
-                                className="w-full max-h-64 object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                                className="w-full max-h-64 object-contain cursor-pointer"
                                 onClick={() => student.idCardUrl && window.open(student.idCardUrl, '_blank')}
                               />
                             </div>
@@ -387,15 +394,6 @@ export default function AdminVerificationPage() {
                               fontSize: '16px !important',
                               textShadow: '0 2px 4px rgba(0, 0, 0, 0.4) !important',
                               boxShadow: '0 6px 20px rgba(16, 185, 129, 0.5), 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important',
-                              transition: 'all 0.3s ease !important',
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.transform = 'translateY(-3px) scale(1.02) !important'
-                              e.currentTarget.style.boxShadow = '0 10px 30px rgba(16, 185, 129, 0.6), 0 5px 10px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.4) !important'
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = 'translateY(0) scale(1) !important'
-                              e.currentTarget.style.boxShadow = '0 6px 20px rgba(16, 185, 129, 0.5), 0 3px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important'
                             }}
                           >
                             {actionLoading === student.id ? (
@@ -410,7 +408,7 @@ export default function AdminVerificationPage() {
                           <Button
                             onClick={() => setRejectDialog({ open: true, studentId: student.id })}
                             disabled={actionLoading === student.id}
-                            className="flex-1 bg-gray-700 hover:bg-gray-800 text-white font-bold"
+                            className="flex-1 bg-gray-700 text-white font-bold"
                           >
                             {actionLoading === student.id ? (
                               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -466,7 +464,7 @@ export default function AdminVerificationPage() {
             <Button
               onClick={handleReject}
               disabled={!rejectionReason.trim()}
-              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
+              className="bg-gray-700 text-white font-bold"
               suppressHydrationWarning={true}
             >
               تأكيد الرفض

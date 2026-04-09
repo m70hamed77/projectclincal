@@ -422,7 +422,7 @@ export default function AdminDashboardPage() {
 
             {/* Pending Verifications */}
             <Card
-              className="cursor-pointer hover:shadow-lg transition-all hover:scale-105"
+              className="cursor-pointer"
               style={{background: 'linear-gradient(135deg, #FFF8E1 0%, #FFE082 100%)', border: '2px solid rgba(245, 158, 11, 0.3)'}}
               onClick={() => {
                 let userId = user?.id

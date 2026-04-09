@@ -16,7 +16,7 @@ model User {
   status          AccountStatus  @default(PENDING)
   deleteReason    String?
   emailVerified   DateTime?
-  phone           String?
+  phone           String?        @unique
   avatarUrl       String?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
@@ -30,6 +30,7 @@ model User {
   strikes         UserStrike?
 
   @@index([email])
+  @@index([phone])
   @@index([role])
   @@index([status])
 }
@@ -467,7 +468,7 @@ model UserStrike {
   lastStrikeDate DateTime?
   strikeHistory  String?
   createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  updatedAt      DateTime @updatedAt
   user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])

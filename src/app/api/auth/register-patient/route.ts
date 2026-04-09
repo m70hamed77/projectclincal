@@ -70,69 +70,78 @@ export async function POST(request: NextRequest) {
     }
     console.log('[REGISTER PATIENT] Step 4 ✅: Password validated')
 
-    // Step 5: Verify the verification code
+    // Step 5: Check if user already exists (BEFORE verifying code to prevent giving hints about codes)
     try {
-      console.log('[REGISTER PATIENT] Step 5: Verifying code...')
+      console.log('[REGISTER PATIENT] Step 5: Checking if user already exists...')
+      const existingUser = await db.user.findUnique({
+        where: { email: email.trim().toLowerCase() }
+      })
+
+      if (existingUser) {
+        console.log('[REGISTER PATIENT] Step 5 ❌: Email already registered')
+        return NextResponse.json({ error: 'البريد الإلكتروني مسجل مسبقاً' }, { status: 409 })
+      }
+
+      // Check if phone number already exists
+      const existingPhone = await db.user.findUnique({
+        where: { phone: phone.trim() }
+      })
+      if (existingPhone) {
+        console.log('[REGISTER PATIENT] Step 5 ❌: Phone already registered')
+        return NextResponse.json({ error: 'رقم الهاتف مسجل مسبقاً' }, { status: 409 })
+      }
+
+      console.log('[REGISTER PATIENT] Step 5 ✅: Email and phone are available')
+    } catch (dbError: any) {
+      console.error('[REGISTER PATIENT] Step 5 ❌: Database error:', dbError)
+      return NextResponse.json(
+        { error: 'خطأ في قاعدة البيانات: ' + dbError.message },
+        { status: 500 }
+      )
+    }
+
+    // Step 6: Verify the verification code (AFTER checking if user exists)
+    try {
+      console.log('[REGISTER PATIENT] Step 6: Verifying code...')
 
       const verificationRecord = await db.verificationCode.findUnique({
         where: { email: email.trim().toLowerCase() }
       })
 
       if (!verificationRecord) {
-        console.log('[REGISTER PATIENT] Step 5 ❌: No verification code found')
+        console.log('[REGISTER PATIENT] Step 6 ❌: No verification code found')
         return NextResponse.json({
           error: 'لم يتم العثور على كود تحقق. يرجى طلب كود جديد.'
         }, { status: 400 })
       }
 
       if (verificationRecord.used) {
-        console.log('[REGISTER PATIENT] Step 5 ❌: Code already used')
+        console.log('[REGISTER PATIENT] Step 6 ❌: Code already used')
         return NextResponse.json({
           error: 'هذا الكود تم استخدامه من قبل. يرجى طلب كود جديد.'
         }, { status: 400 })
       }
 
       if (verificationRecord.expiresAt < new Date()) {
-        console.log('[REGISTER PATIENT] Step 5 ❌: Code expired')
+        console.log('[REGISTER PATIENT] Step 6 ❌: Code expired')
         return NextResponse.json({
           error: 'انتهت صلاحية كود التحقق. يرجى طلب كود جديد.'
         }, { status: 400 })
       }
 
       if (verificationRecord.code !== verificationCode) {
-        console.log('[REGISTER PATIENT] Step 5 ❌: Invalid code')
+        console.log('[REGISTER PATIENT] Step 6 ❌: Invalid code')
         return NextResponse.json({
           error: 'كود التحقق غير صحيح. يرجى المحاولة مرة أخرى.'
         }, { status: 400 })
       }
 
-      console.log('[REGISTER PATIENT] Step 5 ✅: Verification code validated')
+      console.log('[REGISTER PATIENT] Step 6 ✅: Verification code validated')
     } catch (verifyError: any) {
-      console.error('[REGISTER PATIENT] Step 5 ❌: Verification error:', verifyError)
+      console.error('[REGISTER PATIENT] Step 6 ❌: Verification error:', verifyError)
       return NextResponse.json({
         error: 'خطأ في التحقق من الكود'
       }, { status: 500 })
-    }
-
-    // Step 6: Check if user already exists
-    try {
-      console.log('[REGISTER PATIENT] Step 6: Checking if user already exists...')
-      const existingUser = await db.user.findUnique({
-        where: { email: email.trim().toLowerCase() }
-      })
-
-      if (existingUser) {
-        console.log('[REGISTER PATIENT] Step 6 ❌: Email already registered')
-        return NextResponse.json({ error: 'البريد الإلكتروني مسجل مسبقاً' }, { status: 409 })
-      }
-
-      console.log('[REGISTER PATIENT] Step 6 ✅: Email is available')
-    } catch (dbError: any) {
-      console.error('[REGISTER PATIENT] Step 6 ❌: Database error:', dbError)
-      return NextResponse.json(
-        { error: 'خطأ في قاعدة البيانات: ' + dbError.message },
-        { status: 500 }
-      )
     }
 
     // Step 7: Hash password
@@ -198,6 +207,26 @@ export async function POST(request: NextRequest) {
     } catch (dbError: any) {
       console.error('[REGISTER PATIENT] Step 8 ❌: Failed to create user:', dbError)
       console.error('[REGISTER PATIENT] DB Error Details:', dbError.message)
+      console.error('[REGISTER PATIENT] DB Error Code:', dbError.code)
+
+      // Handle Prisma unique constraint violations
+      if (dbError.code === 'P2002') {
+        const targetField = Array.isArray(dbError.meta?.target) ? dbError.meta.target[0] : null
+        console.error('[REGISTER PATIENT] Unique constraint violation on:', targetField)
+
+        if (targetField === 'email') {
+          return NextResponse.json(
+            { error: 'البريد الإلكتروني مسجل مسبقاً' },
+            { status: 409 }
+          )
+        } else if (targetField === 'phone') {
+          return NextResponse.json(
+            { error: 'رقم الهاتف مسجل مسبقاً' },
+            { status: 409 }
+          )
+        }
+      }
+
       return NextResponse.json(
         { error: 'فشل في إنشاء المستخدم: ' + dbError.message },
         { status: 500 }

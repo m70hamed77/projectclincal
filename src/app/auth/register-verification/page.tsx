@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { Eye, EyeOff, Send, ArrowRight, ArrowLeft, Mail, Lock, User, CheckCircle, AlertCircle, GraduationCap, Clock, Phone, MapPin, Sparkles, Shield, Zap, Heart, LogIn } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { LanguageSwitcher } from '@/components/language-switcher'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { useTranslations } from '@/hooks/useTranslations'
@@ -66,7 +65,11 @@ export default function RegisterWithVerificationPage() {
     confirmPassword: '',
     verificationCode: '',
     universityName: '',
+    academicYear: '',
   })
+
+  const [idCardFile, setIdCardFile] = useState<File | null>(null)
+  const [idCardPreview, setIdCardPreview] = useState<string | null>(null)
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -74,6 +77,7 @@ export default function RegisterWithVerificationPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [codeSent, setCodeSent] = useState(false)
   const [countdown, setCountdown] = useState(0)
+  const [isUploading, setIsUploading] = useState(false)
 
   // Mouse position for parallax effect
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -109,6 +113,66 @@ export default function RegisterWithVerificationPage() {
   }
 
   const passwordStrength = calculatePasswordStrength(formData.password)
+
+  // Handle ID Card Upload
+  const handleIdCardUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!['image/jpeg', 'image/png', 'image/jpg'].includes(file.type)) {
+      setErrors({ idCard: 'يجب أن تكون الصورة بتنسيق JPG أو PNG' })
+      return
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      setErrors({ idCard: 'حجم الصورة يجب أن يكون أقل من 5MB' })
+      return
+    }
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setIdCardPreview(reader.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    setIdCardFile(file)
+    delete errors.idCard
+    setErrors(errors)
+  }
+
+  // Upload ID Card to server
+  const uploadIdCard = async (): Promise<string | null> => {
+    if (!idCardFile) return null
+
+    setIsUploading(true)
+    try {
+      const formDataUpload = new FormData()
+      formDataUpload.append('file', idCardFile)
+
+      const response = await fetch('/api/upload/id-card', {
+        method: 'POST',
+        body: formDataUpload,
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        console.log('[UPLOAD ID CARD] ✅ Upload successful:', data.url)
+        return data.url || null
+      } else {
+        const errorData = await response.json()
+        console.error('[UPLOAD ID CARD] ❌ Upload failed:', errorData.error)
+        return null
+      }
+    } catch (error) {
+      console.error('[UPLOAD ID CARD] ❌ Error:', error)
+      return null
+    } finally {
+      setIsUploading(false)
+    }
+  }
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors }
@@ -174,6 +238,14 @@ export default function RegisterWithVerificationPage() {
         }
         break
 
+      case 'academicYear':
+        if (userType === 'student' && !value.trim()) {
+          newErrors.academicYear = 'السنة الدراسية مطلوبة'
+        } else {
+          delete newErrors.academicYear
+        }
+        break
+
       case 'password':
         if (!value) {
           newErrors.password = 'كلمة المرور مطلوبة'
@@ -218,7 +290,7 @@ export default function RegisterWithVerificationPage() {
     }
 
     if (name === 'verificationCode') {
-      cleanedValue = value.replace(/\D/g, '').slice(0, 4)
+      cleanedValue = value.slice(0, 4)
     }
 
     setFormData(prev => ({ ...prev, [name]: cleanedValue }))
@@ -277,6 +349,8 @@ export default function RegisterWithVerificationPage() {
 
     if (userType === 'student') {
       if (!formData.universityName.trim()) newErrors.universityName = 'الجامعة مطلوبة'
+      if (!formData.academicYear.trim()) newErrors.academicYear = 'السنة الدراسية مطلوبة'
+      if (!idCardFile) newErrors.idCard = 'صورة الكارنيه مطلوبة'
     }
 
     if (formData.email && !/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim())) {
@@ -309,10 +383,27 @@ export default function RegisterWithVerificationPage() {
       return
     }
 
+    // Validate ID card for students
+    if (userType === 'student' && !idCardFile) {
+      setErrors({ idCard: 'صورة الكارنيه مطلوبة' })
+      return
+    }
+
     setIsSubmitting(true)
     setErrors({})
 
     try {
+      // Upload ID card first for students
+      let idCardUrl = null
+      if (userType === 'student' && idCardFile) {
+        idCardUrl = await uploadIdCard()
+        if (!idCardUrl) {
+          setErrors({ idCard: 'فشل في رفع صورة الكارنيه' })
+          setIsSubmitting(false)
+          return
+        }
+      }
+
       const apiEndpoint = userType === 'patient'
         ? '/api/auth/register-patient'
         : '/api/auth/register-student'
@@ -330,6 +421,8 @@ export default function RegisterWithVerificationPage() {
           ...(userType === 'student' && {
             universityName: formData.universityName,
             city: formData.governorate.trim(),
+            academicYear: parseInt(formData.academicYear),
+            idCardUrl: idCardUrl,
           }),
           ...(userType === 'patient' && {
             gender: null,
@@ -343,7 +436,22 @@ export default function RegisterWithVerificationPage() {
       if (response.ok) {
         setStep(3)
       } else {
-        setErrors({ verificationCode: data.error || 'فشل في التسجيل' })
+        // Handle different error types
+        const errorMessage = data.error || 'فشل في التسجيل'
+
+        // Check if error is related to email or phone
+        if (errorMessage.includes('البريد الإلكتروني')) {
+          setErrors({ email: errorMessage })
+          // Go back to step 1 to show the email error
+          setStep(1)
+        } else if (errorMessage.includes('رقم الهاتف')) {
+          setErrors({ phone: errorMessage })
+          // Go back to step 1 to show the phone error
+          setStep(1)
+        } else {
+          // Other errors show in verification code field
+          setErrors({ verificationCode: errorMessage })
+        }
       }
     } catch (error) {
       setErrors({ verificationCode: 'حدث خطأ أثناء التسجيل' })
@@ -353,6 +461,12 @@ export default function RegisterWithVerificationPage() {
   }
 
   const isFormValid = () => {
+    const studentFieldsValid = userType === 'student'
+      ? formData.universityName.trim().length > 0 &&
+        formData.academicYear.trim().length > 0 &&
+        idCardFile !== null
+      : true
+
     return formData.name.trim().length >= 3 &&
            /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email.trim()) &&
            /^01[0125][0-9]{8}$/.test(formData.phone.trim()) &&
@@ -360,7 +474,7 @@ export default function RegisterWithVerificationPage() {
            formData.address.trim().length >= 10 &&
            formData.password.length >= 8 &&
            formData.password === formData.confirmPassword &&
-           (userType === 'student' ? formData.universityName.trim().length > 0 : true)
+           studentFieldsValid
   }
 
   // Step 1: Registration Form
@@ -393,44 +507,6 @@ export default function RegisterWithVerificationPage() {
           <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-particle-3" />
           <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
         </div>
-
-        {/* Language Switcher */}
-        <div className="absolute top-6 right-6 z-20">
-          <LanguageSwitcher />
-        </div>
-
-        {/* Back Button - Stylish */}
-        <Link
-          href="/"
-          className="absolute top-6 left-6 z-20 group"
-        >
-          <div
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-semibold text-sm text-white transition-all duration-500 hover:scale-110 active:scale-95"
-            style={{
-              background: "rgba(147, 51, 234, 0.2)",
-              backdropFilter: "blur(10px)",
-              border: "2px solid rgba(147, 51, 234, 0.4)",
-              boxShadow: "0 4px 14px rgba(147, 51, 234, 0.3)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.6)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(147, 51, 234, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
-              e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(147, 51, 234, 0.3)";
-            }}
-          >
-            <ArrowRight
-              className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`}
-            />
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {t('loginPage.back')}
-            </span>
-          </div>
-        </Link>
 
         {/* Main Container */}
         <div className="relative w-full max-w-4xl z-10 animate-slide-in-up">
@@ -494,7 +570,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.fullNameLabel')}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-center">
                     <User className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -521,7 +597,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.emailLabel')}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-center">
                     <Mail className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -555,7 +631,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.phoneLabel')}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-center">
                     <Phone className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -584,7 +660,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.governorateLabel')}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative">
                     <Select value={formData.governorate} onValueChange={(value) => handleSelectChange('governorate', value)}>
                       <SelectTrigger className={`w-full bg-slate-800/50 border-2 rounded-xl text-white focus:ring-0 transition-all duration-300 ${
@@ -614,7 +690,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.addressLabel' )}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-start">
                     <MapPin className="absolute right-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <textarea
@@ -641,7 +717,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.passwordLabel' )}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-center">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -708,7 +784,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300">{t('registerPage.confirmPasswordLabel' )}</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <div className="relative flex items-center">
                     <Lock className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-purple-400 transition-colors" />
                     <input
@@ -747,7 +823,7 @@ export default function RegisterWithVerificationPage() {
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-300">{t('registerPage.universityLabel' )}</label>
                     <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                       <div className="relative flex items-center">
                         <GraduationCap className="absolute right-4 w-5 h-5 text-gray-400 group-focus-within:text-blue-400 transition-colors" />
                         <input
@@ -767,6 +843,73 @@ export default function RegisterWithVerificationPage() {
                         <AlertCircle className="w-4 h-4" />
                         {errors.universityName}
                       </p>
+                    )}
+                  </div>
+
+                  {/* Academic Year */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">السنة الدراسية *</label>
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
+                      <div className="relative">
+                        <Select value={formData.academicYear} onValueChange={(value) => handleSelectChange('academicYear', value)}>
+                          <SelectTrigger className={`w-full bg-slate-800/50 border-2 rounded-xl text-white focus:ring-0 transition-all duration-300 ${
+                            errors.academicYear ? 'border-red-500' : 'border-white/10'
+                          }`}>
+                            <SelectValue placeholder="اختر السنة الدراسية" />
+                          </SelectTrigger>
+                          <SelectContent className="max-h-64 overflow-y-auto bg-slate-800 border-white/10">
+                            <SelectItem value="1" className="text-white hover:bg-purple-500/20">السنة الأولى</SelectItem>
+                            <SelectItem value="2" className="text-white hover:bg-purple-500/20">السنة الثانية</SelectItem>
+                            <SelectItem value="3" className="text-white hover:bg-purple-500/20">السنة الثالثة</SelectItem>
+                            <SelectItem value="4" className="text-white hover:bg-purple-500/20">السنة الرابعة</SelectItem>
+                            <SelectItem value="5" className="text-white hover:bg-purple-500/20">السنة الخامسة</SelectItem>
+                            <SelectItem value="6" className="text-white hover:bg-purple-500/20">سنة الامتياز 🌟</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    {errors.academicYear && (
+                      <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.academicYear}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* ID Card Upload */}
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-300">صورة الكارنيه *</label>
+                    <div className="relative group">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
+                      <div className="relative">
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/jpg"
+                          onChange={handleIdCardUpload}
+                          className={`w-full px-4 py-3.5 bg-slate-800/50 border-2 rounded-xl text-white placeholder-gray-500 focus:outline-none transition-all duration-300 cursor-pointer ${
+                            errors.idCard ? 'border-red-500' : 'border-white/10 group-focus-within:border-cyan-500'
+                          }`}
+                        />
+                      </div>
+                    </div>
+                    {idCardPreview && (
+                      <div className="mt-2 rounded-lg overflow-hidden border-2 border-white/20">
+                        <img
+                          src={idCardPreview}
+                          alt="معاينة الكارنيه"
+                          className="w-full max-h-48 object-contain"
+                        />
+                      </div>
+                    )}
+                    {errors.idCard && (
+                      <p className="text-sm text-red-400 flex items-center gap-1 animate-shake">
+                        <AlertCircle className="w-4 h-4" />
+                        {errors.idCard}
+                      </p>
+                    )}
+                    {!errors.idCard && !idCardFile && (
+                      <p className="text-xs text-gray-400">يجب أن تكون الصورة بتنسيق JPG أو PNG وحجمها أقل من 5MB</p>
                     )}
                   </div>
                 </div>
@@ -899,44 +1042,6 @@ export default function RegisterWithVerificationPage() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" />
         </div>
 
-        {/* Language Switcher */}
-        <div className="absolute top-6 right-6 z-20">
-          <LanguageSwitcher />
-        </div>
-
-        {/* Back Button - Stylish */}
-        <Link
-          href="/"
-          className="absolute top-6 left-6 z-20 group"
-        >
-          <div
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-semibold text-sm text-white transition-all duration-500 hover:scale-110 active:scale-95"
-            style={{
-              background: "rgba(147, 51, 234, 0.2)",
-              backdropFilter: "blur(10px)",
-              border: "2px solid rgba(147, 51, 234, 0.4)",
-              boxShadow: "0 4px 14px rgba(147, 51, 234, 0.3)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.6)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(147, 51, 234, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
-              e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(147, 51, 234, 0.3)";
-            }}
-          >
-            <ArrowRight
-              className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`}
-            />
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {t('loginPage.back')}
-            </span>
-          </div>
-        </Link>
-
         <div className="relative w-full max-w-md z-10 animate-slide-in-up">
           <Card className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden hover:shadow-purple-500/20 transition-all duration-500">
             {/* Header */}
@@ -965,7 +1070,7 @@ export default function RegisterWithVerificationPage() {
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-gray-300 text-center">{t('registerPage.verifyCode')} ({t('registerPage.codeValidity')})</label>
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300 pointer-events-none" />
                   <input
                     type="text"
                     name="verificationCode"
@@ -977,6 +1082,9 @@ export default function RegisterWithVerificationPage() {
                     placeholder="_ _ _ _"
                     maxLength={4}
                     autoFocus
+                    autoComplete="off"
+                    autoCorrect="off"
+                    spellCheck="false"
                   />
                 </div>
                 {errors.verificationCode && (
@@ -1095,44 +1203,6 @@ export default function RegisterWithVerificationPage() {
           />
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-500/10 rounded-full blur-3xl animate-pulse-slow" />
         </div>
-
-        {/* Language Switcher */}
-        <div className="absolute top-6 right-6 z-20">
-          <LanguageSwitcher />
-        </div>
-
-        {/* Back Button - Stylish */}
-        <Link
-          href="/"
-          className="absolute top-6 left-6 z-20 group"
-        >
-          <div
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-semibold text-sm text-white transition-all duration-500 hover:scale-110 active:scale-95"
-            style={{
-              background: "rgba(147, 51, 234, 0.2)",
-              backdropFilter: "blur(10px)",
-              border: "2px solid rgba(147, 51, 234, 0.4)",
-              boxShadow: "0 4px 14px rgba(147, 51, 234, 0.3)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.borderColor = "rgba(168, 85, 247, 0.6)";
-              e.currentTarget.style.boxShadow = "0 8px 24px rgba(147, 51, 234, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
-              e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.4)";
-              e.currentTarget.style.boxShadow = "0 4px 14px rgba(147, 51, 234, 0.3)";
-            }}
-          >
-            <ArrowRight
-              className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isRTL ? 'rotate-180' : ''}`}
-            />
-            <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              {t('loginPage.back')}
-            </span>
-          </div>
-        </Link>
 
         <div className="relative w-full max-w-md z-10 animate-slide-in-up">
           <Card className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl overflow-hidden hover:shadow-green-500/20 transition-all duration-500 text-center">

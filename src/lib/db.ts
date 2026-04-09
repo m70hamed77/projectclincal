@@ -4,9 +4,6 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Use DATABASE_URL from env, with fallback
-const DATABASE_URL = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_8VWQD3iHtPAp@ep-bitter-sound-amro63xu-pooler.c-5.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
-
 let db: PrismaClient
 
 if (!globalForPrisma.prisma) {
@@ -22,4 +19,5 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 export { db }
+export const prisma = db
 export default db

@@ -40,6 +40,7 @@ import {
   Ban,
   Pause,
   ShieldAlert,
+  Loader2,
 } from 'lucide-react'
 
 interface Report {
@@ -75,15 +76,13 @@ export default function AdminReportsPage() {
   const [resolutionText, setResolutionText] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
 
-  // Advanced actions state
   const [actionDialog, setActionDialog] = useState(false)
   const [selectedAction, setSelectedAction] = useState<'WARN' | 'SUSPEND' | 'TEMP_BAN' | 'PERM_BAN' | null>(null)
   const [actionForm, setActionForm] = useState({
     reason: '',
-    duration: 7 // default 7 days for temp ban
+    duration: 7
   })
 
-  // Fetch reports
   const fetchReports = async () => {
     if (!user || user.role !== 'ADMIN') return
 
@@ -117,7 +116,6 @@ export default function AdminReportsPage() {
     }
   }
 
-  // Ensure admin record exists
   const ensureAdminRecord = async () => {
     if (!user || user.role !== 'ADMIN') return
 
@@ -150,13 +148,11 @@ export default function AdminReportsPage() {
     fetchReports()
   }, [user])
 
-  // Filter reports
   const filteredReports = reports.filter(report => {
     if (filterStatus === 'ALL') return true
     return report.status === filterStatus
   })
 
-  // Handle resolve
   const handleResolve = async () => {
     if (!selectedReport || !resolutionText.trim()) {
       alert(t('reports.mustWriteSolution'))
@@ -198,7 +194,6 @@ export default function AdminReportsPage() {
     }
   }
 
-  // Handle dismiss
   const handleDismiss = async (reportId: string) => {
     if (!confirm(t('reports.confirmDismiss'))) return
 
@@ -233,7 +228,6 @@ export default function AdminReportsPage() {
     }
   }
 
-  // Handle advanced action (warn, suspend, ban)
   const handleAction = async () => {
     if (!selectedReport || !selectedAction || !actionForm.reason.trim()) {
       alert(t('reports.mustWriteReason'))
@@ -309,13 +303,12 @@ export default function AdminReportsPage() {
     return t(`reports.actionLabels.${action}`) || action
   }
 
-  // Get status badge
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'PENDING':
-        return <Badge variant="secondary" className="bg-amber-100 text-amber-700">{t('reports.pending')}</Badge>
+        return <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-200">{t('reports.pending')}</Badge>
       case 'RESOLVED':
-        return <Badge className="bg-emerald-800 text-emerald-50">{t('reports.resolved')}</Badge>
+        return <Badge className="bg-emerald-600 text-white hover:bg-emerald-700">{t('reports.resolved')}</Badge>
       case 'DISMISSED':
         return <Badge variant="destructive">{t('reports.dismissed')}</Badge>
       default:
@@ -323,13 +316,12 @@ export default function AdminReportsPage() {
     }
   }
 
-  // Get status icon
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'PENDING':
         return <Clock className="w-5 h-5 text-amber-600" />
       case 'RESOLVED':
-        return <CheckCircle className="w-5 h-5 text-emerald-800" />
+        return <CheckCircle className="w-5 h-5 text-emerald-600" />
       case 'DISMISSED':
         return <XCircle className="w-5 h-5 text-red-600" />
       default:
@@ -337,13 +329,11 @@ export default function AdminReportsPage() {
     }
   }
 
-  // Get admin decision label
   const getAdminDecisionLabel = (decision: string | null) => {
     if (!decision) return ''
     return t(`reports.decisionLabels.${decision}`) || decision
   }
 
-  // Format date based on locale
   const formatDate = (date: Date) => {
     const localeDate = locale === 'ar' ? 'ar-EG' : 'en-US'
     return new Date(date).toLocaleDateString(localeDate, {
@@ -355,24 +345,22 @@ export default function AdminReportsPage() {
     })
   }
 
-  // Check if user is not authenticated after loading
   if (!loading && !user) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={undefined} />
-        <main className="flex-1 flex items-center justify-center bg-muted/30">
-          <Card className="max-w-md mx-4">
+        <main className="flex-1 flex items-center justify-center">
+          <Card className="max-w-md mx-4 border-slate-200 bg-white">
             <CardContent className="py-12 text-center">
-              <Shield className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2" suppressHydrationWarning={true}>{t('auth.mustLogin')}</h3>
-              <p className="text-muted-foreground mb-4" suppressHydrationWarning={true}>{t('auth.loginRequired')}</p>
+              <Shield className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-slate-800">{t('auth.mustLogin')}</h3>
+              <p className="text-slate-600 mb-4">{t('auth.loginRequired')}</p>
               <Button
                 onClick={() => {
                   const currentPath = encodeURIComponent('/admin/reports')
                   window.location.href = `/sandbox-login?redirect=${currentPath}`
                 }}
-                style={{background: 'linear-gradient(135deg, #6C3FC5, #2d1b69)', boxShadow: '0 4px 14px rgba(108,63,197,0.4)'}}
-                suppressHydrationWarning={true}
+                className="bg-slate-800 hover:bg-slate-900 text-white"
               >
                 {t('auth.loginButton')}
               </Button>
@@ -384,17 +372,16 @@ export default function AdminReportsPage() {
     )
   }
 
-  // Check if user is admin
   if (user && user.role !== 'ADMIN') {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
-        <main className="flex-1 flex items-center justify-center bg-muted/30">
-          <Card className="max-w-md mx-4">
+        <main className="flex-1 flex items-center justify-center">
+          <Card className="max-w-md mx-4 border-slate-200 bg-white">
             <CardContent className="py-12 text-center">
-              <Shield className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-semibold mb-2" suppressHydrationWarning={true}>{t('auth.unauthorized')}</h3>
-              <p className="text-muted-foreground" suppressHydrationWarning={true}>{t('auth.adminOnly')}</p>
+              <Shield className="w-16 h-16 mx-auto text-slate-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-slate-800">{t('auth.unauthorized')}</h3>
+              <p className="text-slate-600">{t('auth.adminOnly')}</p>
             </CardContent>
           </Card>
         </main>
@@ -405,12 +392,12 @@ export default function AdminReportsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
-        <main className="flex-1 flex items-center justify-center bg-muted/30">
+        <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{borderTopColor: '#6C3FC5', borderRightColor: 'transparent', borderBottomColor: '#2d1b69', borderLeftColor: 'transparent'}} />
-            <p className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.loading')}</p>
+            <Loader2 className="w-16 h-16 animate-spin text-slate-400 mx-auto mb-4" />
+            <p className="text-slate-600">{t('reports.loading')}</p>
           </div>
         </main>
         <Footer />
@@ -419,96 +406,92 @@ export default function AdminReportsPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
 
-      <main className="flex-1" style={{background: 'linear-gradient(135deg, #F8F4FF 0%, #E8F8F5 100%)'}}>
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          {/* Header */}
-          <div className="mb-6">
+      <main className="flex-1 py-8 px-4">
+        <div className="container mx-auto max-w-7xl">
+          <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{background: 'linear-gradient(135deg, #6C3FC5, #2d1b69)'}}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-800">
                 <Shield className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-3xl font-bold" style={{color: '#0D1B40'}} suppressHydrationWarning={true}>{t('reports.title')}</h1>
+              <h1 className="text-3xl font-bold text-slate-800">{t('reports.title')}</h1>
             </div>
-            <p className="text-muted-foreground" suppressHydrationWarning={true}>
-              {t('reports.subtitle')}
-            </p>
+            <p className="text-slate-600">{t('reports.subtitle')}</p>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <Card style={{background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(245, 158, 11, 0.3)'}}>
+            <Card className="border-slate-200 bg-white hover:shadow-md transition-shadow duration-200">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground" suppressHydrationWarning={true}>{t('reports.pending')}</p>
-                    <p className="text-2xl font-bold" style={{color: '#f59e0b'}}>
+                    <p className="text-sm text-slate-600">{t('reports.pending')}</p>
+                    <p className="text-2xl font-bold text-amber-600">
                       {reports.filter(r => r.status === 'PENDING').length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'rgba(245, 158, 11, 0.15)'}}>
-                    <Clock className="w-5 h-5" style={{color: '#f59e0b'}} />
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-amber-100">
+                    <Clock className="w-5 h-5 text-amber-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card style={{background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(0,191,166,0.3)'}}>
+            <Card className="border-slate-200 bg-white hover:shadow-md transition-shadow duration-200">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground" suppressHydrationWarning={true}>{t('reports.resolved')}</p>
-                    <p className="text-2xl font-bold" style={{color: '#00BFA6'}}>
+                    <p className="text-sm text-slate-600">{t('reports.resolved')}</p>
+                    <p className="text-2xl font-bold text-emerald-600">
                       {reports.filter(r => r.status === 'RESOLVED').length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'rgba(0,191,166,0.15)'}}>
-                    <CheckCircle className="w-5 h-5" style={{color: '#00BFA6'}} />
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-emerald-100">
+                    <CheckCircle className="w-5 h-5 text-emerald-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
-            <Card style={{background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', border: '1px solid rgba(239, 68, 68, 0.3)'}}>
+            <Card className="border-slate-200 bg-white hover:shadow-md transition-shadow duration-200">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground" suppressHydrationWarning={true}>{t('reports.dismissed')}</p>
-                    <p className="text-2xl font-bold" style={{color: '#ef4444'}}>
+                    <p className="text-sm text-slate-600">{t('reports.dismissed')}</p>
+                    <p className="text-2xl font-bold text-red-600">
                       {reports.filter(r => r.status === 'DISMISSED').length}
                     </p>
                   </div>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'rgba(239, 68, 68, 0.15)'}}>
-                    <XCircle className="w-5 h-5" style={{color: '#ef4444'}} />
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100">
+                    <XCircle className="w-5 h-5 text-red-600" />
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Filters */}
-          <Card className="mb-6" style={{background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)', backdropFilter: 'blur(10px)', border: '2px solid rgba(108,63,197,0.2)'}}>
+          <Card className="mb-6 border-slate-200 bg-white hover:shadow-md transition-shadow duration-200">
             <CardContent className="p-4">
               <div className="flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <Filter className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground" suppressHydrationWarning={true}>{t('reports.filter')}</span>
+                  <Filter className="w-4 h-4 text-slate-500" />
+                  <span className="text-sm text-slate-600">{t('reports.filter')}</span>
                 </div>
                 <Select value={filterStatus} onValueChange={(value: any) => setFilterStatus(value)}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder={t('reports.status')} suppressHydrationWarning={true} />
+                  <SelectTrigger className="w-48 border-slate-200">
+                    <SelectValue placeholder={t('reports.status')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="ALL" suppressHydrationWarning={true}>{t('reports.all')}</SelectItem>
-                    <SelectItem value="PENDING" suppressHydrationWarning={true}>{t('reports.pending')}</SelectItem>
-                    <SelectItem value="RESOLVED" suppressHydrationWarning={true}>{t('reports.resolved')}</SelectItem>
-                    <SelectItem value="DISMISSED" suppressHydrationWarning={true}>{t('reports.dismissed')}</SelectItem>
+                    <SelectItem value="ALL">{t('reports.all')}</SelectItem>
+                    <SelectItem value="PENDING">{t('reports.pending')}</SelectItem>
+                    <SelectItem value="RESOLVED">{t('reports.resolved')}</SelectItem>
+                    <SelectItem value="DISMISSED">{t('reports.dismissed')}</SelectItem>
                   </SelectContent>
                 </Select>
                 <Button
                   variant="outline"
                   size="icon"
                   onClick={fetchReports}
+                  className="hover:bg-slate-100 border-slate-200"
                 >
                   <RefreshCw className="w-4 h-4" />
                 </Button>
@@ -516,15 +499,14 @@ export default function AdminReportsPage() {
             </CardContent>
           </Card>
 
-          {/* Reports List */}
           {filteredReports.length === 0 ? (
-            <Card style={{background: 'linear-gradient(135deg, #F3E8FF 0%, #FEE2E2 100%)', border: '2px solid rgba(108,63,197,0.2)'}}>
+            <Card className="border-slate-200 bg-white">
               <CardContent className="py-16 text-center">
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #F3E8FF, #E9D5FF)'}}>
-                  <Flag className="w-8 h-8" style={{color: '#6C3FC5'}} />
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-slate-100">
+                  <Flag className="w-8 h-8 text-slate-500" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2" style={{color: '#0D1B40'}} suppressHydrationWarning={true}>{t('reports.noReports')}</h3>
-                <p className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.noReportsDesc')}</p>
+                <h3 className="text-xl font-semibold mb-2 text-slate-800">{t('reports.noReports')}</h3>
+                <p className="text-slate-600">{t('reports.noReportsDesc')}</p>
               </CardContent>
             </Card>
           ) : (
@@ -532,87 +514,73 @@ export default function AdminReportsPage() {
               {filteredReports.map((report) => (
                 <Card 
                   key={report.id}
-                  style={{
-                    background: report.status === 'PENDING'
-                      ? 'linear-gradient(135deg, #FFF8E1 0%, #FFEDD5 100%)'
-                      : report.status === 'RESOLVED'
-                      ? 'linear-gradient(135deg, #E8F8F5 0%, #D1F2EB 100%)'
-                      : 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)',
-                    border: report.status === 'PENDING'
-                      ? '2px solid rgba(245, 158, 11, 0.3)'
-                      : report.status === 'RESOLVED'
-                      ? '2px solid rgba(0,191,166,0.2)'
-                      : '2px solid rgba(239, 68, 68, 0.3)'
-                  }}
-                  className="hover:shadow-lg transition-all"
+                  className="border-slate-200 bg-white hover:shadow-md transition-shadow duration-200"
                 >
                   <CardContent className="p-6">
                     <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                       <div className="flex-1 space-y-4">
                         <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}>
-                            <AlertTriangle className="w-5 h-5 text-white" />
+                          <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-red-100">
+                            <AlertTriangle className="w-5 h-5 text-red-600" />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <h3 className="font-semibold" suppressHydrationWarning={true}>{t('reports.newReport')}</h3>
+                              <h3 className="font-semibold text-slate-800">{t('reports.newReport')}</h3>
                               {getStatusBadge(report.status)}
                             </div>
                             <div className="space-y-2 text-sm">
                               <div className="flex items-center gap-2">
-                                <User className="w-4 h-4 text-muted-foreground" />
-                                <span className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.reporter')}</span>
-                                <span className="font-medium">{report.reporterName}</span>
+                                <User className="w-4 h-4 text-slate-500" />
+                                <span className="text-slate-600">{t('reports.reporter')}</span>
+                                <span className="font-medium text-slate-800">{report.reporterName}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <User className="w-4 h-4 text-muted-foreground" />
-                                <span className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.reportedUser')}</span>
-                                <span className="font-medium">{report.reportedName}</span>
+                                <User className="w-4 h-4 text-slate-500" />
+                                <span className="text-slate-600">{t('reports.reportedUser')}</span>
+                                <span className="font-medium text-slate-800">{report.reportedName}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <FileText className="w-4 h-4 text-muted-foreground" />
-                                <span className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.type')}</span>
-                                <span className="font-medium">{report.reportType}</span>
+                                <FileText className="w-4 h-4 text-slate-500" />
+                                <span className="text-slate-600">{t('reports.type')}</span>
+                                <span className="font-medium text-slate-800">{report.reportType}</span>
                               </div>
                               <div className="flex items-center gap-2">
-                                <Clock className="w-4 h-4 text-muted-foreground" />
-                                <span className="text-muted-foreground" suppressHydrationWarning={true}>{t('reports.date')}</span>
-                                <span className="font-medium">{formatDate(report.createdAt)}</span>
+                                <Clock className="w-4 h-4 text-slate-500" />
+                                <span className="text-slate-600">{t('reports.date')}</span>
+                                <span className="font-medium text-slate-800">{formatDate(report.createdAt)}</span>
                               </div>
                             </div>
                           </div>
                         </div>
 
-                        <div className="rounded-lg p-4" style={{background: 'rgba(255,255,255,0.7)'}}>
-                          <p className="text-sm text-muted-foreground mb-2" suppressHydrationWarning={true}>{t('reports.description')}</p>
-                          <p className="text-sm">{report.description}</p>
+                        <div className="rounded-lg p-4 bg-slate-50">
+                          <p className="text-sm text-slate-600 mb-2">{t('reports.description')}</p>
+                          <p className="text-sm text-slate-800">{report.description}</p>
                         </div>
 
-                        {/* Admin Decision Display */}
                         {report.adminDecision && (
-                          <div className="rounded-lg p-4" style={{background: 'rgba(108,63,197,0.1)', border: '1px solid rgba(108,63,197,0.2)'}}>
-                            <p className="text-sm mb-2 font-medium" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('reports.actionTaken')}</p>
-                            <p className="text-sm mb-2" style={{color: '#6C3FC5'}}>
+                          <div className="rounded-lg p-4 bg-slate-50 border border-slate-200">
+                            <p className="text-sm mb-2 font-medium text-slate-800">{t('reports.actionTaken')}</p>
+                            <p className="text-sm mb-2 text-slate-700">
                               {getAdminDecisionLabel(report.adminDecision)}
                             </p>
                             {report.adminNotes && (
-                              <p className="text-sm bg-white p-2 rounded" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>
+                              <p className="text-sm bg-white p-2 rounded text-slate-700">
                                 {t('reports.notes')} {report.adminNotes}
                               </p>
                             )}
                             {report.banDuration && report.adminDecision === 'TEMP_BAN' && (
-                              <p className="text-sm bg-white p-2 rounded" style={{color: '#f97316'}} suppressHydrationWarning={true}>
+                              <p className="text-sm bg-white p-2 rounded text-slate-700">
                                 {t('reports.banDuration')} {report.banDuration} {locale === 'ar' ? 'أيام' : 'days'}
                               </p>
                             )}
                           </div>
                         )}
 
-                        {/* Legacy resolution support */}
                         {!report.adminDecision && report.adminNotes && report.status === 'RESOLVED' && (
-                          <div className="rounded-lg p-4" style={{background: 'rgba(0,191,166,0.1)', border: '1px solid rgba(0,191,166,0.2)'}}>
-                            <p className="text-sm mb-2 font-medium" style={{color: '#00BFA6'}} suppressHydrationWarning={true}>{t('reports.solution')}</p>
-                            <p className="text-sm" style={{color: '#008C7A'}}>{report.adminNotes}</p>
+                          <div className="rounded-lg p-4 bg-emerald-50 border border-emerald-200">
+                            <p className="text-sm mb-2 font-medium text-emerald-800">{t('reports.solution')}</p>
+                            <p className="text-sm text-emerald-700">{report.adminNotes}</p>
                           </div>
                         )}
                       </div>
@@ -627,7 +595,7 @@ export default function AdminReportsPage() {
                                 setResolveDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              className="bg-emerald-800 hover:bg-emerald-700"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
                             >
                               <CheckCircle className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                               {t('reports.resolve')}
@@ -641,11 +609,10 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              style={{background: '#D4AF37', color: '#ffffff', border: 'none'}}
-                              className="hover:bg-yellow-600 transition-all duration-300"
+                              className="bg-amber-600 hover:bg-amber-700 text-white border-0"
                             >
-                              <ShieldAlert className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
-                              <span style={{color: '#ffffff'}}>{t('reports.warn')}</span>
+                              <ShieldAlert className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                              {t('reports.warn')}
                             </Button>
                             <Button
                               size="sm"
@@ -655,11 +622,10 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              style={{background: '#1B347A', color: '#ffffff', border: 'none'}}
-                              className="hover:bg-blue-900 transition-all duration-300"
+                              className="bg-blue-700 hover:bg-blue-800 text-white"
                             >
-                              <Pause className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
-                              <span style={{color: '#ffffff'}}>{t('reports.suspend')}</span>
+                              <Pause className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                              {t('reports.suspend')}
                             </Button>
                             <Button
                               size="sm"
@@ -669,11 +635,10 @@ export default function AdminReportsPage() {
                                 setActionDialog(true)
                               }}
                               disabled={actionLoading === report.id}
-                              style={{background: '#1B347A', color: '#ffffff', border: 'none'}}
-                              className="hover:bg-blue-900 transition-all duration-300"
+                              className="bg-blue-700 hover:bg-blue-800 text-white"
                             >
-                              <Ban className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} style={{color: '#ffffff'}} />
-                              <span style={{color: '#ffffff'}}>{t('reports.tempBan')}</span>
+                              <Ban className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                              {t('reports.tempBan')}
                             </Button>
                             <Button
                               variant="destructive"
@@ -693,7 +658,7 @@ export default function AdminReportsPage() {
                               size="sm"
                               onClick={() => handleDismiss(report.id)}
                               disabled={actionLoading === report.id}
-                              className="bg-gray-700 hover:bg-gray-800 text-white font-bold"
+                              className="bg-slate-700 hover:bg-slate-800 text-white"
                             >
                               <XCircle className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
                               {t('reports.dismiss')}
@@ -712,15 +677,14 @@ export default function AdminReportsPage() {
 
       <Footer />
 
-      {/* Resolve Dialog */}
       <Dialog open={resolveDialog} onOpenChange={setResolveDialog}>
-        <DialogContent>
+        <DialogContent className="border-slate-200">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2" suppressHydrationWarning={true}>
-              <CheckCircle className="w-5 h-5 text-emerald-800" />
+            <DialogTitle className="flex items-center gap-2 text-slate-800">
+              <CheckCircle className="w-5 h-5 text-emerald-600" />
               {t('reports.resolveReport')}
             </DialogTitle>
-            <DialogDescription suppressHydrationWarning={true}>
+            <DialogDescription>
               {t('reports.resolveDescription')}
             </DialogDescription>
           </DialogHeader>
@@ -729,7 +693,7 @@ export default function AdminReportsPage() {
             value={resolutionText}
             onChange={(e) => setResolutionText(e.target.value)}
             rows={4}
-            suppressHydrationWarning={true}
+            className="border-slate-200"
           />
           <DialogFooter>
             <Button
@@ -739,42 +703,14 @@ export default function AdminReportsPage() {
                 setResolutionText('')
                 setSelectedReport(null)
               }}
-              className="relative overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
-              style={{
-                border: '2px solid rgba(107, 114, 128, 0.5)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(107, 114, 128, 0.3)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = 'none'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-              suppressHydrationWarning={true}
+              className="hover:bg-slate-100 border-slate-200"
             >
               {t('common.cancel')}
             </Button>
             <Button
               onClick={handleResolve}
               disabled={!resolutionText.trim()}
-              className="relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)',
-                boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(16, 185, 129, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-              suppressHydrationWarning={true}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
             >
               <span className="font-bold">{t('reports.confirmResolve')}</span>
             </Button>
@@ -782,23 +718,22 @@ export default function AdminReportsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Action Dialog (Warn, Suspend, Ban) */}
       <Dialog open={actionDialog} onOpenChange={(open) => !open && setActionDialog(false)}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg border-slate-200">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-red-600" suppressHydrationWarning={true}>
+            <DialogTitle className="flex items-center gap-2 text-red-600">
               {selectedAction === 'WARN' && <ShieldAlert className="w-5 h-5" />}
               {selectedAction === 'SUSPEND' && <Pause className="w-5 h-5" />}
               {(selectedAction === 'TEMP_BAN' || selectedAction === 'PERM_BAN') && <AlertOctagon className="w-5 h-5" />}
               {getActionLabel(selectedAction || '')}
             </DialogTitle>
-            <DialogDescription suppressHydrationWarning={true}>
+            <DialogDescription>
               {selectedReport && (`${t('reports.takeActionAgainst')} ${selectedReport.reportedName}`)}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div>
-              <label className="text-sm font-medium mb-1.5 block" suppressHydrationWarning={true}>
+              <label className="text-sm font-medium mb-1.5 block text-slate-700">
                 {t('reports.actionReason')} *
               </label>
               <Textarea
@@ -806,12 +741,12 @@ export default function AdminReportsPage() {
                 value={actionForm.reason}
                 onChange={(e) => setActionForm({ ...actionForm, reason: e.target.value })}
                 rows={4}
-                suppressHydrationWarning={true}
+                className="border-slate-200"
               />
             </div>
             {selectedAction === 'TEMP_BAN' && (
               <div>
-                <label className="text-sm font-medium mb-1.5 block" suppressHydrationWarning={true}>
+                <label className="text-sm font-medium mb-1.5 block text-slate-700">
                   {t('reports.banDurationDays')} *
                 </label>
                 <Input
@@ -820,12 +755,12 @@ export default function AdminReportsPage() {
                   max="365"
                   value={actionForm.duration}
                   onChange={(e) => setActionForm({ ...actionForm, duration: parseInt(e.target.value) })}
-                  className="text-left"
+                  className="text-left border-slate-200"
                 />
               </div>
             )}
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <p className="text-sm text-red-800" suppressHydrationWarning={true}>
+              <p className="text-sm text-red-800">
                 <strong>{t('reports.warningText')}</strong>
                 {selectedAction === 'WARN' && t('reports.warnActionDesc')}
                 {selectedAction === 'SUSPEND' && t('reports.suspendActionDesc')}
@@ -843,46 +778,18 @@ export default function AdminReportsPage() {
                 setActionForm({ reason: '', duration: 7 })
               }}
               disabled={actionLoading !== null}
-              className="relative overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95"
-              style={{
-                border: '2px solid rgba(107, 114, 128, 0.5)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(107, 114, 128, 0.3)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = 'none'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
-              suppressHydrationWarning={true}
+              className="hover:bg-slate-100 border-slate-200"
             >
               {t('common.cancel')}
             </Button>
             <Button
               onClick={handleAction}
               disabled={actionLoading !== null || !actionForm.reason.trim()}
-              variant="destructive"
-              className="relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl active:scale-95"
-              style={{
-                background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 50%, #B91C1C 100%)',
-                boxShadow: '0 4px 15px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-                border: '2px solid rgba(255, 255, 255, 0.3)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(239, 68, 68, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
-                e.currentTarget.style.transform = 'translateY(-2px)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(239, 68, 68, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-                e.currentTarget.style.transform = 'translateY(0)'
-              }}
+              className="bg-red-700 hover:bg-red-800 text-white"
             >
               {actionLoading === selectedReport?.id ? (
                 <>
-                  <div className={`w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                  <Loader2 className={`w-4 h-4 animate-spin ${isRTL ? 'ml-2' : 'mr-2'}`} />
                   {t('reports.executing')}
                 </>
               ) : (

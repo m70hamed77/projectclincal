@@ -404,7 +404,7 @@
       "sendCodeFailed": "Failed to send verification code. Please try again.",
       "connectionError": "Connection error. Please try again.",
       "registrationError": "An error occurred during registration",
-      "studentRegisteredSuccessfully": "✅ Student registered successfully",
+      "studentRegisteredSuccessfully": "Account created ✓",
       "patientRegisteredSuccessfully": "✅ Patient registered successfully",
       "accountCreated": "Your account has been created successfully!"
     },

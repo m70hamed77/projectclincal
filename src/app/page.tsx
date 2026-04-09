@@ -252,6 +252,21 @@ export default function Home() {
           cache: 'no-store', // Disable caching to always get fresh data
         });
 
+        // ✅ Check if response is OK before parsing JSON
+        if (!response.ok) {
+          console.error('[HOME] API Error:', response.status, response.statusText);
+          setStatsLoading(false);
+          return;
+        }
+
+        // ✅ Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          console.error('[HOME] API did not return JSON, got:', contentType);
+          setStatsLoading(false);
+          return;
+        }
+
         const data = await response.json();
 
         if (data.success) {

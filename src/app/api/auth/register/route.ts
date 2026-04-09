@@ -1,183 +1,64 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/lib/db'
-import { hashPassword } from '@/lib/password'
-import { notifyAdminNewStudent } from '@/lib/notifications'
+import { prisma } from '@/lib/db'
+import { sendVerificationCode } from '@/lib/email'
 
-/**
- * API Route: تسجيل مستخدم جديد (مبسط)
- * Method: POST
- * Body: { email, password, name, role }
- */
-export async function POST(request: NextRequest) {
-  console.log('═══════════════════════════════════════')
-  console.log('[REGISTER] Starting registration...')
-  console.log('═══════════════════════════════════════')
-
+export async function POST(request: Request) {
   try {
-    // Step 1: Parse request body
-    let body
-    let email, password, name, role
+    const { email } = await request.json()
 
-    try {
-      body = await request.json()
-      email = body.email
-      password = body.password
-      name = body.name
-      role = body.role || 'PATIENT'
-      console.log('[REGISTER] Step 1 ✅: Parsed request body')
-      console.log('[REGISTER] Email:', email?.substring(0, 20) + '...')
-      console.log('[REGISTER] Name:', name)
-      console.log('[REGISTER] Role:', role)
-    } catch (parseError: any) {
-      console.error('[REGISTER] Step 1 ❌: Failed to parse request body:', parseError)
-      return NextResponse.json({ error: 'فشل في قراءة البيانات' }, { status: 400 })
-    }
-
-    // Step 2: Validate required fields
-    if (!email || !password || !name) {
-      console.log('[REGISTER] Step 2 ❌: Missing required fields')
-      return NextResponse.json({
-        error: 'البريد الإلكتروني وكلمة المرور والاسم مطلوبين'
-      }, { status: 400 })
-    }
-    console.log('[REGISTER] Step 2 ✅: Fields validated')
-
-    // Step 3: Validate email format
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    if (!emailRegex.test(email.trim())) {
-      console.log('[REGISTER] Step 3 ❌: Invalid email format')
-      return NextResponse.json({ error: 'البريد الإلكتروني غير صحيح' }, { status: 400 })
-    }
-
-    // Step 4: Validate password strength
-    const passwordValidation = await import('@/lib/password').then(m => m.validatePasswordStrength(password))
-    if (!passwordValidation.valid) {
-      console.log('[REGISTER] Step 4 ❌: Password too weak:', passwordValidation.message)
-      return NextResponse.json({ error: passwordValidation.message }, { status: 400 })
-    }
-    console.log('[REGISTER] Step 4 ✅: Password validated')
-
-    // Step 5: Validate role
-    const validRoles = ['PATIENT', 'STUDENT']
-    if (!validRoles.includes(role)) {
-      console.log('[REGISTER] Step 5 ❌: Invalid role:', role)
-      return NextResponse.json({ error: 'نوع المستخدم غير صحيح' }, { status: 400 })
-    }
-    console.log('[REGISTER] Step 5 ✅: Role validated')
-
-    // Step 6: Check if user already exists
-    try {
-      console.log('[REGISTER] Step 6: Checking if user already exists...')
-      const existingUser = await db.user.findUnique({
-        where: { email: email.trim().toLowerCase() }
-      })
-
-      if (existingUser) {
-        console.log('[REGISTER] Step 6 ❌: Email already registered')
-        return NextResponse.json({ error: 'البريد الإلكتروني مسجل مسبقاً' }, { status: 409 })
-      }
-
-      console.log('[REGISTER] Step 6 ✅: Email is available')
-    } catch (dbError: any) {
-      console.error('[REGISTER] Step 6 ❌: Database error:', dbError)
-      return NextResponse.json(
-        { error: 'خطأ في قاعدة البيانات: ' + dbError.message },
-        { status: 500 }
+    // التحقق من وجود الإيميل
+    if (!email) {
+      return Response.json(
+        { error: 'الإيميل مطلوب' },
+        { status: 400 }
       )
     }
 
-    // Step 7: Hash password
-    let hashedPassword
-    try {
-      console.log('[REGISTER] Step 7: Hashing password...')
-      hashedPassword = await hashPassword(password)
-      console.log('[REGISTER] Step 7 ✅: Password hashed')
-    } catch (hashError: any) {
-      console.error('[REGISTER] Step 7 ❌: Failed to hash password:', hashError)
-      return NextResponse.json({ error: 'فشل في تشفير كلمة المرور' }, { status: 500 })
-    }
+    // 1. توليد كود عشوائي من 6 أرقام
+    const code = Math.floor(100000 + Math.random() * 900000).toString()
 
-    // Step 8: Create user
-    let user
-    try {
-      console.log('[REGISTER] Step 8: Creating user...')
+    // 2. حساب وقت انتهاء الكود (10 دقائق)
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
-      // Patient: Active immediately, Student: Pending approval
-      const userStatus = role === 'PATIENT' ? 'ACTIVE' : 'PENDING'
+    // 3. التحقق من وجود كود سابق لنفس الإيميل وتحديثه
+    const existingCode = await prisma.verificationCode.findUnique({
+      where: { email }
+    })
 
-      const userData: any = {
-        email: email.trim().toLowerCase(),
-        password: hashedPassword,
-        name: name.trim(),
-        role,
-        status: userStatus,
-        emailVerified: new Date(), // Email verified immediately (no code verification needed)
-      }
-
-      user = await db.user.create({
-        data: userData,
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true,
-          status: true
+    if (existingCode) {
+      // تحديث الكود الموجود
+      await prisma.verificationCode.update({
+        where: { email },
+        data: {
+          code,
+          expiresAt,
+          used: false
         }
       })
-
-      console.log('[REGISTER] Step 8 ✅: User created')
-      console.log('[REGISTER] User ID:', user.id)
-      console.log('[REGISTER] User Role:', user.role)
-      console.log('[REGISTER] User Status:', user.status)
-    } catch (dbError: any) {
-      console.error('[REGISTER] Step 8 ❌: Failed to create user:', dbError)
-      console.error('[REGISTER] DB Error Details:', dbError.message)
-      return NextResponse.json(
-        { error: 'فشل في إنشاء المستخدم: ' + dbError.message },
-        { status: 500 }
-      )
+    } else {
+      // إنشاء كود جديد
+      await prisma.verificationCode.create({
+        data: {
+          email,
+          code,
+          expiresAt,
+          used: false
+        }
+      })
     }
 
-    // Step 9: Notify admins if it's a student registration
-    if (role === 'STUDENT') {
-      try {
-        console.log('[REGISTER] Step 9: Notifying admins about new student...')
-        await notifyAdminNewStudent(user.id, user.name, user.email)
-        console.log('[REGISTER] Step 9 ✅: Admins notified')
-      } catch (notifyError) {
-        console.error('[REGISTER] Step 9 ⚠️: Failed to notify admins:', notifyError)
-        // Don't fail the registration if notification fails
-      }
-    }
+    // 4. إرسال الكود على إيميل المستخدم
+    await sendVerificationCode(email, code)
 
-    // Step 10: Return success response
-    console.log('[REGISTER] Step 10 ✅: Registration successful')
-    console.log(`[AUTH] ✅✅✅ New user registered: ${user.name} (${user.email}) as ${user.role}`)
-    console.log('═══════════════════════════════════════')
-
-    // Custom message based on role
-    const successMessage = role === 'STUDENT'
-      ? '✅ تم استلام طلبك بنجاح! حسابك الآن قيد المراجعة من قبل الإدارة. سيتم تفعيل حسابك قريباً بعد الموافقة.'
-      : '✅ تم إنشاء حسابك بنجاح! يمكنك الآن تسجيل الدخول.'
-
-    return NextResponse.json({
-      success: true,
-      message: successMessage,
-      user
-    }, { status: 201 })
-
+    return Response.json({
+      message: 'تم إرسال كود التحقق على إيميلك',
+      success: true
+    })
   } catch (error: any) {
-    console.error('═══════════════════════════════════════')
-    console.error('[AUTH] ❌❌❌ UNEXPECTED ERROR:')
-    console.error('[AUTH] Error Message:', error.message)
-    console.error('[AUTH] Error Stack:', error.stack)
-    console.error('[AUTH] Error Name:', error.name)
-    console.error('═══════════════════════════════════════')
-
-    return NextResponse.json(
+    console.error('[REGISTER ERROR]:', error)
+    return Response.json(
       {
-        error: error.message || 'حدث خطأ غير متوقع أثناء التسجيل',
-        details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        error: 'حدث خطأ أثناء إرسال كود التحقق',
+        details: error.message
       },
       { status: 500 }
     )

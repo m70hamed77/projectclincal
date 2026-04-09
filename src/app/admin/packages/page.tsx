@@ -331,7 +331,10 @@ export default function PackagesPage() {
                 if (!open) resetForm()
               }}>
                 <DialogTrigger asChild>
-                  <Button className="bg-emerald-600 hover:bg-emerald-700">
+                  <Button 
+                    className="bg-emerald-600 transition-all duration-300 hover:bg-emerald-700 hover:scale-105 hover:shadow-lg"
+                    style={{textShadow: '0 2px 4px rgba(0,0,0,0.2)'}}
+                  >
                     <Plus className="w-4 h-4 ml-2" />
                     إضافة باقة جديدة
                   </Button>
@@ -580,7 +583,10 @@ export default function PackagesPage() {
                       >
                         إلغاء
                       </Button>
-                      <Button type="submit" className="bg-emerald-600 hover:bg-emerald-700">
+                      <Button type="submit" 
+                        className="bg-emerald-600 transition-all duration-300 hover:bg-emerald-700 hover:scale-105"
+                        style={{textShadow: '0 2px 4px rgba(0,0,0,0.2)'}}
+                      >
                         {editingPackage ? 'حفظ التعديلات' : 'إضافة'}
                       </Button>
                     </div>
@@ -617,7 +623,11 @@ export default function PackagesPage() {
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredPackages.map((pkg) => (
-                <Card key={pkg.id} className="overflow-hidden flex flex-col">
+                <Card 
+                  key={pkg.id} 
+                  className="overflow-hidden flex flex-col transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+                  style={{textShadow: '0 1px 2px rgba(0,0,0,0.05)'}}
+                >
                   {pkg.images.length > 0 && (
                     <div className="h-48 bg-muted relative overflow-hidden">
                       <img
@@ -699,7 +709,8 @@ export default function PackagesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="flex-1"
+                          className="flex-1 transition-all duration-300 hover:bg-emerald-50 hover:scale-105 hover:shadow-md"
+                          style={{textShadow: '0 1px 2px rgba(0,0,0,0.05)'}}
                           onClick={() => handleEdit(pkg)}
                         >
                           <Edit className="w-4 h-4 ml-1" />
@@ -708,7 +719,8 @@ export default function PackagesPage() {
                         <Button
                           size="sm"
                           onClick={() => handleDelete(pkg.id)}
-                          className="bg-red-800 hover:bg-red-900 text-white font-bold"
+                          className="bg-red-800 text-white font-bold transition-all duration-300 hover:bg-red-900 hover:scale-105 hover:shadow-md"
+                          style={{textShadow: '0 2px 4px rgba(0,0,0,0.3)'}}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
