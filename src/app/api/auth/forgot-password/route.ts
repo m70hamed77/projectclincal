@@ -48,9 +48,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: 'إذا كان البريد الإلكتروني مسجلاً، تم إرسال رمز التحقق',
-      // نرجع OTP ليُطبع في Console المتصفح (للتجربة فقط)
-      dev_otp: otp
+      message: 'إذا كان البريد الإلكتروني مسجلاً، تم إرسال رمز التحقق'
     })
   } catch (error: any) {
     console.error('[AUTH] Forgot password error:', error)

@@ -23,7 +23,6 @@ export default function ForgotPasswordPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const [devOtp, setDevOtp] = useState('')
 
   // Mouse position for parallax effect
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -73,7 +72,6 @@ export default function ForgotPasswordPage() {
       }
 
       setSuccess(t('forgotPasswordPage.codeSent'))
-      setDevOtp(data.dev_otp || '')
 
       setTimeout(() => {
         setSuccess('')
@@ -182,7 +180,6 @@ export default function ForgotPasswordPage() {
         throw new Error(data.error || t('forgotPasswordPage.errors.unknownError'))
       }
 
-      setDevOtp(data.dev_otp || '')
       setSuccess(t('forgotPasswordPage.codeSent'))
       setTimeout(() => setSuccess(''), 3000)
 
@@ -389,15 +386,6 @@ export default function ForgotPasswordPage() {
                   {t('forgotPasswordPage.resendCode')}
                 </button>
               </div>
-
-              {/* Dev OTP Display */}
-              {devOtp && (
-                <div className="rounded-xl p-4" style={{ background: 'rgba(245, 158, 11, 0.1)', borderColor: 'rgba(245, 158, 11, 0.3)' }}>
-                  <p className="text-sm text-amber-400 text-center">
-                    🔐 {t('forgotPasswordPage.checkConsole')} <strong className="text-xl ml-2">{devOtp}</strong>
-                  </p>
-                </div>
-              )}
 
               <div className="flex gap-3">
                 <button
