@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getUserIdFromRequest } from '@/lib/auth-helper'
 import { notifyAdminStudentApproved } from '@/lib/notifications'
+import {
+  incrementApprovedDoctors,
+  incrementActiveStudents
+} from '@/lib/stats'
 
 /**
  * POST /api/admin/verification/[id]/approve
@@ -101,6 +105,11 @@ export async function POST(
 
     console.log('[ADMIN APPROVE] Student approved successfully:', updatedStudent.user.name)
     console.log('[ADMIN APPROVE] User status set to ACTIVE')
+
+    // 📊 Increment stats
+    await incrementApprovedDoctors()
+    await incrementActiveStudents()
+    console.log('[ADMIN APPROVE] Stats incremented successfully')
 
     // Create notification for the student
     await db.notification.create({

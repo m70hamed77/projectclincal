@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getUserIdFromRequest } from '@/lib/auth-helper'
+import {
+  incrementDismissedReports,
+  decrementPendingReports
+} from '@/lib/stats'
 
 /**
  * POST /api/admin/reports/[id]/dismiss
@@ -79,6 +83,11 @@ export async function POST(
     })
 
     console.log('[ADMIN REPORT DISMISS] Report dismissed successfully')
+
+    // 📊 Update stats
+    await incrementDismissedReports()
+    await decrementPendingReports()
+    console.log('[ADMIN REPORT DISMISS] Stats updated')
 
     // Create notification for reporter
     await db.notification.create({

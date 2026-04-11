@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getUserIdFromRequest } from '@/lib/auth-helper'
 import { notifyAdminStudentRejected } from '@/lib/notifications'
+import { incrementRejectedDoctors } from '@/lib/stats'
 
 /**
  * POST /api/admin/verification/[id]/reject
@@ -98,6 +99,10 @@ export async function POST(
     })
 
     console.log('[ADMIN REJECT] Student rejected successfully:', updatedStudent.user.name)
+
+    // 📊 Increment stats
+    await incrementRejectedDoctors()
+    console.log('[ADMIN REJECT] Stats incremented successfully')
 
     // Create notification for the student
     await db.notification.create({

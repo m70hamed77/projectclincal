@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { incrementTotalRatings } from '@/lib/stats'
 
 export async function POST(request: NextRequest) {
   try {
@@ -140,6 +141,10 @@ export async function POST(request: NextRequest) {
         }
       })
       console.log(`[RATING] ✅ Created new rating for case ${caseId}`)
+
+      // 📊 Increment total ratings
+      await incrementTotalRatings()
+      console.log(`[RATING] ✅ Total ratings incremented`)
 
       // Send notification to the doctor (student)
       try {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getUserIdFromRequest } from '@/lib/auth-helper'
+import { getOrCreateStats } from '@/lib/stats'
 
 /**
  * GET /api/admin/dashboard-stats
@@ -8,7 +9,8 @@ import { getUserIdFromRequest } from '@/lib/auth-helper'
  * Get dashboard statistics for admin
  * Only accessible by ADMIN users
  *
- * Updated: Now supports userId from cookies, headers, and query parameters
+ * Stats are read from SystemStats table (incremented at event time)
+ * Only pendingVerifications and averageRating are calculated on-demand
  */
 export async function GET(request: NextRequest) {
   try {
@@ -40,149 +42,47 @@ export async function GET(request: NextRequest) {
 
     console.log('[ADMIN STATS] User is admin, fetching stats...')
 
-    // Get pending verifications count
+    // Get stats from SystemStats table
+    const stats = await getOrCreateStats()
+
+    // Get pending verifications count (calculated on-demand)
     const pendingVerifications = await db.student.count({
       where: { verificationStatus: 'PENDING' }
     })
 
-    // Get total users count
-    const totalUsers = await db.user.count()
-
-    // Get approved doctors (verified and active students)
-    const approvedDoctors = await db.student.count({
-      where: {
-        verificationStatus: 'APPROVED',
-        user: {
-          status: 'ACTIVE'
-        }
-      }
-    })
-
-    // Get rejected doctors
-    const rejectedDoctors = await db.student.count({
-      where: {
-        verificationStatus: 'REJECTED'
-      }
-    })
-
-    // Get deleted users (both doctors and patients)
-    const deletedUsers = await db.user.count({
-      where: { status: 'DELETED' }
-    })
-
-    // Get banned users
-    const bannedUsers = await db.user.count({
-      where: { status: 'BANNED' }
-    })
-
-    // Get suspended users
-    const suspendedUsers = await db.user.count({
-      where: { status: 'SUSPENDED' }
-    })
-
-    // Get total patients (all patients regardless of status)
-    const totalPatients = await db.patient.count()
-
-    // Get active patients
-    const activePatients = await db.patient.count({
-      where: {
-        user: {
-          status: 'ACTIVE'
-        }
-      }
-    })
-
-    // 🎓 Get total students (all students regardless of verification status)
-    const totalStudents = await db.student.count()
-
-    // 🎓 Get active students (verified and active)
-    const activeStudents = await db.student.count({
-      where: {
-        verificationStatus: 'APPROVED',
-        user: {
-          status: 'ACTIVE'
-        }
-      }
-    })
-
-    // 🩺 Get total cases (completed cases count)
-    const totalCases = await db.case.count({
-      where: { isCompleted: true }
-    })
-
-    // 🩺 Get active cases (in progress)
-    const activeCases = await db.case.count({
-      where: { isCompleted: false }
-    })
-
-    // ⭐ Get total ratings count
-    const totalRatings = await db.rating.count()
-
-    // ⭐ Get average rating
+    // Get average rating (calculated on-demand)
     const ratingStats = await db.rating.aggregate({
       _avg: {
-        overallRating: true,
-        qualityRating: true,
-        professionalRating: true,
-        punctualityRating: true,
-        cleanlinessRating: true,
-        explanationRating: true
-      },
-      _count: {
-        id: true
+        overallRating: true
       }
     })
 
     const averageRating = ratingStats._avg.overallRating || 0
 
-    // Get pending reports
-    const pendingReports = await db.report.count({
-      where: { status: 'PENDING' }
-    })
-
-    // Get resolved reports
-    const resolvedReports = await db.report.count({
-      where: { status: 'RESOLVED' }
-    })
-
-    // Get dismissed reports (by admin decision, not status)
-    const dismissedReports = await db.report.count({
-      where: { adminDecision: 'DISMISS' }
-    })
-
-    // Get rejected reports
-    const rejectedReports = await db.report.count({
-      where: { status: 'REJECTED' }
-    })
-
     // Calculate total reports
-    const totalReports = pendingReports + resolvedReports + dismissedReports + rejectedReports
+    const totalReports = stats.pendingReports + stats.resolvedReports + stats.dismissedReports + stats.rejectedReports
 
     console.log('[ADMIN STATS] Stats fetched successfully')
     console.log('[ADMIN STATS] Stats details:', {
       pendingVerifications,
-      totalUsers,
-      approvedDoctors,
-      rejectedDoctors,
-      deletedUsers,
-      bannedUsers,
-      suspendedUsers,
-      totalPatients,
-      activePatients,
-      // 🎓 Students Stats
-      totalStudents,
-      activeStudents,
-      // 🩺 Cases Stats
-      totalCases,
-      activeCases,
-      // ⭐ Ratings Stats
-      totalRatings,
+      totalUsers: stats.totalUsers,
+      approvedDoctors: stats.approvedDoctors,
+      rejectedDoctors: stats.rejectedDoctors,
+      deletedUsers: stats.deletedUsers,
+      bannedUsers: stats.bannedUsers,
+      suspendedUsers: stats.suspendedUsers,
+      totalPatients: stats.totalPatients,
+      activePatients: stats.activePatients,
+      totalStudents: stats.totalStudents,
+      activeStudents: stats.activeStudents,
+      totalCases: stats.totalCases,
+      activeCases: stats.activeCases,
+      totalRatings: stats.totalRatings,
       averageRating,
-      // Reports
-      pendingReports,
-      resolvedReports,
-      dismissedReports,
-      rejectedReports,
+      pendingReports: stats.pendingReports,
+      resolvedReports: stats.resolvedReports,
+      dismissedReports: stats.dismissedReports,
+      rejectedReports: stats.rejectedReports,
       totalReports
     })
 
@@ -190,28 +90,24 @@ export async function GET(request: NextRequest) {
       success: true,
       stats: {
         pendingVerifications,
-        totalUsers,
-        approvedDoctors,
-        rejectedDoctors,
-        deletedUsers,
-        bannedUsers,
-        suspendedUsers,
-        totalPatients,
-        activePatients,
-        // 🎓 Students Stats (Real-Time)
-        totalStudents,
-        activeStudents,
-        // 🩺 Cases Stats (Real-Time)
-        totalCases,
-        activeCases,
-        // ⭐ Ratings Stats (Real-Time)
-        totalRatings,
+        totalUsers: stats.totalUsers,
+        approvedDoctors: stats.approvedDoctors,
+        rejectedDoctors: stats.rejectedDoctors,
+        deletedUsers: stats.deletedUsers,
+        bannedUsers: stats.bannedUsers,
+        suspendedUsers: stats.suspendedUsers,
+        totalPatients: stats.totalPatients,
+        activePatients: stats.activePatients,
+        totalStudents: stats.totalStudents,
+        activeStudents: stats.activeStudents,
+        totalCases: stats.totalCases,
+        activeCases: stats.activeCases,
+        totalRatings: stats.totalRatings,
         averageRating,
-        // Reports
-        pendingReports,
-        resolvedReports,
-        dismissedReports,
-        rejectedReports,
+        pendingReports: stats.pendingReports,
+        resolvedReports: stats.resolvedReports,
+        dismissedReports: stats.dismissedReports,
+        rejectedReports: stats.rejectedReports,
         totalReports
       }
     })

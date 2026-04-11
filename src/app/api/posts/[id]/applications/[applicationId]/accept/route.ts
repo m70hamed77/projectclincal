@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import { db } from '@/lib/db'
+import { incrementActiveCases } from '@/lib/stats'
 
 export const dynamic = 'force-dynamic'
 
@@ -138,6 +139,10 @@ export async function POST(
         }
       })
       console.log(`[ACCEPT] ✅ Case created: ${newCase.id} for application ${applicationId}`)
+
+      // 📊 Increment active cases
+      await incrementActiveCases()
+      console.log(`[ACCEPT] ✅ Active cases incremented`)
     } else {
       console.log(`[ACCEPT] ℹ️ Case already exists: ${newCase.id} for application ${applicationId}`)
     }

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getUserIdFromRequest } from '@/lib/auth-helper'
+import {
+  incrementResolvedReports,
+  decrementPendingReports
+} from '@/lib/stats'
 
 /**
  * POST /api/admin/reports/[id]/resolve
@@ -104,6 +108,11 @@ export async function POST(
     })
 
     console.log('[ADMIN REPORT RESOLVE] ✅ Report updated successfully')
+
+    // 📊 Update stats
+    await incrementResolvedReports()
+    await decrementPendingReports()
+    console.log('[ADMIN REPORT RESOLVE] ✅ Stats updated')
 
     // Verify reported user exists before creating notification
     const reportedUserExists = await db.user.findUnique({

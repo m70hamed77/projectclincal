@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { hashPassword } from '@/lib/password'
+import {
+  incrementTotalUsers,
+  incrementTotalPatients,
+  incrementActivePatients
+} from '@/lib/stats'
 
 /**
  * API Route: تسجيل مريض جديد مع كود التحقق
@@ -205,6 +210,12 @@ export async function POST(request: NextRequest) {
       console.log('[REGISTER PATIENT] User ID:', user.id)
       console.log('[REGISTER PATIENT] User Role:', user.role)
       console.log('[REGISTER PATIENT] User Status:', user.status)
+
+      // 📊 Increment stats
+      await incrementTotalUsers()
+      await incrementTotalPatients()
+      await incrementActivePatients()
+      console.log('[REGISTER PATIENT] Stats incremented successfully')
     } catch (dbError: any) {
       console.error('[REGISTER PATIENT] Step 8 ❌: Failed to create user:', dbError)
       console.error('[REGISTER PATIENT] DB Error Details:', dbError.message)

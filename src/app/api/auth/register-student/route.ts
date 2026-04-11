@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { hashPassword } from '@/lib/password'
 import { notifyAdminNewStudent } from '@/lib/notifications'
+import {
+  incrementTotalUsers,
+  incrementTotalStudents
+} from '@/lib/stats'
 
 /**
  * API Route: تسجيل طالب جديد مع كود التحقق
@@ -239,6 +243,11 @@ export async function POST(request: NextRequest) {
       console.log('[REGISTER STUDENT] User ID:', user.id)
       console.log('[REGISTER STUDENT] User Role:', user.role)
       console.log('[REGISTER STUDENT] User Status:', user.status)
+
+      // 📊 Increment stats
+      await incrementTotalUsers()
+      await incrementTotalStudents()
+      console.log('[REGISTER STUDENT] Stats incremented successfully')
     } catch (dbError: any) {
       console.error('[REGISTER STUDENT] Step 8 ❌: Failed to create user:', dbError)
       console.error('[REGISTER STUDENT] DB Error Details:', dbError.message)

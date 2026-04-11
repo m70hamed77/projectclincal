@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { cookies } from 'next/headers'
 import { notifyAdminNewReport } from '@/lib/notifications'
+import { incrementPendingReports } from '@/lib/stats'
 
 /**
  * POST /api/reports
@@ -86,6 +87,12 @@ export async function POST(request: NextRequest) {
         status: 'PENDING',
       }
     })
+
+    console.log('[REPORTS] ✅ Report created:', report.id)
+
+    // 📊 Increment pending reports
+    await incrementPendingReports()
+    console.log('[REPORTS] ✅ Pending reports incremented')
 
     // Send notification to all admins using the notification library
     try {

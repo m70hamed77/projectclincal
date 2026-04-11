@@ -722,3 +722,26 @@ model VerificationCode {
   @@index([code])
   @@index([expiresAt])
 }
+
+model SystemStats {
+  id                  String   @id @default(cuid())
+  totalUsers          Int      @default(0)
+  approvedDoctors     Int      @default(0)
+  rejectedDoctors     Int      @default(0)
+  deletedUsers        Int      @default(0)
+  bannedUsers         Int      @default(0)
+  suspendedUsers      Int      @default(0)
+  totalPatients       Int      @default(0)
+  activePatients      Int      @default(0)
+  totalStudents       Int      @default(0)
+  activeStudents      Int      @default(0)
+  totalCases          Int      @default(0)
+  activeCases         Int      @default(0)
+  totalRatings        Int      @default(0)
+  pendingReports      Int      @default(0)
+  resolvedReports     Int      @default(0)
+  dismissedReports    Int      @default(0)
+  rejectedReports     Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
