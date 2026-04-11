@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -83,7 +83,7 @@ export default function AdminReportsPage() {
     duration: 7
   })
 
-  const fetchReports = async () => {
+  const fetchReports = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
 
     try {
@@ -114,9 +114,9 @@ export default function AdminReportsPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user, t])
 
-  const ensureAdminRecord = async () => {
+  const ensureAdminRecord = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
 
     try {
@@ -141,12 +141,12 @@ export default function AdminReportsPage() {
     } catch (error) {
       console.error('Error ensuring admin record:', error)
     }
-  }
+  }, [user])
 
   useEffect(() => {
     ensureAdminRecord()
     fetchReports()
-  }, [user])
+  }, [fetchReports, ensureAdminRecord])
 
   const filteredReports = reports.filter(report => {
     if (filterStatus === 'ALL') return true

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -96,10 +96,10 @@ export default function AdminDashboardPage() {
     }, 10000) // 10 seconds
 
     return () => clearInterval(interval)
-  }, [user])
+  }, [user, fetchStats])
 
   // Fetch dashboard stats
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
 
     try {
@@ -129,10 +129,10 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user])
 
   // Ensure admin record exists
-  const ensureAdminRecord = async () => {
+  const ensureAdminRecord = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
 
     try {
@@ -158,7 +158,7 @@ export default function AdminDashboardPage() {
     } catch (error) {
       console.error('Error ensuring admin record:', error)
     }
-  }
+  }, [user])
 
   // دالة مساعدة لإضافة userId إلى الروابط
   const withUserId = (path: string) => {
@@ -228,8 +228,8 @@ export default function AdminDashboardPage() {
       ensureAdminRecord()
       fetchStats()
     }
-     
-  }, [user])
+
+  }, [user, ensureAdminRecord, fetchStats])
 
   // Check if user is not authenticated after loading
   if (!loading && !user) {

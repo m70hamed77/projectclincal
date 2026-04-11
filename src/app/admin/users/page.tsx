@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { Card, CardContent } from '@/components/ui/card'
@@ -85,7 +85,7 @@ export default function AdminUsersPage() {
   })
   const [deleteReason, setDeleteReason] = useState('')
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') {
       return
     }
@@ -119,11 +119,11 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [user, t])
 
   useEffect(() => {
     fetchUsers()
-  }, [user])
+  }, [fetchUsers])
 
   const filteredUsers = users.filter(user => {
     if (filterRole !== 'ALL' && user.role !== filterRole) return false
