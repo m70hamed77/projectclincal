@@ -1,0 +1,552 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import {
+  User,
+  Stethoscope,
+  Mail,
+  Lock,
+  AlertCircle,
+  Loader2,
+  CheckCircle2,
+  Phone,
+} from 'lucide-react'
+import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
+
+type VerificationMethod = 'email' | 'phone'
+
+export default function RegisterPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const typeParam = searchParams.get('type')
+
+  const [userType, setUserType] = useState<'patient' | 'student'>(
+    (typeParam === 'patient' || typeParam === 'student') ? typeParam : 'patient'
+  )
+  const [verificationMethod, setVerificationMethod] = useState<VerificationMethod>('email')
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [step, setStep] = useState(1)
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    name: '',
+    phone: '',
+  })
+
+  useEffect(() => {
+    if (typeParam) {
+      setUserType(typeParam as 'patient' | 'student')
+    }
+  }, [typeParam])
+
+  const handleSubmit = async () => {
+    setIsLoading(true)
+    setError('')
+
+    console.log('[Register Form] Starting submission...')
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('كلمات المرور غير متطابقة')
+      setIsLoading(false)
+      console.log('[Register Form] Passwords do not match')
+      return
+    }
+
+    // التحقق من الحقول المطلوبة حسب طريقة التحقق
+    if (verificationMethod === 'email' && !formData.email) {
+      setError('البريد الإلكتروني مطلوب')
+      setIsLoading(false)
+      return
+    }
+
+    if (verificationMethod === 'phone' && !formData.phone) {
+      setError('رقم الهاتف مطلوب')
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      // إرسال كود التحقق حسب الطريقة المختارة
+      let endpoint = ''
+      let payload: any = {}
+
+      if (verificationMethod === 'email') {
+        endpoint = '/api/auth/send-verification-code'
+        payload = { email: formData.email }
+        console.log('[Register Form] Sending verification code to:', formData.email)
+      } else {
+        endpoint = '/api/auth/send-sms-code'
+        payload = { phone: formData.phone }
+        console.log('[Register Form] Sending SMS verification code to:', formData.phone)
+      }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      console.log('[Register Form] Response status:', response.status)
+
+      const data = await response.json()
+      console.log('[Register Form] Response data:', data)
+
+      if (!response.ok) {
+        throw new Error(data.error || 'فشل إرسال كود التحقق')
+      }
+
+      // حفظ البيانات في localStorage
+      if (typeof window !== 'undefined' && window.localStorage) {
+        try {
+          localStorage.setItem('registrationData', JSON.stringify({
+            ...formData,
+            userType,
+            verificationMethod,
+          }))
+          console.log('[Register Form] Data saved to localStorage')
+        } catch (storageError) {
+          console.error('[Register Form] Failed to save to localStorage:', storageError)
+        }
+      }
+
+      console.log('[Register Form] Redirecting to verify page...')
+
+      // التوجه لصفحة التحقق المناسبة
+      if (verificationMethod === 'email') {
+        await router.push(`/auth/verify?email=${encodeURIComponent(formData.email)}&userType=${userType}`)
+      } else {
+        await router.push(`/auth/verify-sms?phone=${encodeURIComponent(formData.phone)}&userType=${userType}`)
+      }
+    } catch (err: any) {
+      console.error('[Register Form] Error:', err)
+      setError(err.message || 'حدث خطأ أثناء إرسال كود التحقق')
+      setIsLoading(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen py-12 px-4 bg-muted/50">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-2">إنشاء حساب جديد</h1>
+          <p className="text-muted-foreground">انضم لمنصة سمايلي وابدأ رحلتك</p>
+        </div>
+
+        <Tabs value={userType} onValueChange={(v) => setUserType(v as 'patient' | 'student')} className="w-full">
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="patient" className="gap-2">
+              <User className="w-4 h-4" />
+              كمريض
+            </TabsTrigger>
+            <TabsTrigger value="student" className="gap-2">
+              <Stethoscope className="w-4 h-4" />
+              كطالب
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Patient Registration */}
+          <TabsContent value="patient">
+            <Card>
+              <CardHeader>
+                <CardTitle>بيانات المريض</CardTitle>
+                <CardDescription>أدخل بياناتك لإنشاء حساب مريض</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                  {error && (
+                    <Alert variant="destructive">
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">الاسم الكامل</Label>
+                      <Input
+                        id="name"
+                        placeholder="الاسم الكامل"
+                        required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">رقم الهاتف</Label>
+                      <div className="relative">
+                        <Phone className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="phone"
+                          type="tel"
+                          placeholder="01xxxxxxxxx"
+                          className="pr-10"
+                          required={verificationMethod === 'phone'}
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email">البريد الإلكتروني</Label>
+                    <div className="relative">
+                      <Mail className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="example@email.com"
+                        className="pr-10"
+                        required={verificationMethod === 'email'}
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="password">كلمة المرور</Label>
+                      <div className="relative">
+                        <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="••••••••"
+                          className="pr-10"
+                          required
+                          value={formData.password}
+                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="confirmPassword">تأكيد كلمة المرور</Label>
+                      <div className="relative">
+                        <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="confirmPassword"
+                          type="password"
+                          placeholder="••••••••"
+                          className="pr-10"
+                          required
+                          value={formData.confirmPassword}
+                          onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <Label>طريقة التحقق</Label>
+                    <RadioGroup
+                      value={verificationMethod}
+                      onValueChange={(v) => setVerificationMethod(v as VerificationMethod)}
+                      className="grid grid-cols-2 gap-4"
+                    >
+                      <div className="flex items-center space-x-2 space-x-reverse p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                        <RadioGroupItem value="email" id="email" />
+                        <Label htmlFor="email" className="cursor-pointer flex-1">
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4" />
+                            <span>البريد الإلكتروني</span>
+                          </div>
+                        </Label>
+                      </div>
+
+                      <div className="flex items-center space-x-2 space-x-reverse p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                        <RadioGroupItem value="phone" id="phone" />
+                        <Label htmlFor="phone" className="cursor-pointer flex-1">
+                          <div className="flex items-center gap-2">
+                            <Phone className="w-4 h-4" />
+                            <span>رسالة نصية (SMS)</span>
+                          </div>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+
+                    {verificationMethod === 'email' && (
+                      <Alert className="bg-blue-50 border-blue-200">
+                        <Mail className="h-4 w-4 text-blue-600" />
+                        <AlertDescription className="text-blue-900 text-sm">
+                          سيتم إرسال كود التحقق إلى بريدك الإلكتروني
+                        </AlertDescription>
+                      </Alert>
+                    )}
+
+                    {verificationMethod === 'phone' && (
+                      <Alert className="bg-emerald-50 border-emerald-200">
+                        <Phone className="h-4 w-4 text-emerald-600" />
+                        <AlertDescription className="text-emerald-900 text-sm">
+                          سيتم إرسال كود التحقق كرسالة نصية إلى هاتفك
+                        </AlertDescription>
+                      </Alert>
+                    )}
+                  </div>
+
+                  <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                        جاري إرسال كود التحقق...
+                      </>
+                    ) : (
+                      'إرسال كود التحقق'
+                    )}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center text-sm text-muted-foreground">
+                  لديك حساب بالفعل؟{' '}
+                  <Link href="/auth/login" className="text-emerald-600 hover:underline font-medium">
+                    سجل الدخول
+                  </Link>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Student Registration */}
+          <TabsContent value="student">
+            <Card>
+              <CardHeader>
+                <CardTitle>بيانات الطالب</CardTitle>
+                <CardDescription>أدخل بياناتك الجامعية للتوثيق</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {step === 1 ? (
+                  <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="studentName">الاسم الكامل</Label>
+                        <Input
+                          id="studentName"
+                          placeholder="الاسم الكامل"
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="studentPhone">رقم الهاتف</Label>
+                        <div className="relative">
+                          <Phone className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="studentPhone"
+                            type="tel"
+                            placeholder="01xxxxxxxxx"
+                            className="pr-10"
+                            required={verificationMethod === 'phone'}
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="studentEmail">البريد الإلكتروني الجامعي</Label>
+                      <div className="relative">
+                        <Mail className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          id="studentEmail"
+                          type="email"
+                          placeholder="student@university.edu"
+                          className="pr-10"
+                          required={verificationMethod === 'email'}
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="password">كلمة المرور</Label>
+                        <div className="relative">
+                          <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="password"
+                            type="password"
+                            placeholder="••••••••"
+                            className="pr-10"
+                            required
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">تأكيد كلمة المرور</Label>
+                        <div className="relative">
+                          <Lock className="absolute right-3 top-3 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="••••••••"
+                            className="pr-10"
+                            required
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button type="submit" className="w-full">
+                      التالي
+                    </Button>
+                  </form>
+                ) : (
+                  <form onSubmit={(e) => e.preventDefault()} className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="university">اسم الجامعة</Label>
+                      <Input id="university" placeholder="مثال: جامعة القاهرة" required />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="studentId">رقم الكارنيه</Label>
+                        <Input id="studentId" placeholder="رقم الكارنيه الجامعي" required />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="academicYear">السنة الدراسية</Label>
+                        <select
+                          id="academicYear"
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                          required
+                        >
+                          <option value="">اختر السنة الدراسية</option>
+                          <option value="1">السنة الأولى</option>
+                          <option value="2">السنة الثانية</option>
+                          <option value="3">السنة الثالثة</option>
+                          <option value="4">السنة الرابعة</option>
+                          <option value="5">السنة الخامسة</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>صورة الكارنيه الجامعي</Label>
+                      <div className="border-2 border-dashed rounded-lg p-6 text-center hover:border-emerald-400 transition-colors cursor-pointer">
+                        <div className="text-4xl mb-2">📷</div>
+                        <p className="text-sm text-muted-foreground">
+                          اضغط هنا لرفع صورة الكارنيه
+                        </p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          PNG, JPG حتى 5MB
+                        </p>
+                        <input type="file" accept="image/*" className="hidden" />
+                      </div>
+                    </div>
+
+                    <Alert>
+                      <CheckCircle2 className="h-4 w-4" />
+                      <AlertDescription className="text-right">
+                        سيتم مراجعة بياناتك من قبل الإدارة قبل تفعيل الحساب
+                      </AlertDescription>
+                    </Alert>
+
+                    <div className="space-y-3">
+                      <Label>طريقة التحقق</Label>
+                      <RadioGroup
+                        value={verificationMethod}
+                        onValueChange={(v) => setVerificationMethod(v as VerificationMethod)}
+                        className="grid grid-cols-2 gap-4"
+                      >
+                        <div className="flex items-center space-x-2 space-x-reverse p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                          <RadioGroupItem value="email" id="student-email" />
+                          <Label htmlFor="student-email" className="cursor-pointer flex-1">
+                            <div className="flex items-center gap-2">
+                              <Mail className="w-4 h-4" />
+                              <span>البريد الإلكتروني</span>
+                            </div>
+                          </Label>
+                        </div>
+
+                        <div className="flex items-center space-x-2 space-x-reverse p-3 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                          <RadioGroupItem value="phone" id="student-phone" />
+                          <Label htmlFor="student-phone" className="cursor-pointer flex-1">
+                            <div className="flex items-center gap-2">
+                              <Phone className="w-4 h-4" />
+                              <span>رسالة نصية (SMS)</span>
+                            </div>
+                          </Label>
+                        </div>
+                      </RadioGroup>
+
+                      {verificationMethod === 'email' && (
+                        <Alert className="bg-blue-50 border-blue-200">
+                          <Mail className="h-4 w-4 text-blue-600" />
+                          <AlertDescription className="text-blue-900 text-sm">
+                            سيتم إرسال كود التحقق إلى بريدك الإلكتروني
+                          </AlertDescription>
+                        </Alert>
+                      )}
+
+                      {verificationMethod === 'phone' && (
+                        <Alert className="bg-emerald-50 border-emerald-200">
+                          <Phone className="h-4 w-4 text-emerald-600" />
+                          <AlertDescription className="text-emerald-900 text-sm">
+                            سيتم إرسال كود التحقق كرسالة نصية إلى هاتفك
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+
+                    <div className="flex gap-3">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => setStep(1)}
+                      >
+                        رجوع
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={handleSubmit}
+                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+                        disabled={isLoading}
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                            جاري الإرسال...
+                          </>
+                        ) : (
+                          'إرسال كود التحقق'
+                        )}
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  )
+}
