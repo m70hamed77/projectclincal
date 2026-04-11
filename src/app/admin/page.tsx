@@ -401,19 +401,19 @@ export default function AdminDashboardPage() {
 
           {/* Stats Grid - Professional Dashboard */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>لوحة الإحصائيات</h2>
+            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}} suppressHydrationWarning={true}>{t('admin.dashboardStats')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
 
               {/* إجمالي المستخدمين */}
               <Card style={{background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', border: 'none', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">إجمالي المستخدمين</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.totalUsers')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-4xl font-bold text-white mb-1">{stats.totalUsers}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Users className="w-3 h-3" />
-                    <span>مسجل</span>
+                    <span suppressHydrationWarning={true}>{t('admin.registered')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -421,13 +421,13 @@ export default function AdminDashboardPage() {
               {/* الدكاترة النشطون */}
               <Card style={{background: 'linear-gradient(135deg, #00BFA6 0%, #008C7A 100%)', border: 'none', boxShadow: '0 4px 14px rgba(0, 191, 166, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">الدكاترة النشطون</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.activeDoctors')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-4xl font-bold text-white mb-1">{stats.approvedDoctors}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <CheckCircle className="w-3 h-3" />
-                    <span>نشط</span>
+                    <span suppressHydrationWarning={true}>{t('admin.active')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -435,13 +435,13 @@ export default function AdminDashboardPage() {
               {/* المرضى النشطون */}
               <Card style={{background: 'linear-gradient(135deg, #9333EA 0%, #7C3AED 100%)', border: 'none', boxShadow: '0 4px 14px rgba(147, 51, 234, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">المرضى النشطون</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.activePatients')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-4xl font-bold text-white mb-1">{stats.activePatients}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Users className="w-3 h-3" />
-                    <span>من {stats.totalPatients} مسجل</span>
+                    <span suppressHydrationWarning={true}>{t('admin.ofRegistered', { count: stats.totalPatients })}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -466,18 +466,18 @@ export default function AdminDashboardPage() {
                 }}
               >
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">طلبات المراجعة</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.verificationRequests')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
                     <div className="text-4xl font-bold text-white mb-1">{stats.pendingVerifications}</div>
                     {stats.pendingVerifications > 0 && (
-                      <Badge className="bg-white/20 text-white text-xs">جديد</Badge>
+                      <Badge className="bg-white/20 text-white text-xs" suppressHydrationWarning={true}>{t('admin.new')}</Badge>
                     )}
                   </div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Clock className="w-3 h-3" />
-                    <span>بانتظار الموافقة</span>
+                    <span suppressHydrationWarning={true}>{t('admin.pendingApproval')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -485,7 +485,7 @@ export default function AdminDashboardPage() {
               {/* الحالات */}
               <Card style={{background: 'linear-gradient(135deg, #0891B2 0%, #0E7490 100%)', border: 'none', boxShadow: '0 4px 14px rgba(8, 145, 178, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">الحالات</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.cases')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-3">
@@ -493,13 +493,13 @@ export default function AdminDashboardPage() {
                       <div className="text-4xl font-bold text-white mb-1">{stats.totalCases}</div>
                       <div className="flex items-center gap-1 text-white/70 text-xs">
                         <Activity className="w-3 h-3" />
-                        <span>مكتملة</span>
+                        <span suppressHydrationWarning={true}>{t('admin.completed')}</span>
                       </div>
                     </div>
                     <div className="h-10 w-px bg-white/20"></div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-white">{stats.activeCases}</div>
-                      <div className="text-xs text-white/70">نشطة</div>
+                      <div className="text-xs text-white/70" suppressHydrationWarning={true}>{t('admin.active')}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -508,7 +508,7 @@ export default function AdminDashboardPage() {
               {/* التقييمات */}
               <Card style={{background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)', border: 'none', boxShadow: '0 4px 14px rgba(236, 72, 153, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">التقييمات</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.ratings')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-3">
@@ -519,13 +519,13 @@ export default function AdminDashboardPage() {
                       </div>
                       <div className="flex items-center gap-1 text-white/70 text-xs">
                         <Star className="w-3 h-3" />
-                        <span>متوسط</span>
+                        <span suppressHydrationWarning={true}>{t('admin.average')}</span>
                       </div>
                     </div>
                     <div className="h-10 w-px bg-white/20"></div>
                     <div className="text-right">
                       <div className="text-2xl font-bold text-white">{stats.totalRatings}</div>
-                      <div className="text-xs text-white/70">تقييم</div>
+                      <div className="text-xs text-white/70" suppressHydrationWarning={true}>{t('admin.rating')}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -558,18 +558,18 @@ export default function AdminDashboardPage() {
                 }}
               >
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">البلاغات</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.reports')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between mb-1">
                     <div className="text-3xl font-bold text-white">{stats.totalReports}</div>
                     {stats.pendingReports > 0 && (
-                      <Badge className="bg-white/20 text-white text-xs">{stats.pendingReports} جديد</Badge>
+                      <Badge className="bg-white/20 text-white text-xs" suppressHydrationWarning={true}>{stats.pendingReports} {t('admin.new')}</Badge>
                     )}
                   </div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <AlertTriangle className="w-3 h-3" />
-                    <span>إجمالي البلاغات</span>
+                    <span suppressHydrationWarning={true}>{t('admin.totalReportsLabel')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -577,13 +577,13 @@ export default function AdminDashboardPage() {
               {/* الحسابات المرفوضة */}
               <Card style={{background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', border: 'none', boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المرفوضة</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.rejectedAccounts')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-white mb-1">{stats.rejectedDoctors}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <XCircle className="w-3 h-3" />
-                    <span>حساب مرفوض</span>
+                    <span suppressHydrationWarning={true}>{t('admin.rejectedAccount')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -591,13 +591,13 @@ export default function AdminDashboardPage() {
               {/* الحسابات المحذوفة */}
               <Card style={{background: 'linear-gradient(135deg, #64748B 0%, #475569 100%)', border: 'none', boxShadow: '0 4px 14px rgba(100, 116, 139, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المحذوفة</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.deletedAccounts')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-white mb-1">{stats.deletedUsers}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Trash2 className="w-3 h-3" />
-                    <span>حساب محذوف</span>
+                    <span suppressHydrationWarning={true}>{t('admin.deletedAccount')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -605,13 +605,13 @@ export default function AdminDashboardPage() {
               {/* الحسابات المحظورة */}
               <Card style={{background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', border: 'none', boxShadow: '0 4px 14px rgba(15, 23, 42, 0.3)'}}>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المحظورة</CardTitle>
+                  <CardTitle className="text-xs font-medium text-white/90" suppressHydrationWarning={true}>{t('admin.bannedAccounts')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-white mb-1">{stats.bannedUsers}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Ban className="w-3 h-3" />
-                    <span>حساب محظور</span>
+                    <span suppressHydrationWarning={true}>{t('admin.bannedAccount')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -626,7 +626,7 @@ export default function AdminDashboardPage() {
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00BFA6, #008C7A)'}}>
                   <Shield className="w-4 h-4 text-white" />
                 </div>
-                <span style={{color: '#0D1B40'}} suppressHydrationWarning={true}>{t('admin.systemHealth')}</span>
+                <span style={{color: '#0D1B40'}} suppressHydrationWarning={true}>{t('admin.systemStatus')}</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
