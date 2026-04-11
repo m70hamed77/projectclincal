@@ -87,17 +87,6 @@ export default function AdminDashboardPage() {
   })
   const [loading, setLoading] = useState(true)
 
-  // 🔄 Auto-refresh stats every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (user && user.role === 'ADMIN') {
-        fetchStats()
-      }
-    }, 10000) // 10 seconds
-
-    return () => clearInterval(interval)
-  }, [user, fetchStats])
-
   // Fetch dashboard stats
   const fetchStats = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
@@ -188,6 +177,17 @@ export default function AdminDashboardPage() {
     }
     return path
   }
+
+  // 🔄 Auto-refresh stats every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user && user.role === 'ADMIN') {
+        fetchStats()
+      }
+    }, 10000) // 10 seconds
+
+    return () => clearInterval(interval)
+  }, [user, fetchStats])
 
   useEffect(() => {
     // ✅ تحقق من وجود userId من أي مصدر
