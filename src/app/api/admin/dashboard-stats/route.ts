@@ -92,6 +92,49 @@ export async function GET(request: NextRequest) {
       }
     })
 
+    // 🎓 Get total students (all students regardless of verification status)
+    const totalStudents = await db.student.count()
+
+    // 🎓 Get active students (verified and active)
+    const activeStudents = await db.student.count({
+      where: {
+        verificationStatus: 'APPROVED',
+        user: {
+          status: 'ACTIVE'
+        }
+      }
+    })
+
+    // 🩺 Get total cases (completed cases count)
+    const totalCases = await db.case.count({
+      where: { isCompleted: true }
+    })
+
+    // 🩺 Get active cases (in progress)
+    const activeCases = await db.case.count({
+      where: { isCompleted: false }
+    })
+
+    // ⭐ Get total ratings count
+    const totalRatings = await db.rating.count()
+
+    // ⭐ Get average rating
+    const ratingStats = await db.rating.aggregate({
+      _avg: {
+        overallRating: true,
+        qualityRating: true,
+        professionalRating: true,
+        punctualityRating: true,
+        cleanlinessRating: true,
+        explanationRating: true
+      },
+      _count: {
+        id: true
+      }
+    })
+
+    const averageRating = ratingStats._avg.overallRating || 0
+
     // Get pending reports
     const pendingReports = await db.report.count({
       where: { status: 'PENDING' }
@@ -126,6 +169,16 @@ export async function GET(request: NextRequest) {
       suspendedUsers,
       totalPatients,
       activePatients,
+      // 🎓 Students Stats
+      totalStudents,
+      activeStudents,
+      // 🩺 Cases Stats
+      totalCases,
+      activeCases,
+      // ⭐ Ratings Stats
+      totalRatings,
+      averageRating,
+      // Reports
       pendingReports,
       resolvedReports,
       dismissedReports,
@@ -145,6 +198,16 @@ export async function GET(request: NextRequest) {
         suspendedUsers,
         totalPatients,
         activePatients,
+        // 🎓 Students Stats (Real-Time)
+        totalStudents,
+        activeStudents,
+        // 🩺 Cases Stats (Real-Time)
+        totalCases,
+        activeCases,
+        // ⭐ Ratings Stats (Real-Time)
+        totalRatings,
+        averageRating,
+        // Reports
         pendingReports,
         resolvedReports,
         dismissedReports,

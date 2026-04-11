@@ -22,6 +22,9 @@ import {
   Trash2,
   Ban,
   PauseCircle,
+  GraduationCap,
+  Activity,
+  Star,
 } from 'lucide-react'
 
 interface DashboardStats {
@@ -34,6 +37,15 @@ interface DashboardStats {
   suspendedUsers: number       // ⏸️ عدد الحسابات الموقوفة
   totalPatients: number        // 👥 إجمالي المرضى
   activePatients: number       // ✅ المرضى النشطين
+  // 🎓 Real-Time Students Stats
+  totalStudents: number        // 🎓 إجمالي الطلاب
+  activeStudents: number       // ✅ الطلاب النشطين
+  // 🩺 Real-Time Cases Stats
+  totalCases: number           // 🩺 إجمالي الحالات المكتملة
+  activeCases: number          // 🔄 الحالات النشطة (قيد التنفيذ)
+  // ⭐ Real-Time Ratings Stats
+  totalRatings: number         // ⭐ إجمالي التقييمات
+  averageRating: number        // ⭐ متوسط التقييم العام
   pendingReports: number
   resolvedReports: number
   dismissedReports: number     // 📤 عدد البلاغات المتجاهلة
@@ -58,6 +70,15 @@ export default function AdminDashboardPage() {
     suspendedUsers: 0,
     totalPatients: 0,
     activePatients: 0,
+    // 🎓 Students Stats
+    totalStudents: 0,
+    activeStudents: 0,
+    // 🩺 Cases Stats
+    totalCases: 0,
+    activeCases: 0,
+    // ⭐ Ratings Stats
+    totalRatings: 0,
+    averageRating: 0,
     pendingReports: 0,
     resolvedReports: 0,
     dismissedReports: 0,
@@ -65,6 +86,17 @@ export default function AdminDashboardPage() {
     totalReports: 0,
   })
   const [loading, setLoading] = useState(true)
+
+  // 🔄 Auto-refresh stats every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user && user.role === 'ADMIN') {
+        fetchStats()
+      }
+    }, 10000) // 10 seconds
+
+    return () => clearInterval(interval)
+  }, [user])
 
   // Fetch dashboard stats
   const fetchStats = async () => {
@@ -516,6 +548,103 @@ export default function AdminDashboardPage() {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* 🎓🩺⭐ Real-Time Stats Section */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>إحصائيات فورية (Real-Time)</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {/* 🎓 Total Students */}
+              <Card style={{background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)', border: '2px solid rgba(249, 115, 22, 0.2)'}}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#EA580C'}}>
+                    <GraduationCap className="w-4 h-4" />
+                    إجمالي الطلاب
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-bold" style={{color: '#EA580C'}}>{stats.totalStudents}</div>
+                      <div className="text-xs" style={{color: '#C2410C'}}>طالب مسجل</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold" style={{color: '#059669'}}>{stats.activeStudents}</div>
+                      <div className="text-xs" style={{color: '#059669'}}>نشط</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 🩺 Total Cases */}
+              <Card style={{background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)', border: '2px solid rgba(234, 179, 8, 0.2)'}}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#CA8A04'}}>
+                    <Activity className="w-4 h-4" />
+                    إجمالي الحالات
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-bold" style={{color: '#CA8A04'}}>{stats.totalCases}</div>
+                      <div className="text-xs" style={{color: '#A16207'}}>حالة مكتملة</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold" style={{color: '#0891B2'}}>{stats.activeCases}</div>
+                      <div className="text-xs" style={{color: '#0891B2'}}>نشطة</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* ⭐ Total Ratings */}
+              <Card style={{background: 'linear-gradient(135deg, #FDF4FF 0%, #FAE8FF 100%)', border: '2px solid rgba(217, 70, 239, 0.2)'}}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#A21CAF'}}>
+                    <Star className="w-4 h-4" />
+                    التقييمات
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-bold flex items-center gap-1" style={{color: '#A21CAF'}}>
+                        <Star className="w-6 h-6 fill-current" />
+                        {stats.averageRating.toFixed(1)}
+                      </div>
+                      <div className="text-xs" style={{color: '#86198F'}}>متوسط التقييم</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold" style={{color: '#A21CAF'}}>{stats.totalRatings}</div>
+                      <div className="text-xs" style={{color: '#86198F'}}>تقييم</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 👥 Total Users */}
+              <Card style={{background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)', border: '2px solid rgba(16, 185, 129, 0.2)'}}>
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#059669'}}>
+                    <Users className="w-4 h-4" />
+                    إجمالي المستخدمين
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="text-3xl font-bold" style={{color: '#059669'}}>{stats.totalUsers}</div>
+                      <div className="text-xs" style={{color: '#047857'}}>مستخدم مسجل</div>
+                    </div>
+                    <div className="flex items-center gap-1 text-emerald-600">
+                      <TrendingUp className="w-4 h-4" />
+                      <span className="text-xs font-medium">نشط</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
 
           {/* Account Status Cards */}
