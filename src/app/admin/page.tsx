@@ -37,13 +37,13 @@ interface DashboardStats {
   suspendedUsers: number       // ⏸️ عدد الحسابات الموقوفة
   totalPatients: number        // 👥 إجمالي المرضى
   activePatients: number       // ✅ المرضى النشطين
-  // 🎓 Real-Time Students Stats
+  // 🎓 Students Stats
   totalStudents: number        // 🎓 إجمالي الطلاب
   activeStudents: number       // ✅ الطلاب النشطين
-  // 🩺 Real-Time Cases Stats
+  // 🩺 Cases Stats
   totalCases: number           // 🩺 إجمالي الحالات المكتملة
   activeCases: number          // 🔄 الحالات النشطة (قيد التنفيذ)
-  // ⭐ Real-Time Ratings Stats
+  // ⭐ Ratings Stats
   totalRatings: number         // ⭐ إجمالي التقييمات
   averageRating: number        // ⭐ متوسط التقييم العام
   pendingReports: number
@@ -178,16 +178,7 @@ export default function AdminDashboardPage() {
     return path
   }
 
-  // 🔄 Auto-refresh stats every 10 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (user && user.role === 'ADMIN') {
-        fetchStats()
-      }
-    }, 10000) // 10 seconds
 
-    return () => clearInterval(interval)
-  }, [user, fetchStats])
 
   useEffect(() => {
     // ✅ تحقق من وجود userId من أي مصدر
@@ -550,9 +541,9 @@ export default function AdminDashboardPage() {
             </Card>
           </div>
 
-          {/* 🎓🩺⭐ Real-Time Stats Section */}
+          {/* 🎓🩺⭐ Stats Section */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>إحصائيات فورية (Real-Time)</h2>
+            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>الإحصائيات العامة</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {/* 🎓 Total Students */}
               <Card style={{background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)', border: '2px solid rgba(249, 115, 22, 0.2)'}}>
