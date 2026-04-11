@@ -399,288 +399,224 @@ export default function AdminDashboardPage() {
             </Button>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            {/* Total Doctors (Approved) */}
-            <Card style={{background: 'linear-gradient(135deg, #E8F8F5 0%, #D1F2EB 100%)', border: '2px solid rgba(0,191,166,0.2)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#008C7A'}} suppressHydrationWarning={true}>{t('admin.totalDoctors')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #00BFA6, #008C7A)'}}>
-                      <CheckCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#00BFA6'}}>{stats.approvedDoctors}</div>
-                      <div className="text-xs" style={{color: '#008C7A'}} suppressHydrationWarning={true}>{t('admin.activeDoctor')}</div>
-                    </div>
-                  </div>
-                  <TrendingUp className="w-5 h-5" style={{color: '#008C7A'}} />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Total Patients */}
-            <Card style={{background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)', border: '2px solid rgba(147, 51, 234, 0.2)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.totalPatients')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #9333ea, #7C3AED)'}}>
-                      <Users className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#9333ea'}}>{stats.totalPatients}</div>
-                      <div className="text-xs" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.registeredPatient')}</div>
-                    </div>
-                  </div>
-                  <TrendingUp className="w-5 h-5" style={{color: '#7C3AED'}} />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Pending Verifications */}
-            <Card
-              className="cursor-pointer"
-              style={{background: 'linear-gradient(135deg, #FFF8E1 0%, #FFE082 100%)', border: '2px solid rgba(245, 158, 11, 0.3)'}}
-              onClick={() => {
-                let userId = user?.id
-
-                // إذا لم يكن user.id متاحاً، حاول من localStorage
-                if (!userId) {
-                  try {
-                    userId = localStorage.getItem('userId')
-                  } catch (e) {
-                    // ignore
-                  }
-                }
-
-                // إذا لم يكن متاحاً، حاول من sessionStorage
-                if (!userId) {
-                  try {
-                    userId = sessionStorage.getItem('userId')
-                  } catch (e) {
-                    // ignore
-                  }
-                }
-
-                if (userId) {
-                  window.location.href = `/admin/users?userId=${encodeURIComponent(userId)}`
-                } else {
-                  alert('عذراً، لم نتمكن من العثور على معرف المستخدم')
-                }
-              }}
-            >
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#B8860B'}} suppressHydrationWarning={true}>{t('admin.pendingVerifications')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f59e0b, #d97706)'}}>
-                      <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#f59e0b'}}>{stats.pendingVerifications}</div>
-                      <div className="text-xs" style={{color: '#B8860B'}} suppressHydrationWarning={true}>{t('admin.waitingApproval')}</div>
-                    </div>
-                  </div>
-                  {stats.pendingVerifications > 0 && (
-                    <Badge style={{background: 'linear-gradient(135deg, #f59e0b, #d97706)'}}>{t('admin.new')}</Badge>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Rejected Doctors */}
-            <Card style={{background: 'linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%)', border: '2px solid rgba(239, 68, 68, 0.3)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#dc2626'}} suppressHydrationWarning={true}>{t('admin.rejectedAccounts')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #f87171, #ef4444)'}}>
-                      <XCircle className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#ef4444'}}>{stats.rejectedDoctors}</div>
-                      <div className="text-xs" style={{color: '#dc2626'}} suppressHydrationWarning={true}>{t('admin.rejected')}</div>
-                    </div>
-                  </div>
-                  <XCircle className="w-5 h-5" style={{color: '#fca5a5'}} />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Total Reports */}
-            <Card style={{background: 'linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%)', border: '2px solid rgba(108,63,197,0.2)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.totalReports')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #6C3FC5, #2d1b69)'}}>
-                      <AlertTriangle className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#6C3FC5'}}>{stats.totalReports}</div>
-                      <div className="text-xs" style={{color: '#7C3AED'}} suppressHydrationWarning={true}>{t('admin.reportInSystem')}</div>
-                    </div>
-                  </div>
-                  {stats.pendingReports > 0 && (
-                    <Badge style={{background: 'linear-gradient(135deg, #6C3FC5, #2d1b69)'}}>{stats.pendingReports} {t('admin.new')}</Badge>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* 🎓🩺⭐ Stats Section */}
+          {/* Stats Grid - Professional Dashboard */}
           <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>الإحصائيات العامة</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* 🎓 Total Students */}
-              <Card style={{background: 'linear-gradient(135deg, #FFF7ED 0%, #FFEDD5 100%)', border: '2px solid rgba(249, 115, 22, 0.2)'}}>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#EA580C'}}>
-                    <GraduationCap className="w-4 h-4" />
-                    إجمالي الطلاب
-                  </CardTitle>
+            <h2 className="text-2xl font-bold mb-4" style={{color: '#0D1B40'}}>لوحة الإحصائيات</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+
+              {/* إجمالي المستخدمين */}
+              <Card style={{background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)', border: 'none', boxShadow: '0 4px 14px rgba(16, 185, 129, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">إجمالي المستخدمين</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#EA580C'}}>{stats.totalStudents}</div>
-                      <div className="text-xs" style={{color: '#C2410C'}}>طالب مسجل</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold" style={{color: '#059669'}}>{stats.activeStudents}</div>
-                      <div className="text-xs" style={{color: '#059669'}}>نشط</div>
-                    </div>
+                  <div className="text-4xl font-bold text-white mb-1">{stats.totalUsers}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <Users className="w-3 h-3" />
+                    <span>مسجل</span>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* 🩺 Total Cases */}
-              <Card style={{background: 'linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%)', border: '2px solid rgba(234, 179, 8, 0.2)'}}>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#CA8A04'}}>
-                    <Activity className="w-4 h-4" />
-                    إجمالي الحالات
-                  </CardTitle>
+              {/* الدكاترة النشطون */}
+              <Card style={{background: 'linear-gradient(135deg, #00BFA6 0%, #008C7A 100%)', border: 'none', boxShadow: '0 4px 14px rgba(0, 191, 166, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">الدكاترة النشطون</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#CA8A04'}}>{stats.totalCases}</div>
-                      <div className="text-xs" style={{color: '#A16207'}}>حالة مكتملة</div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-sm font-semibold" style={{color: '#0891B2'}}>{stats.activeCases}</div>
-                      <div className="text-xs" style={{color: '#0891B2'}}>نشطة</div>
-                    </div>
+                  <div className="text-4xl font-bold text-white mb-1">{stats.approvedDoctors}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <CheckCircle className="w-3 h-3" />
+                    <span>نشط</span>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* ⭐ Total Ratings */}
-              <Card style={{background: 'linear-gradient(135deg, #FDF4FF 0%, #FAE8FF 100%)', border: '2px solid rgba(217, 70, 239, 0.2)'}}>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#A21CAF'}}>
-                    <Star className="w-4 h-4" />
-                    التقييمات
-                  </CardTitle>
+              {/* المرضى النشطون */}
+              <Card style={{background: 'linear-gradient(135deg, #9333EA 0%, #7C3AED 100%)', border: 'none', boxShadow: '0 4px 14px rgba(147, 51, 234, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">المرضى النشطون</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-4xl font-bold text-white mb-1">{stats.activePatients}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <Users className="w-3 h-3" />
+                    <span>من {stats.totalPatients} مسجل</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* طلبات المراجعة */}
+              <Card
+                className="cursor-pointer hover:scale-105 transition-transform"
+                style={{background: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)', border: 'none', boxShadow: '0 4px 14px rgba(245, 158, 11, 0.3)'}}
+                onClick={() => {
+                  let userId = user?.id
+                  if (!userId) {
+                    try { userId = localStorage.getItem('userId') } catch (e) {}
+                  }
+                  if (!userId) {
+                    try { userId = sessionStorage.getItem('userId') } catch (e) {}
+                  }
+                  if (userId) {
+                    window.location.href = `/admin/users?userId=${encodeURIComponent(userId)}`
+                  } else {
+                    alert('عذراً، لم نتمكن من العثور على معرف المستخدم')
+                  }
+                }}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">طلبات المراجعة</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center justify-between">
+                    <div className="text-4xl font-bold text-white mb-1">{stats.pendingVerifications}</div>
+                    {stats.pendingVerifications > 0 && (
+                      <Badge className="bg-white/20 text-white text-xs">جديد</Badge>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <Clock className="w-3 h-3" />
+                    <span>بانتظار الموافقة</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* الحالات */}
+              <Card style={{background: 'linear-gradient(135deg, #0891B2 0%, #0E7490 100%)', border: 'none', boxShadow: '0 4px 14px rgba(8, 145, 178, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">الحالات</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center gap-3">
                     <div>
-                      <div className="text-3xl font-bold flex items-center gap-1" style={{color: '#A21CAF'}}>
-                        <Star className="w-6 h-6 fill-current" />
-                        {stats.averageRating.toFixed(1)}
+                      <div className="text-4xl font-bold text-white mb-1">{stats.totalCases}</div>
+                      <div className="flex items-center gap-1 text-white/70 text-xs">
+                        <Activity className="w-3 h-3" />
+                        <span>مكتملة</span>
                       </div>
-                      <div className="text-xs" style={{color: '#86198F'}}>متوسط التقييم</div>
                     </div>
+                    <div className="h-10 w-px bg-white/20"></div>
                     <div className="text-right">
-                      <div className="text-sm font-semibold" style={{color: '#A21CAF'}}>{stats.totalRatings}</div>
-                      <div className="text-xs" style={{color: '#86198F'}}>تقييم</div>
+                      <div className="text-2xl font-bold text-white">{stats.activeCases}</div>
+                      <div className="text-xs text-white/70">نشطة</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* 👥 Total Users */}
-              <Card style={{background: 'linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%)', border: '2px solid rgba(16, 185, 129, 0.2)'}}>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium flex items-center gap-2" style={{color: '#059669'}}>
-                    <Users className="w-4 h-4" />
-                    إجمالي المستخدمين
-                  </CardTitle>
+              {/* التقييمات */}
+              <Card style={{background: 'linear-gradient(135deg, #EC4899 0%, #DB2777 100%)', border: 'none', boxShadow: '0 4px 14px rgba(236, 72, 153, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">التقييمات</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
                     <div>
-                      <div className="text-3xl font-bold" style={{color: '#059669'}}>{stats.totalUsers}</div>
-                      <div className="text-xs" style={{color: '#047857'}}>مستخدم مسجل</div>
+                      <div className="flex items-center gap-1 text-4xl font-bold text-white mb-1">
+                        <Star className="w-6 h-6 fill-current" />
+                        <span>{stats.averageRating.toFixed(1)}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-white/70 text-xs">
+                        <Star className="w-3 h-3" />
+                        <span>متوسط</span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1 text-emerald-600">
-                      <TrendingUp className="w-4 h-4" />
-                      <span className="text-xs font-medium">نشط</span>
+                    <div className="h-10 w-px bg-white/20"></div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-white">{stats.totalRatings}</div>
+                      <div className="text-xs text-white/70">تقييم</div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
+
             </div>
           </div>
 
-          {/* Account Status Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-            {/* Deleted Users */}
-            <Card style={{background: 'linear-gradient(135deg, #F1F5F9 0%, #E2E8F0 100%)', border: '2px solid rgba(100, 116, 139, 0.3)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#64748b'}} suppressHydrationWarning={true}>{t('admin.deletedAccounts')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #94a3b8, #64748b)'}}>
-                      <Trash2 className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#64748b'}}>{stats.deletedUsers}</div>
-                      <div className="text-xs" style={{color: '#475569'}} suppressHydrationWarning={true}>{t('admin.deleted')}</div>
-                    </div>
-                  </div>
-                  <Trash2 className="w-5 h-5" style={{color: '#94a3b8'}} />
-                </div>
-              </CardContent>
-            </Card>
+          {/* Secondary Stats - More Info */}
+          <div className="mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-            {/* Banned Users */}
-            <Card style={{background: 'linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%)', border: '2px solid rgba(71, 85, 105, 0.3)'}}>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium" style={{color: '#334155'}} suppressHydrationWarning={true}>{t('admin.bannedAccounts')}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{background: 'linear-gradient(135deg, #475569, #334155)'}}>
-                      <Ban className="w-5 h-5 text-white" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold" style={{color: '#475569'}}>{stats.bannedUsers}</div>
-                      <div className="text-xs" style={{color: '#334155'}} suppressHydrationWarning={true}>{t('admin.banned')}</div>
-                    </div>
+              {/* البلاغات */}
+              <Card
+                className="cursor-pointer hover:scale-105 transition-transform"
+                style={{background: 'linear-gradient(135deg, #6C3FC5 0%, #4C1D95 100%)', border: 'none', boxShadow: '0 4px 14px rgba(108, 63, 197, 0.3)'}}
+                onClick={() => {
+                  let userId = user?.id
+                  if (!userId) {
+                    try { userId = localStorage.getItem('userId') } catch (e) {}
+                  }
+                  if (!userId) {
+                    try { userId = sessionStorage.getItem('userId') } catch (e) {}
+                  }
+                  if (userId) {
+                    window.location.href = `/admin/reports?userId=${encodeURIComponent(userId)}`
+                  } else {
+                    alert('عذراً، لم نتمكن من العثور على معرف المستخدم')
+                  }
+                }}
+              >
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">البلاغات</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center justify-between mb-1">
+                    <div className="text-3xl font-bold text-white">{stats.totalReports}</div>
+                    {stats.pendingReports > 0 && (
+                      <Badge className="bg-white/20 text-white text-xs">{stats.pendingReports} جديد</Badge>
+                    )}
                   </div>
-                  <Ban className="w-5 h-5" style={{color: '#64748b'}} />
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <AlertTriangle className="w-3 h-3" />
+                    <span>إجمالي البلاغات</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* الحسابات المرفوضة */}
+              <Card style={{background: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)', border: 'none', boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المرفوضة</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-white mb-1">{stats.rejectedDoctors}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <XCircle className="w-3 h-3" />
+                    <span>حساب مرفوض</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* الحسابات المحذوفة */}
+              <Card style={{background: 'linear-gradient(135deg, #64748B 0%, #475569 100%)', border: 'none', boxShadow: '0 4px 14px rgba(100, 116, 139, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المحذوفة</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-white mb-1">{stats.deletedUsers}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <Trash2 className="w-3 h-3" />
+                    <span>حساب محذوف</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* الحسابات المحظورة */}
+              <Card style={{background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)', border: 'none', boxShadow: '0 4px 14px rgba(15, 23, 42, 0.3)'}}>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-xs font-medium text-white/90">الحسابات المحظورة</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-3xl font-bold text-white mb-1">{stats.bannedUsers}</div>
+                  <div className="flex items-center gap-1 text-white/70 text-xs">
+                    <Ban className="w-3 h-3" />
+                    <span>حساب محظور</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+            </div>
           </div>
 
           {/* System Health */}
