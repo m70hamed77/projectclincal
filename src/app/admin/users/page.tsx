@@ -62,7 +62,7 @@ interface UserData {
 }
 
 export default function AdminUsersPage() {
-  const { user } = useCurrentUser()
+  const { user, loading: userLoading } = useCurrentUser()
   const { t, locale, loading: i18nLoading } = useTranslations()
   const searchParams = useSearchParams()
   const userIdParam = searchParams.get('userId') || ''
@@ -313,7 +313,7 @@ export default function AdminUsersPage() {
     })
   }
 
-  if (!loading && !i18nLoading && !user) {
+  if (!loading && !i18nLoading && !userLoading && !user) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={undefined} />
@@ -358,7 +358,7 @@ export default function AdminUsersPage() {
     )
   }
 
-  if (loading || i18nLoading) {
+  if (loading || i18nLoading || userLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
