@@ -157,13 +157,29 @@ export default function RegisterWithVerificationPage() {
         body: formDataUpload,
       })
 
-      if (response.ok) {
-        const data = await response.json()
+      // ✅ الحل الصحيح - قراءة النص أولاً ثم التحقق
+      const text = await response.text()
+
+      if (!response.ok) {
+        console.error('[UPLOAD ID CARD] ❌ Server error:', text)
+        console.error('[UPLOAD ID CARD] ❌ Status:', response.status)
+        return null
+      }
+
+      // الآن نحاول تحليل JSON بعد التأكد من نجاح الطلب
+      let data
+      try {
+        data = JSON.parse(text)
+      } catch (parseError) {
+        console.error('[UPLOAD ID CARD] ❌ Failed to parse response as JSON:', text)
+        return null
+      }
+
+      if (data.success && data.url) {
         console.log('[UPLOAD ID CARD] ✅ Upload successful:', data.url)
-        return data.url || null
+        return data.url
       } else {
-        const errorData = await response.json()
-        console.error('[UPLOAD ID CARD] ❌ Upload failed:', errorData.error)
+        console.error('[UPLOAD ID CARD] ❌ Invalid response:', data)
         return null
       }
     } catch (error) {
