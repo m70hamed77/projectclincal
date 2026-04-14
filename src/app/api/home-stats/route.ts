@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db'
+import { db } from '@/lib/db'
 import { NextResponse } from 'next/server'
 
 export async function GET() {
@@ -13,20 +13,20 @@ export async function GET() {
       completedCases,
       ratingsResult
     ] = await Promise.all([
-      prisma.user.count(),
-      prisma.post.count().catch(() => 0),
-      prisma.case.count().catch(() => 0),
-      // Count verified students (students with isVerified = true and active user status)
-      prisma.student.count({
+      db.user.count(),
+      db.post.count().catch(() => 0),
+      db.case.count().catch(() => 0),
+      // Count verified students (students with verificationStatus = 'APPROVED' and active user status)
+      db.student.count({
         where: {
-          isVerified: true,
+          verificationStatus: 'APPROVED',
           user: {
             status: 'ACTIVE'
           }
         }
       }).catch(() => 0),
       // Count active patients (patients with active user status)
-      prisma.patient.count({
+      db.patient.count({
         where: {
           user: {
             status: 'ACTIVE'
@@ -34,13 +34,13 @@ export async function GET() {
         }
       }).catch(() => 0),
       // Count completed cases
-      prisma.case.count({
+      db.case.count({
         where: {
           isCompleted: true
         }
       }).catch(() => 0),
       // Calculate average rating from all visible ratings
-      prisma.rating.aggregate({
+      db.rating.aggregate({
         where: {
           isVisible: true
         },
