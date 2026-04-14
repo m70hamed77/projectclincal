@@ -1,30 +1,63 @@
-#!/usr/bin/env node
-
 const { spawn } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
-console.log('Starting server monitor...');
+const logFile = '/home/z/my-project/dev.log';
+const managerLogFile = '/home/z/my-project/server-manager.log';
+
+function log(message) {
+  const timestamp = new Date().toISOString();
+  const logMessage = `[${timestamp}] ${message}\n`;
+  fs.appendFileSync(managerLogFile, logMessage);
+  console.log(message);
+}
 
 function startServer() {
-  console.log('[Server] Starting Next.js dev server on port 3000...');
+  log('Starting Next.js dev server...');
 
   const server = spawn('bun', ['run', 'dev'], {
     cwd: '/home/z/my-project',
-    stdio: 'inherit',
-    shell: true
+    stdio: ['ignore', 'pipe', 'pipe']
   });
 
-  server.on('error', (err) => {
-    console.error('[Server] Error:', err);
-  });
+  // Redirect stdout and stderr to log file
+  const logStream = fs.createWriteStream(logFile, { flags: 'a' });
+  server.stdout.pipe(logStream);
+  server.stderr.pipe(logStream);
 
   server.on('exit', (code, signal) => {
-    console.log(`[Server] Exited with code ${code}, signal ${signal}`);
-    console.log('[Server] Restarting in 3 seconds...');
+    log(`Server exited with code ${code}, signal: ${signal}`);
+    logStream.end();
 
+    // Restart after 3 seconds
     setTimeout(() => {
       startServer();
     }, 3000);
   });
+
+  server.on('error', (err) => {
+    log(`Server error: ${err.message}`);
+    setTimeout(() => {
+      startServer();
+    }, 3000);
+  });
+
+  return server;
 }
 
-startServer();
+// Start the server
+log('=== Server Manager Started ===');
+const server = startServer();
+
+// Keep the process alive
+process.on('SIGTERM', () => {
+  log('Received SIGTERM, shutting down...');
+  server.kill();
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  log('Received SIGINT, shutting down...');
+  server.kill();
+  process.exit(0);
+});

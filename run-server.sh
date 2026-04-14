@@ -1,17 +1,17 @@
 #!/bin/bash
 
-# Kill any existing dev server
-pkill -f "next dev" 2>/dev/null
-sleep 2
+cd /home/z/my-project
 
-# Start the server
-echo "🚀 Starting Next.js dev server..."
-bun run dev
-
-# If the server exits, restart it
 while true; do
-  echo "🔄 Server stopped, restarting in 5 seconds..."
-  sleep 5
-  echo "🚀 Restarting Next.js dev server..."
-  bun run dev
+  echo "$(date): Starting server..." >> /home/z/my-project/server-pid.log
+  bun run dev >> /home/z/my-project/dev.log 2>&1 &
+  SERVER_PID=$!
+
+  echo "$(date): Server started with PID $SERVER_PID" >> /home/z/my-project/server-pid.log
+
+  # Wait for server process
+  wait $SERVER_PID 2>/dev/null
+
+  echo "$(date): Server stopped, restarting in 2 seconds..." >> /home/z/my-project/server-pid.log
+  sleep 2
 done
