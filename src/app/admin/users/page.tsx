@@ -111,15 +111,15 @@ export default function AdminUsersPage() {
       } else {
         const errorData = await response.json()
         console.error('[Admin Users Page] ❌ Error response:', errorData)
-        alert(`${t('common.error')}: ${errorData.error || t('users.errorFetchingUsers')}`)
+        alert(`Error: ${errorData.error || 'Failed to fetch users'}`)
       }
     } catch (error) {
       console.error('[Admin Users Page] ❌ Fetch error:', error)
-      alert(t('users.errorConnectingServer'))
+      alert('Error connecting to server')
     } finally {
       setLoading(false)
     }
-  }, [user, t])
+  }, [user])
 
   useEffect(() => {
     fetchUsers()

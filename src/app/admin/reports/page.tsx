@@ -110,11 +110,11 @@ export default function AdminReportsPage() {
       }
     } catch (error) {
       console.error('Error fetching reports:', error)
-      alert(t('reports.errorFetchingReports'))
+      alert('Error fetching reports')
     } finally {
       setLoading(false)
     }
-  }, [user, t])
+  }, [user])
 
   const ensureAdminRecord = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
