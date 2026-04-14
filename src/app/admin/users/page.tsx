@@ -313,7 +313,7 @@ export default function AdminUsersPage() {
     })
   }
 
-  if (!loading && !user) {
+  if (!loading && !i18nLoading && !user) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={undefined} />
@@ -358,7 +358,7 @@ export default function AdminUsersPage() {
     )
   }
 
-  if (loading) {
+  if (loading || i18nLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
