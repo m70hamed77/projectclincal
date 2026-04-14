@@ -64,7 +64,7 @@ interface Report {
 }
 
 export default function AdminReportsPage() {
-  const { user } = useCurrentUser()
+  const { user, loading: userLoading } = useCurrentUser()
   const { t, locale, loading: i18nLoading } = useTranslations()
   const isRTL = locale === 'ar'
 
@@ -348,7 +348,7 @@ export default function AdminReportsPage() {
     })
   }
 
-  if (!loading && !user) {
+  if (!loading && !userLoading && !user) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={undefined} />
@@ -393,7 +393,7 @@ export default function AdminReportsPage() {
     )
   }
 
-  if (loading) {
+  if (loading || userLoading) {
     return (
       <div className="min-h-screen flex flex-col bg-slate-50">
         <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN' } : undefined} />
