@@ -87,6 +87,7 @@ export default function AdminUsersPage() {
 
   const fetchUsers = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') {
+      setLoading(false)
       return
     }
 
@@ -119,7 +120,7 @@ export default function AdminUsersPage() {
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user?.id, user?.role])
 
   useEffect(() => {
     fetchUsers()

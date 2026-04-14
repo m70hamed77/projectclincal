@@ -84,7 +84,10 @@ export default function AdminReportsPage() {
   })
 
   const fetchReports = useCallback(async () => {
-    if (!user || user.role !== 'ADMIN') return
+    if (!user || user.role !== 'ADMIN') {
+      setLoading(false)
+      return
+    }
 
     try {
       setLoading(true)
@@ -114,7 +117,7 @@ export default function AdminReportsPage() {
     } finally {
       setLoading(false)
     }
-  }, [user])
+  }, [user?.id, user?.role])
 
   const ensureAdminRecord = useCallback(async () => {
     if (!user || user.role !== 'ADMIN') return
@@ -141,7 +144,7 @@ export default function AdminReportsPage() {
     } catch (error) {
       console.error('Error ensuring admin record:', error)
     }
-  }, [user])
+  }, [user?.id, user?.role])
 
   useEffect(() => {
     ensureAdminRecord()

@@ -100,62 +100,62 @@ export default function AdminNotificationsPage() {
   const [actionModalOpen, setActionModalOpen] = useState(false)
   const [actionData, setActionData] = useState<AdminActionData | null>(null)
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      if (!user || user.role !== 'ADMIN') {
-        setLoading(false)
-        return
-      }
-
-      try {
-        let userId = user?.id
-
-        if (!userId) {
-          try {
-            userId = localStorage.getItem('userId')
-          } catch (e) {}
-        }
-
-        if (!userId) {
-          try {
-            userId = sessionStorage.getItem('userId')
-          } catch (e) {}
-        }
-
-        const headers: HeadersInit = {
-          'Content-Type': 'application/json',
-        }
-
-        if (userId) {
-          headers['X-User-Id'] = userId
-        }
-
-        let apiUrl = '/api/notifications/new'
-        if (userId) {
-          const separator = apiUrl.includes('?') ? '&' : '?'
-          apiUrl = `${apiUrl}${separator}userId=${encodeURIComponent(userId)}`
-        }
-
-        const response = await fetch(apiUrl, {
-          credentials: 'include',
-          headers
-        })
-
-        const data = await response.json()
-
-        if (data.success) {
-          setNotifications(data.notifications || [])
-          setUnreadCount(data.unreadCount || 0)
-        }
-      } catch (error) {
-        console.error('[Admin Notifications] ❌ Fetch error:', error)
-      } finally {
-        setLoading(false)
-      }
+  const fetchNotifications = useCallback(async () => {
+    if (!user || user.role !== 'ADMIN') {
+      setLoading(false)
+      return
     }
 
+    try {
+      let userId = user?.id
+
+      if (!userId) {
+        try {
+          userId = localStorage.getItem('userId')
+        } catch (e) {}
+      }
+
+      if (!userId) {
+        try {
+          userId = sessionStorage.getItem('userId')
+        } catch (e) {}
+      }
+
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json',
+      }
+
+      if (userId) {
+        headers['X-User-Id'] = userId
+      }
+
+      let apiUrl = '/api/notifications/new'
+      if (userId) {
+        const separator = apiUrl.includes('?') ? '&' : '?'
+        apiUrl = `${apiUrl}${separator}userId=${encodeURIComponent(userId)}`
+      }
+
+      const response = await fetch(apiUrl, {
+        credentials: 'include',
+        headers
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setNotifications(data.notifications || [])
+        setUnreadCount(data.unreadCount || 0)
+      }
+    } catch (error) {
+      console.error('[Admin Notifications] ❌ Fetch error:', error)
+    } finally {
+      setLoading(false)
+    }
+  }, [user?.id, user?.role])
+
+  useEffect(() => {
     fetchNotifications()
-  }, [user])
+  }, [fetchNotifications])
 
   const markAsRead = async (id: string) => {
     try {
