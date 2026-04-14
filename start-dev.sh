@@ -1,16 +1,22 @@
 #!/bin/bash
 
-# سكريبت للحفاظ على تشغيل خادم التطوير
+echo "🚀 Starting development server..."
+echo "================================"
 
-# إيقاف أي عمليات قديمة
-pkill -f "next dev" 2>/dev/null
+# Kill any existing server
+pkill -9 -f "next dev" 2>/dev/null
+pkill -9 -f "node.*next" 2>/dev/null
+
+# Wait a moment
 sleep 2
 
-# تشغيل الخادم في الخلفية مع إعادة التشغيل التلقائي
-while true; do
-  echo "[$(date)] Starting dev server..."
-  npx cross-env TURBOPACK=0 next dev -p 3000 >> /home/z/my-project/dev.log 2>&1
+# Start server
+cd /home/z/my-project
+echo "✅ Starting Next.js dev server..."
+echo "📍 Logs will be saved to: /home/z/my-project/dev.log"
+echo "🌐 Server will run at: http://localhost:3000"
+echo "================================"
+echo "Press Ctrl+C to stop the server"
+echo ""
 
-  echo "[$(date)] Server stopped! Restarting in 3 seconds..."
-  sleep 3
-done
+bun run dev
