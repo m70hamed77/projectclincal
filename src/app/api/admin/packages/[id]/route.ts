@@ -4,9 +4,10 @@ import { db } from '@/lib/db'
 // PUT update package
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const userId = request.headers.get('X-User-Id')
 
     if (!userId) {
@@ -26,7 +27,7 @@ export async function PUT(
     const body = await request.json()
 
     const pkg = await db.travelPackage.update({
-      where: { id: params.id },
+      where: { id: resolvedParams.id },
       data: {
         name: body.name,
         nameAr: body.nameAr,
@@ -62,9 +63,10 @@ export async function PUT(
 // DELETE package
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const resolvedParams = await params
     const userId = request.headers.get('X-User-Id')
 
     if (!userId) {
@@ -82,7 +84,7 @@ export async function DELETE(
     }
 
     await db.travelPackage.delete({
-      where: { id: params.id }
+      where: { id: resolvedParams.id }
     })
 
     return NextResponse.json({ success: true })

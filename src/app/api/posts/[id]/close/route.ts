@@ -20,15 +20,24 @@ export async function POST(
       )
     }
 
-    // جلب المستخدم
+    // جلب المستخدم مع معلومات الطالب
     const user = await db.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
+      include: { student: true }
     })
 
     if (!user) {
       return NextResponse.json(
         { error: 'المستخدم غير موجود' },
         { status: 404 }
+      )
+    }
+
+    // التحقق من أن المستخدم طالب
+    if (!user.student) {
+      return NextResponse.json(
+        { error: 'غير مصرح: يجب أن تكون طالباً' },
+        { status: 403 }
       )
     }
 
@@ -44,8 +53,8 @@ export async function POST(
       )
     }
 
-    // التحقق من أن المستخدم صاحب البوست
-    if (post.studentId !== user.id) {
+    // التحقق من أن المستخدم صاحب البوست (مقارنة معرف الطالب)
+    if (post.studentId !== user.student.id) {
       return NextResponse.json(
         { error: 'غير مصرح: أنت لست صاحب هذا البوست' },
         { status: 403 }
