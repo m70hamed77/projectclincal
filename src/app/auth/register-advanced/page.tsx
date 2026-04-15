@@ -590,7 +590,7 @@ export default function AdvancedRegisterPage() {
                       ) : (
                         <>
                           <Mail className="w-4 h-4" />
-                          إرسال كود التحقق
+                          {t('register.form.sendCode')}
                         </>
                       )}
                     </Button>
@@ -600,7 +600,7 @@ export default function AdvancedRegisterPage() {
                         <Alert className="bg-emerald-50 border-emerald-200">
                           <CheckCircle2 className="h-4 w-4" />
                           <AlertDescription className="text-emerald-900">
-                            تم إرسال كود التحقق بنجاح!
+                            {t('registerPage.codeSentTitle')}
                             {devOtpCode && (
                               <div className="mt-2 p-2 bg-white rounded border text-center font-mono font-bold">
                                 كود التحقق (للتجربة): {devOtpCode}

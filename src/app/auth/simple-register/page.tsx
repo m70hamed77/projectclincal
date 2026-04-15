@@ -438,9 +438,9 @@ export default function SimpleRegisterPage() {
                 </form>
 
                 <div className="mt-6 text-center text-sm text-muted-foreground">
-                  لديك حساب بالفعل؟{' '}
+                  {t('auth.haveAccount')}{' '}
                   <Link href="/auth/login" className="text-emerald-600 hover:underline font-medium">
-                    سجل الدخول
+                    {t('auth.loginButton')}
                   </Link>
                 </div>
               </CardContent>

@@ -960,14 +960,14 @@ export default function RegisterWithVerificationPage() {
                 ) : (
                   <span className="flex items-center gap-2">
                     <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                    إرسال كود التحقق
+                    {t('register.form.sendCode')}
                   </span>
                 )}
               </Button>
 
               {/* Login Link */}
               <p className="text-center text-gray-400">
-                لديك حساب بالفعل؟{' '}
+                {t('auth.haveAccount')}{' '}
                 <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline">
                   {t('auth.loginButton' )}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
