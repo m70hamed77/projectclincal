@@ -880,6 +880,7 @@
     "editProfile": "Edit Profile",
     "joined": "Joined",
     "rating": "Rating",
+    "pleaseFillMedicalForm": "Please complete the medical form before applying to the post",
     "tabs": {
       "overview": "Overview",
       "myCases": "My Cases",
