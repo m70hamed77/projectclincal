@@ -661,12 +661,25 @@ export default function AdminUsersPage() {
                     <div>
                       <span className="text-slate-600 text-sm">{t('users.idCard')}:</span>
                       <div className="mt-2 border border-slate-200 rounded-lg overflow-hidden">
-                        <img
-                          src={selectedUser.idCardUrl || ''}
-                          alt={t('users.idCardAlt')}
-                          className="w-full max-h-96 object-contain cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => selectedUser.idCardUrl && window.open(selectedUser.idCardUrl, '_blank')}
-                        />
+                        {selectedUser.idCardUrl.startsWith('http') ? (
+                          <img
+                            src={selectedUser.idCardUrl}
+                            alt={t('users.idCardAlt')}
+                            className="w-full max-h-96 object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                            onClick={() => selectedUser.idCardUrl && window.open(selectedUser.idCardUrl, '_blank')}
+                            onError={(e) => {
+                              console.error('[Admin Users] Failed to load ID card image:', selectedUser.idCardUrl)
+                              e.currentTarget.src = '/placeholder-image.png'
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-64 flex items-center justify-center bg-slate-100">
+                            <div className="text-center">
+                              <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-2" />
+                              <p className="text-sm text-slate-600">{t('users.noImageAvailable')}</p>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}

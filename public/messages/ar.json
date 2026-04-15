@@ -107,7 +107,8 @@
     "rejectedSuccessfully": "تم رفض الطالب بنجاح",
     "errorRejecting": "حدث خطأ أثناء الرفض",
     "mustWriteReason": "يجب كتابة سبب الحذف",
-    "mustWriteRejectionReason": "يجب كتابة سبب الرفض"
+    "mustWriteRejectionReason": "يجب كتابة سبب الرفض",
+    "noImageAvailable": "لا توجد صورة متاحة"
   },
   "verification": {
     "title": "مراجعة طلبات التحقق",

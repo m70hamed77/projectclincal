@@ -107,7 +107,8 @@
     "rejectedSuccessfully": "Student rejected successfully",
     "errorRejecting": "Error rejecting",
     "mustWriteReason": "You must write a deletion reason",
-    "mustWriteRejectionReason": "You must write a rejection reason"
+    "mustWriteRejectionReason": "You must write a rejection reason",
+    "noImageAvailable": "No image available"
   },
   "verification": {
     "title": "Review Verification Requests",
