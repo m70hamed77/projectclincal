@@ -384,9 +384,9 @@ export default function AdminNotificationsPage() {
                 <Bell className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800">إشعارات الإدارة</h1>
+                <h1 className="text-3xl font-bold text-slate-800">{t('notifications.title')}</h1>
                 <p className="text-sm text-slate-600">
-                  {unreadCount} إشعار غير مقروء
+                  {unreadCount} {t('notifications.unreadCount')}
                 </p>
               </div>
             </div>
@@ -399,7 +399,7 @@ export default function AdminNotificationsPage() {
                 className="hover:bg-slate-100 border-slate-200 text-emerald-600 hover:text-emerald-700"
               >
                 <Check className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                <span>تحديد الكل كمقروء</span>
+                <span>{t('notifications.markAllAsRead')}</span>
               </Button>
               <Button
                 size="sm"
@@ -408,7 +408,7 @@ export default function AdminNotificationsPage() {
                 className="bg-red-800 hover:bg-red-900 text-white"
               >
                 <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                <span>حذف الكل</span>
+                <span>{t('notifications.clearAll')}</span>
               </Button>
             </div>
           </div>
@@ -435,12 +435,12 @@ export default function AdminNotificationsPage() {
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-white border-slate-200">
                 <TabsTrigger value="all" className="gap-2 data-[state=active]:bg-slate-100">
                   <Bell className="w-4 h-4" />
-                  <span>الكل</span>
+                  <span>{t('notifications.all')}</span>
                   <Badge variant="secondary" className="bg-emerald-600 text-white hover:bg-emerald-700">{allNotifications.length}</Badge>
                 </TabsTrigger>
                 <TabsTrigger value="unread" className="gap-2 data-[state=active]:bg-slate-100">
                   <MessageCircle className="w-4 h-4" />
-                  <span>غير مقروء</span>
+                  <span>{t('notifications.unread')}</span>
                   <Badge variant="secondary" className="bg-amber-600 text-white hover:bg-amber-700">{unreadCount}</Badge>
                 </TabsTrigger>
               </TabsList>
@@ -464,7 +464,7 @@ export default function AdminNotificationsPage() {
                                 <h3 className="font-semibold mb-1 flex items-center gap-2 text-slate-800">
                                   {notification.title}
                                   {!notification.isRead && (
-                                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-700">جديد</Badge>
+                                    <Badge className="bg-emerald-600 text-white hover:bg-emerald-700">{t('notifications.newBadge')}</Badge>
                                   )}
                                 </h3>
                                 <p className="text-sm mb-2 whitespace-pre-line text-slate-600">
@@ -485,7 +485,7 @@ export default function AdminNotificationsPage() {
                                   className="hover:bg-slate-100 border-slate-200 text-purple-600"
                                 >
                                   <FileText className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                  <span>تفاصيل الإجراء</span>
+                                  <span>{t('notifications.viewActionDetails')}</span>
                                 </Button>
                               )}
                               {!notification.isRead && (
@@ -496,7 +496,7 @@ export default function AdminNotificationsPage() {
                                   className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
                                 >
                                   <Check className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                  <span>مقروء</span>
+                                  <span>{t('notifications.markAsRead')}</span>
                                 </Button>
                               )}
                               <Button
@@ -519,9 +519,9 @@ export default function AdminNotificationsPage() {
                         <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-slate-100">
                           <Bell className="w-8 h-8 text-slate-400" />
                         </div>
-                        <h3 className="text-xl font-semibold mb-2 text-slate-800">لا توجد إشعارات</h3>
+                        <h3 className="text-xl font-semibold mb-2 text-slate-800">{t('notifications.noNotifications')}</h3>
                         <p className="text-slate-600">
-                          كل الإشعارات الحالية فارغة
+                          {t('notifications.noNotificationsDesc')}
                         </p>
                       </CardContent>
                     </Card>
@@ -567,7 +567,7 @@ export default function AdminNotificationsPage() {
                                   className="hover:bg-slate-100 border-slate-200 text-purple-600"
                                 >
                                   <FileText className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                                  <span>تفاصيل الإجراء</span>
+                                  <span>{t('notifications.viewActionDetails')}</span>
                                 </Button>
                               )}
                               <Button
@@ -599,9 +599,9 @@ export default function AdminNotificationsPage() {
                         <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-slate-100">
                           <CheckCircle2 className="w-8 h-8 text-emerald-600" />
                         </div>
-                        <h3 className="text-xl font-semibold mb-2 text-slate-800">جميع الإشعارات مقروءة</h3>
+                        <h3 className="text-xl font-semibold mb-2 text-slate-800">{t('notifications.allNotificationsRead')}</h3>
                         <p className="text-slate-600">
-                          لا توجد إشعارات جديدة
+                          {t('notifications.noUnreadNotifications')}
                         </p>
                       </CardContent>
                     </Card>
@@ -634,7 +634,7 @@ export default function AdminNotificationsPage() {
 
               <div>
                 <label className="text-sm font-medium mb-2 block text-emerald-700">
-                  رسالة الإدارة:
+                  {t('notifications.adminMessage')}:
                 </label>
                 <div className="p-4 rounded-lg bg-white border border-slate-200">
                   <p className="text-base whitespace-pre-line text-slate-800">{actionData.actionMessage}</p>
@@ -646,7 +646,7 @@ export default function AdminNotificationsPage() {
                   <User className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-emerald-700">المسؤول:</p>
+                  <p className="text-sm text-emerald-700">{t('notifications.admin')}:</p>
                   <p className="font-medium text-slate-800">{actionData.adminName}</p>
                 </div>
               </div>
@@ -656,7 +656,7 @@ export default function AdminNotificationsPage() {
                   <Clock className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600">تاريخ الإجراء:</p>
+                  <p className="text-sm text-slate-600">{t('notifications.actionDate')}:</p>
                   <p className="font-medium text-slate-800">
                     {new Date(actionData.actionDate).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
                       year: 'numeric',
@@ -675,16 +675,16 @@ export default function AdminNotificationsPage() {
                     <Ban className="w-4 h-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-red-700">مدة الحظر:</p>
+                    <p className="text-sm text-red-700">{t('notifications.banDuration')}:</p>
                     <p className="font-medium text-red-800">
-                      {actionData.banDuration} <span className="mx-1">أيام</span>
+                      {actionData.banDuration} <span className="mx-1">{t('notifications.days')}</span>
                     </p>
                   </div>
                 </div>
               )}
 
               <div className="text-sm text-center pt-2 text-slate-500">
-                <p>رقم البلاغ: {actionData.reportId}</p>
+                <p>{t('notifications.reportNumber')}: {actionData.reportId}</p>
               </div>
             </div>
           )}
@@ -694,7 +694,7 @@ export default function AdminNotificationsPage() {
               <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center bg-red-50">
                 <AlertCircle className="w-6 h-6 text-red-600" />
               </div>
-              <p className="text-slate-600">لا توجد تفاصيل إضافية</p>
+              <p className="text-slate-600">{t('notifications.noAdditionalDetails')}</p>
             </div>
           )}
         </DialogContent>

@@ -111,14 +111,14 @@ export default function AdminVerificationPage() {
       if (response.ok) {
         // Remove from list
         setStudents(prev => prev.filter(s => s.id !== studentId))
-        alert('تمت الموافقة على الطالب بنجاح! 🎉')
+        alert(t('users.approvedSuccessfully'))
       } else {
         const data = await response.json()
-        alert(data.error || 'حدث خطأ أثناء الموافقة')
+        alert(data.error || t('users.errorApproving'))
       }
     } catch (error) {
       console.error('Error approving student:', error)
-      alert('حدث خطأ أثناء الموافقة')
+      alert(t('users.errorApproving'))
     } finally {
       setActionLoading(null)
     }
@@ -127,7 +127,7 @@ export default function AdminVerificationPage() {
   // Handle reject
   const handleReject = async () => {
     if (!rejectDialog.studentId || !rejectionReason.trim()) {
-      alert('يجب كتابة سبب الرفض')
+      alert(t('users.mustWriteRejectionReason'))
       return
     }
 
@@ -153,14 +153,14 @@ export default function AdminVerificationPage() {
         setStudents(prev => prev.filter(s => s.id !== rejectDialog.studentId))
         setRejectDialog({ open: false, studentId: null })
         setRejectionReason('')
-        alert('تم رفض الطالب بنجاح')
+        alert(t('users.approvedSuccessfully'))
       } else {
         const data = await response.json()
-        alert(data.error || 'حدث خطأ أثناء الرفض')
+        alert(data.error || t('users.errorApproving'))
       }
     } catch (error) {
       console.error('Error rejecting student:', error)
-      alert('حدث خطأ أثناء الرفض')
+      alert(t('users.approvedSuccessfully'))
     } finally {
       setActionLoading(null)
     }
