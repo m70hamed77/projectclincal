@@ -196,6 +196,34 @@
     "unauthorized": "غير مصرح بالوصول",
     "adminOnly": "هذه الصفحة متاحة فقط للأدمن"
   },
+  "login": {
+    "home": "الرئيسية",
+    "brand": "Smiley Dental",
+    "welcomeTitle": "مرحباً بك في سمايلي",
+    "welcomeDesc": "منصة طبية عصرية تجمع بين المرضى وطلاب طب الأسنان لعلاج الأسنان بأسعار مناسبة",
+    "features": {
+      "securityTitle": "أمان عالي",
+      "securityDesc": "بياناتك محمية بأحدث تقنيات التشفير",
+      "speedTitle": "سرعة فائقة",
+      "speedDesc": "وصول سريع وسهل لجميع الخدمات"
+    },
+    "form": {
+      "title": "سجّل الدخول الآن",
+      "subtitle": "مرحباً بعودتك!",
+      "description": "أدخل بياناتك للوصول إلى حسابك",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "example@domain.com",
+      "password": "كلمة المرور",
+      "remember": "تذكرني",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "submit": "تسجيل الدخول",
+      "or": "أو",
+      "google": "Google",
+      "facebook": "Facebook",
+      "noAccount": "ليس لديك حساب؟",
+      "createAccount": "إنشاء حساب جديد"
+    }
+  },
   "forgotPasswordPage": {
     "stepEmailTitle": "نسيت كلمة السر؟",
     "stepEmailDesc": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة السر",

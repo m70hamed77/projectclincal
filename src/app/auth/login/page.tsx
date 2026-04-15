@@ -266,18 +266,18 @@ export default function LoginPage() {
                 <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
                   <User className="w-5 h-5 text-white" />
                 </div>
-                <span className="text-white font-semibold text-lg group-hover:text-purple-300 transition-colors">Smiley Dental</span>
+                <span className="text-white font-semibold text-lg group-hover:text-purple-300 transition-colors">{t('login.brand')}</span>
               </div>
 
               <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
-                {t('loginPage.welcomeToSmiley')}{' '}
+                {t('login.welcomeTitle')}{' '}
                 <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                  {t('loginPage.brandName')}
+                  {t('login.brandName')}
                 </span>
               </h1>
 
               <p className="text-xl text-gray-300 leading-relaxed">
-                {t('loginPage.platformDescription')}
+                {t('login.welcomeDesc')}
               </p>
             </div>
 
@@ -289,8 +289,8 @@ export default function LoginPage() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">{t('loginPage.securityTitle')}</h3>
-                    <p className="text-gray-400 text-sm">{t('loginPage.securityDescFull')}</p>
+                    <h3 className="text-white font-bold text-lg">{t('login.features.securityTitle')}</h3>
+                    <p className="text-gray-400 text-sm">{t('login.features.securityDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -301,8 +301,8 @@ export default function LoginPage() {
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-white font-bold text-lg">{t('loginPage.speedTitle')}</h3>
-                    <p className="text-gray-400 text-sm">{t('loginPage.speedDescFull')}</p>
+                    <h3 className="text-white font-bold text-lg">{t('login.features.speedTitle')}</h3>
+                    <p className="text-gray-400 text-sm">{t('login.features.speedDesc')}</p>
                   </div>
                 </div>
               </div>
@@ -316,11 +316,11 @@ export default function LoginPage() {
               <div className="text-center mb-8">
                 <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-full px-4 py-2 mb-4 animate-bounce-slow">
                   <Sparkles className="w-4 h-4 text-purple-400" />
-                  <span className="text-purple-300 text-sm font-medium">{t('loginPage.loginNowBadge')}</span>
+                  <span className="text-purple-300 text-sm font-medium">{t('login.form.title')}</span>
                   <Sparkles className="w-4 h-4 text-pink-400" />
                 </div>
-                <h2 className="text-3xl font-bold text-white mb-2">{t('loginPage.welcomeBackTitle')}</h2>
-                <p className="text-gray-400">{t('loginPage.enterData')}</p>
+                <h2 className="text-3xl font-bold text-white mb-2">{t('login.form.subtitle')}</h2>
+                <p className="text-gray-400">{t('login.form.description')}</p>
               </div>
 
               {/* Form */}
@@ -328,7 +328,7 @@ export default function LoginPage() {
                 {/* Email */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-300">
-                    {t('loginPage.emailLabel')}
+                    {t('login.form.email')}
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
@@ -345,7 +345,7 @@ export default function LoginPage() {
                             ? 'border-red-500 group-focus-within:border-red-500'
                             : 'border-white/10 group-focus-within:border-purple-500'
                         }`}
-                        placeholder="example@domain.com"
+                        placeholder={t('login.form.emailPlaceholder')}
                         autoComplete="email"
                       />
                     </div>
@@ -361,7 +361,7 @@ export default function LoginPage() {
                 {/* Password */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-300">
-                    {t('loginPage.passwordLabel')}
+                    {t('login.form.password')}
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl blur opacity-0 group-focus-within:opacity-75 transition-opacity duration-300" />
@@ -413,13 +413,13 @@ export default function LoginPage() {
                         <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">{t('loginPage.rememberMe')}</span>
+                    <span className="text-sm text-gray-400 group-hover:text-gray-300 transition-colors">{t('login.form.remember')}</span>
                   </label>
                   <Link
                     href="/auth/forgot-password"
                     className="text-sm text-purple-400 hover:text-purple-300 transition-colors hover:underline font-medium"
                   >
-                    {t('loginPage.forgotPassword')}
+                    {t('login.form.forgotPassword')}
                   </Link>
                 </div>
 
@@ -442,7 +442,7 @@ export default function LoginPage() {
                   ) : (
                     <div className="flex items-center justify-center gap-3">
                       <LogIn className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                      <span>{t('loginPage.title')}</span>
+                      <span>{t('login.form.submit')}</span>
                     </div>
                   )}
                 </button>
@@ -463,7 +463,7 @@ export default function LoginPage() {
                     <div className="w-full border-t border-white/10"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-slate-900/50 text-gray-400">{t('loginPage.or')}</span>
+                    <span className="px-4 bg-slate-900/50 text-gray-400">{t('login.form.or')}</span>
                   </div>
                 </div>
 
@@ -479,7 +479,7 @@ export default function LoginPage() {
                       <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                       <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                     </svg>
-                    Google
+                    {t('login.form.google')}
                   </button>
                   <button
                     type="button"
@@ -488,7 +488,7 @@ export default function LoginPage() {
                     <svg className="w-5 h-5 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                     </svg>
-                    Facebook
+                    {t('login.form.facebook')}
                   </button>
                 </div>
               </form>
@@ -496,12 +496,12 @@ export default function LoginPage() {
               {/* Sign Up Link */}
               <div className="mt-8 text-center pt-6 border-t border-white/10">
                 <p className="text-gray-400 text-sm">
-                  {t('loginPage.noAccount')}{' '}
+                  {t('login.form.noAccount')}{' '}
                   <Link
                     href="/auth/register-verification"
                     className="text-purple-400 hover:text-purple-300 font-semibold transition-all inline-flex items-center gap-1 group hover:underline"
                   >
-                    {t('loginPage.createNewAccount')}
+                    {t('login.form.createAccount')}
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </p>

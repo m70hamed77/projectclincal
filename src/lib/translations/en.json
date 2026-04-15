@@ -196,6 +196,34 @@
     "unauthorized": "Unauthorized access",
     "adminOnly": "This page is only available to admins"
   },
+  "login": {
+    "home": "Home",
+    "brand": "Smiley Dental",
+    "welcomeTitle": "Welcome to Smiley",
+    "welcomeDesc": "A modern medical platform connecting patients and dental students for affordable dental treatments",
+    "features": {
+      "securityTitle": "High Security",
+      "securityDesc": "Your data is protected with the latest encryption technologies",
+      "speedTitle": "Super Fast",
+      "speedDesc": "Fast and easy access to all services"
+    },
+    "form": {
+      "title": "Login Now",
+      "subtitle": "Welcome Back!",
+      "description": "Enter your details to access your account",
+      "email": "Email",
+      "emailPlaceholder": "example@domain.com",
+      "password": "Password",
+      "remember": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Login",
+      "or": "or",
+      "google": "Google",
+      "facebook": "Facebook",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create New Account"
+    }
+  },
   "forgotPasswordPage": {
     "stepEmailTitle": "Forgot Password?",
     "stepEmailDesc": "Enter your email to reset your password",
