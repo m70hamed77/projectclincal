@@ -199,6 +199,7 @@
   "login": {
     "home": "الرئيسية",
     "brand": "Smiley Dental",
+    "brandName": "سمايلي",
     "welcomeTitle": "مرحباً بك في سمايلي",
     "welcomeDesc": "منصة طبية عصرية تجمع بين المرضى وطلاب طب الأسنان لعلاج الأسنان بأسعار مناسبة",
     "features": {
@@ -222,6 +223,12 @@
       "facebook": "Facebook",
       "noAccount": "ليس لديك حساب؟",
       "createAccount": "إنشاء حساب جديد"
+    }
+  },
+  "register": {
+    "form": {
+      "sendCode": "إرسال كود التحقق",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟"
     }
   },
   "forgotPasswordPage": {
