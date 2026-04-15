@@ -175,9 +175,10 @@ export default function RegisterWithVerificationPage() {
         return null
       }
 
-      if (data.success && data.url) {
-        console.log('[UPLOAD ID CARD] ✅ Upload successful:', data.url)
-        return data.url
+      // ✅ التحقق من idCardUrl بدلاً من url
+      if (data.success && data.idCardUrl) {
+        console.log('[UPLOAD ID CARD] ✅ Upload successful:', data.idCardUrl)
+        return data.idCardUrl
       } else {
         console.error('[UPLOAD ID CARD] ❌ Invalid response:', data)
         return null
