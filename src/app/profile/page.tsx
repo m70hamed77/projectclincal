@@ -1289,7 +1289,7 @@ function ProfileContent() {
                       <div className="space-y-4">
                         <div>
                           <div className="flex items-center justify-between text-sm mb-2 text-purple-700">
-                            <span className="text-purple-800">{t('profile.badgesSection.level')}: {studentStats?.level || t('profile.badgesSection.beginner')}</span>
+                            <span className="text-purple-800">{t('profile.badgesSection.level')}: {t('studentDashboard.achievements.levels.' + (studentStats?.level || 'beginner'))}</span>
                             <span className="text-purple-800">{studentStats?.points || 0} {t('profile.badgesSection.points')}</span>
                           </div>
                           <div className="w-full bg-purple-100 rounded-full h-3">

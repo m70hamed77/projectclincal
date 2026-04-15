@@ -55,11 +55,11 @@ export async function GET(request: NextRequest) {
     const points = completedCases * pointsPerCompletedCase
 
     // تحديد المستوى بناءً على النقاط
-    let level = 'مبتدئ'
+    let level = 'beginner'
     if (points >= 300) {
-      level = 'متقدم'
+      level = 'advanced'
     } else if (points >= 100) {
-      level = 'متوسط'
+      level = 'intermediate'
     }
 
     console.log(`[STUDENT STATS] 📊 Student ${student.id} - Total: ${totalCases}, Completed: ${completedCases}, Active: ${activeCases}, Points: ${points}, Level: ${level}`)
