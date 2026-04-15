@@ -1454,5 +1454,23 @@
     "noApplicationsDesc": "لم يتم تقديم أي طلبات على بوستاتك بعد",
     "noApplicationsWithStatus": "لا توجد طلبات",
     "noApplicationsWithStatusDesc": "لم يتم تقديم أي طلبات بهذه الحالة بعد"
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة"
+  },
+  "process": {
+    "title": "كيف يعمل؟"
+  },
+  "features": {
+    "title": "المميزات"
+  },
+  "demo": {
+    "title": "Demo",
+    "label": "عرض توضيحي"
+  },
+  "footer": {
+    "team": "الفريق",
+    "teamName": "فريق CS-22",
+    "graduationProject": "مشروع التخرج"
   }
 }

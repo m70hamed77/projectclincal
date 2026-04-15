@@ -1382,5 +1382,23 @@
     "noApplicationsDesc": "No applications have been submitted to your posts yet",
     "noApplicationsWithStatus": "No applications",
     "noApplicationsWithStatusDesc": "No applications with this status have been submitted yet"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "process": {
+    "title": "How It Works"
+  },
+  "features": {
+    "title": "Features"
+  },
+  "demo": {
+    "title": "Demo",
+    "label": "Demo"
+  },
+  "footer": {
+    "team": "Team",
+    "teamName": "CS-22 Team",
+    "graduationProject": "Graduation Project"
   }
 }
