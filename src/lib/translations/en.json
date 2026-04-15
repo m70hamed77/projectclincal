@@ -578,7 +578,8 @@
     "continue": "Continue",
     "finish": "Finish",
     "optional": "Optional",
-    "required": "Required"
+    "required": "Required",
+    "status": "Status"
   },
   "home": {
     "brand": "Smiley",

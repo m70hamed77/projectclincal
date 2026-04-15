@@ -578,7 +578,8 @@
     "continue": "متابعة",
     "finish": "إنهاء",
     "optional": "اختياري",
-    "required": "مطلوب"
+    "required": "مطلوب",
+    "status": "الحالة"
   },
   "home": {
     "brand": "سمايلي",
