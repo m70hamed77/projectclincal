@@ -1263,10 +1263,12 @@
       "accountInfo": "معلومات الحساب",
       "accountInfoDesc": "معلومات حسابك الأساسية",
       "accountId": "رقم الحساب",
+      "status": "الحالة",
       "createdAt": "تاريخ التسجيل",
       "accountType": "نوع الحساب",
       "student": "طالب",
-      "patient": "مريض"
+      "patient": "مريض",
+      "active": "نشط"
     }
   },
   "createPostPage": {

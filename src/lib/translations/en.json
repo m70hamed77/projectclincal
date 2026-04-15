@@ -1194,10 +1194,12 @@
       "accountInfo": "Account Information",
       "accountInfoDesc": "Your basic account information",
       "accountId": "Account ID",
+      "status": "Status",
       "createdAt": "Registration Date",
       "accountType": "Account Type",
       "student": "Student",
-      "patient": "Patient"
+      "patient": "Patient",
+      "active": "Active"
     },
     "subtitle": "Post a case you need to complete your study requirements",
     "breadcrumb": {
