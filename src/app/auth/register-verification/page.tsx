@@ -1126,7 +1126,7 @@ export default function RegisterWithVerificationPage() {
                 {countdown > 0 ? (
                   <p className="text-sm text-gray-400 flex items-center justify-center gap-2">
                     <Clock className="w-4 h-4 animate-pulse" />
-                    يمكنك طلب كود جديد بعد {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
+                    {t('registerPage.canRequestNewCode')} {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
                   </p>
                 ) : (
                   <button
@@ -1135,7 +1135,7 @@ export default function RegisterWithVerificationPage() {
                     className="text-sm text-cyan-400 hover:text-cyan-300 font-semibold transition-all hover:underline flex items-center justify-center gap-1 group"
                   >
                     <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    إعادة إرسال الكود
+                    {t('registerPage.resendCode')}
                   </button>
                 )}
               </div>
@@ -1149,7 +1149,7 @@ export default function RegisterWithVerificationPage() {
                 className="w-full py-3.5 border-2 border-white/10 text-gray-300 font-semibold rounded-xl hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98]"
               >
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                العودة للبيانات
+                {t('registerPage.backToData')}
               </button>
 
               {/* Verify Button */}
@@ -1166,12 +1166,12 @@ export default function RegisterWithVerificationPage() {
                 {isSubmitting ? (
                   <span className="flex items-center gap-2">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    {t('registerPage.submitting' )}...
+                    {t('registerPage.submitting')}
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    تحقق والتسجيل
+                    {t('registerPage.verifyAndRegister')}
                   </span>
                 )}
               </Button>
@@ -1248,10 +1248,10 @@ export default function RegisterWithVerificationPage() {
 
               <div className="space-y-4">
                 <h1 className="text-3xl font-bold text-white">
-                  {t('registerPage.RegisteredSuccessfully')}
+                  {t('registerPage.errors.RegisteredSuccessfully')}
                 </h1>
                 <p className="text-gray-300 leading-relaxed">
-                  {t('registerPage.accountCreated')}
+                  {t('registerPage.errors.accountCreated')}
                 </p>
               </div>
 
