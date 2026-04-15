@@ -911,7 +911,7 @@ export default function Home() {
               style={{ background: "rgba(147, 51, 234, 0.2)", color: "#a855f7", border: "1px solid rgba(147, 51, 234, 0.35)" }}
             >
               <Play className="w-4 h-4" />
-              Demo
+              {t("demo.label")}
               <Play className="w-4 h-4" />
             </span>
             <h2 className="text-responsive-4xl font-bold mb-6 text-white" suppressHydrationWarning>
@@ -1001,7 +1001,7 @@ export default function Home() {
               style={{ background: "rgba(147, 51, 234, 0.2)", color: "#a855f7", border: "1px solid rgba(147, 51, 234, 0.35)" }}
             >
               <Star className="w-4 h-4" />
-              Features
+              {t("features.title")}
               <Star className="w-4 h-4" />
             </span>
             <h2 className="text-responsive-4xl font-bold mb-4 text-white">
@@ -1088,7 +1088,7 @@ export default function Home() {
               style={{ background: "rgba(236, 72, 153, 0.2)", color: "#ec4899", border: "1px solid rgba(236, 72, 153, 0.35)" }}
             >
               <Zap className="w-4 h-4" />
-              Process
+              {t("process.title")}
               <Zap className="w-4 h-4" />
             </span>
             <h2 className="text-responsive-4xl font-bold mb-4 text-white">
@@ -1237,7 +1237,7 @@ export default function Home() {
                 style={{ background: "rgba(168, 85, 247, 0.2)", color: "#a855f7", border: "1px solid rgba(168, 85, 247, 0.35)" }}
               >
                 <MessageCircle className="w-4 h-4" />
-                FAQ
+                {t("faq.title")}
                 <MessageCircle className="w-4 h-4" />
               </span>
               <h2 className="text-responsive-4xl font-bold mb-4 text-white">
@@ -1396,7 +1396,7 @@ export default function Home() {
                 <div className="space-y-3">
                   <div className="p-3 rounded-xl" style={{ background: "rgba(147, 51, 234, 0.1)", border: "1px solid rgba(147, 51, 234, 0.2)" }}>
                     <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>{t("home.graduationTeam")}</p>
-                    <p className="text-purple-300 font-bold text-lg">Team CS-22</p>
+                    <p className="text-purple-300 font-bold text-lg">{t("footer.teamName")}</p>
                   </div>
                   <div className="p-3 rounded-xl" style={{ background: "rgba(236, 72, 153, 0.1)", border: "1px solid rgba(236, 72, 153, 0.2)" }}>
                     <p className="text-xs" style={{ color: "rgba(255,255,255,0.6)" }}>{t("home.graduationProject")}</p>
