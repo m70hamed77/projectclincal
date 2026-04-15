@@ -272,80 +272,118 @@ function ProfileContent() {
 
     const fetchData = async () => {
       try {
+        // Set a timeout to prevent infinite loading (15 seconds)
+        const timeoutId = setTimeout(() => {
+          console.warn('[Profile] Data fetch timeout - forcing load complete')
+          setLoadingStats(false)
+          setLoadingPosts(false)
+          setLoadingActivities(false)
+          setLoadingStudentProfile(false)
+          setLoadingPatientProfile(false)
+        }, 15000)
+
         if (user.role === 'STUDENT') {
           // Fetch student stats
-          const statsResponse = await fetch('/api/student/stats', {
-            credentials: 'include'
-          })
-          const statsData = await statsResponse.json()
-          if (statsData.success) {
-            setStudentStats(statsData.stats)
+          try {
+            const statsResponse = await fetch('/api/student/stats', {
+              credentials: 'include'
+            })
+            const statsData = await statsResponse.json()
+            if (statsData.success) {
+              setStudentStats(statsData.stats)
+            }
+          } catch (err) {
+            console.error('[Profile] Error fetching student stats:', err)
           }
 
           // Fetch student posts
-          const postsResponse = await fetch('/api/posts/my-posts', {
-            credentials: 'include'
-          })
-          const postsData = await postsResponse.json()
-          if (postsData.success) {
-            setPosts(postsData.posts.filter((p: Post) => p.status === 'ACTIVE'))
+          try {
+            const postsResponse = await fetch('/api/posts/my-posts', {
+              credentials: 'include'
+            })
+            const postsData = await postsResponse.json()
+            if (postsData.success) {
+              setPosts(postsData.posts.filter((p: Post) => p.status === 'ACTIVE'))
+            }
+          } catch (err) {
+            console.error('[Profile] Error fetching student posts:', err)
           }
 
           // Fetch student profile (academic info)
-          const profileResponse = await fetch(`/api/student/profile?t=${Date.now()}`, {
-            credentials: 'include'
-          })
-          const profileData = await profileResponse.json()
-          if (profileData.success) {
-            setStudentProfile(profileData.student)
-
-            // Load privacy settings from student data
-            setPrivacySettings({
-              publicProfileEnabled: profileData.student.publicProfileEnabled ?? true,
-              showCases: profileData.student.showCases ?? true,
-              showRatings: profileData.student.showRatings ?? true,
-              showReviews: profileData.student.showReviews ?? true,
-              showActivePosts: profileData.student.showActivePosts ?? true,
-              showLocation: profileData.student.showLocation ?? true,
-              showBio: profileData.student.showBio ?? true,
-              showCompletedCount: profileData.student.showCompletedCount ?? true
+          try {
+            const profileResponse = await fetch(`/api/student/profile?t=${Date.now()}`, {
+              credentials: 'include'
             })
+            const profileData = await profileResponse.json()
+            if (profileData.success) {
+              setStudentProfile(profileData.student)
+
+              // Load privacy settings from student data
+              setPrivacySettings({
+                publicProfileEnabled: profileData.student.publicProfileEnabled ?? true,
+                showCases: profileData.student.showCases ?? true,
+                showRatings: profileData.student.showRatings ?? true,
+                showReviews: profileData.student.showReviews ?? true,
+                showActivePosts: profileData.student.showActivePosts ?? true,
+                showLocation: profileData.student.showLocation ?? true,
+                showBio: profileData.student.showBio ?? true,
+                showCompletedCount: profileData.student.showCompletedCount ?? true
+              })
+            }
+          } catch (err) {
+            console.error('[Profile] Error fetching student profile:', err)
           }
         } else if (user.role === 'PATIENT') {
           // Fetch patient stats
-          const statsResponse = await fetch('/api/patient/stats', {
-            credentials: 'include'
-          })
-          const statsData = await statsResponse.json()
-          if (statsData.success) {
-            setPatientStats(statsData.stats)
+          try {
+            const statsResponse = await fetch('/api/patient/stats', {
+              credentials: 'include'
+            })
+            const statsData = await statsResponse.json()
+            if (statsData.success) {
+              setPatientStats(statsData.stats)
+            }
+          } catch (err) {
+            console.error('[Profile] Error fetching patient stats:', err)
           }
 
           // Fetch patient profile (including governorate and address)
-          const patientResponse = await fetch('/api/patient/me', {
-            credentials: 'include'
-          })
-          const patientData = await patientResponse.json()
-          if (patientData.success) {
-            setPatientProfile(patientData.patient)
+          try {
+            const patientResponse = await fetch('/api/patient/me', {
+              credentials: 'include'
+            })
+            const patientData = await patientResponse.json()
+            if (patientData.success) {
+              setPatientProfile(patientData.patient)
+            }
+          } catch (err) {
+            console.error('[Profile] Error fetching patient profile:', err)
           }
         }
 
         // Fetch activities
-        const activityResponse = await fetch('/api/activity', {
-          credentials: 'include'
-        })
-        const activityData = await activityResponse.json()
-        if (activityData.success) {
-          setActivities(activityData.activities)
+        try {
+          const activityResponse = await fetch('/api/activity', {
+            credentials: 'include'
+          })
+          const activityData = await activityResponse.json()
+          if (activityData.success) {
+            setActivities(activityData.activities)
+          }
+        } catch (err) {
+          console.error('[Profile] Error fetching activities:', err)
         }
+
+        // Clear timeout
+        clearTimeout(timeoutId)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('[Profile] Error fetching data:', error)
       } finally {
         setLoadingStats(false)
         setLoadingPosts(false)
         setLoadingActivities(false)
         setLoadingStudentProfile(false)
+        setLoadingPatientProfile(false)
       }
     }
 
@@ -407,26 +445,45 @@ function ProfileContent() {
       try {
         setLoadingRateableCases(true)
 
-        // Get patient's cases that need rating
-        const patient = await fetch('/api/patient/me', {
+        // Set a timeout to prevent infinite loading
+        const timeoutId = setTimeout(() => {
+          console.warn('[Profile] Rateable cases fetch timeout')
+          setLoadingRateableCases(false)
+        }, 10000) // 10 seconds timeout
+
+        // Get all accepted applications for this patient
+        const applicationsResponse = await fetch('/api/patient/applications', {
           credentials: 'include'
-        }).then(res => res.json())
+        }).catch(err => {
+          console.error('[Profile] Error fetching applications:', err)
+          return null
+        })
 
-        if (patient.success && patient.patient) {
-          // Get all accepted applications for this patient
-          const applicationsResponse = await fetch('/api/patient/applications', {
-            credentials: 'include'
-          })
-          const applicationsData = await applicationsResponse.json()
+        // Clear timeout
+        clearTimeout(timeoutId)
 
-          if (applicationsData.success) {
-            // Filter cases that are completed but not rated yet
-            const casesWithStatus = await Promise.all(
-              applicationsData.applications.map(async (app: any) => {
-                // Check if this application has a case
+        if (!applicationsResponse || !applicationsResponse.ok) {
+          setRateableCases([])
+          return
+        }
+
+        const applicationsData = await applicationsResponse.json()
+
+        if (applicationsData.success && applicationsData.applications?.length > 0) {
+          // Filter cases that are completed but not rated yet - with timeout
+          const casesWithStatus = await Promise.all(
+            applicationsData.applications.slice(0, 10).map(async (app: any) => { // Limit to 10 most recent
+              try {
+                // Check if this application has a case with timeout
+                const controller = new AbortController()
+                const timeoutId2 = setTimeout(() => controller.abort(), 3000) // 3 seconds per request
+
                 const caseResponse = await fetch(`/api/cases/by-application/${app.id}`, {
-                  credentials: 'include'
+                  credentials: 'include',
+                  signal: controller.signal
                 }).catch(() => null)
+
+                clearTimeout(timeoutId2)
 
                 if (caseResponse && caseResponse.ok) {
                   const caseData = await caseResponse.json()
@@ -439,28 +496,36 @@ function ProfileContent() {
                   ...app,
                   case_: null
                 }
-              })
+              } catch (err) {
+                console.error('[Profile] Error fetching case for app:', app.id, err)
+                return {
+                  ...app,
+                  case_: null
+                }
+              }
+            })
+          )
+
+          // Filter completed cases without ratings
+          const rateable = casesWithStatus
+            .filter((item: any) =>
+              item.case_ &&
+              item.case_.isCompleted &&
+              !item.case_.rating &&
+              item.status === 'ACCEPTED'
             )
+            .map((item: any) => ({
+              id: item.case_.id,
+              postTitle: item.postTitle,
+              postTreatmentType: item.postTreatmentType,
+              studentName: item.studentName,
+              studentId: item.studentId,
+              completedAt: item.case_.endDate || item.case_.updatedAt
+            }))
 
-            // Filter completed cases without ratings
-            const rateable = casesWithStatus
-              .filter((item: any) =>
-                item.case_ &&
-                item.case_.isCompleted &&
-                !item.case_.rating &&
-                item.status === 'ACCEPTED'
-              )
-              .map((item: any) => ({
-                id: item.case_.id,
-                postTitle: item.postTitle,
-                postTreatmentType: item.postTreatmentType,
-                studentName: item.studentName,
-                studentId: item.studentId,
-                completedAt: item.case_.endDate || item.case_.updatedAt
-              }))
-
-            setRateableCases(rateable)
-          }
+          setRateableCases(rateable)
+        } else {
+          setRateableCases([])
         }
       } catch (error) {
         console.error('Error fetching rateable cases:', error)
