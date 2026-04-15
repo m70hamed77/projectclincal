@@ -291,7 +291,7 @@ export default function StudentDashboard() {
               <CardHeader className="pb-3">
                 <CardDescription className="text-xs text-rose-700" suppressHydrationWarning={true}>{t('studentDashboard.stats.level')}</CardDescription>
                 <CardTitle className="text-xl text-rose-900">
-                  {loadingStats ? <Skeleton className="h-6 w-16" /> : stats.level}
+                  {loadingStats ? <Skeleton className="h-6 w-16" /> : t('studentDashboard.achievements.levels.' + stats.level)}
                 </CardTitle>
               </CardHeader>
             </Card>
@@ -520,7 +520,7 @@ export default function StudentDashboard() {
                   <div className="space-y-4">
                     <div>
                       <div className="flex items-center justify-between text-sm mb-2 text-violet-800">
-                        <span>{t('studentDashboard.achievements.level')} {loadingStats ? '...' : stats.level}</span>
+                        <span>{t('studentDashboard.achievements.level')} {loadingStats ? '...' : t('studentDashboard.achievements.levels.' + stats.level)}</span>
                         <span>{loadingStats ? '...' : stats.points} {t('studentDashboard.achievements.points')}</span>
                       </div>
                       <div className="w-full bg-violet-100 rounded-full h-2">
