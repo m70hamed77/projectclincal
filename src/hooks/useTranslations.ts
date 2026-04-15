@@ -7,9 +7,14 @@ import enData from '@/lib/translations/en.json'
 type TranslationKey = string
 
 export function useTranslations() {
-  const [locale, setLocale] = useState<string>('ar')
-  const [translations, setTranslations] = useState<Record<string, any>>(arData || {})
-  const [loading, setLoading] = useState<boolean>(true)
+  // ✅ قراءة اللغة من localStorage أولاً قبل useState
+  const initialLocale = typeof window !== 'undefined' 
+    ? (localStorage.getItem('locale') || 'ar') 
+    : 'ar'
+  
+  const [locale, setLocale] = useState<string>(initialLocale)
+  const [translations, setTranslations] = useState<Record<string, any>>(initialLocale === 'ar' ? arData : enData)
+  const [loading, setLoading] = useState<boolean>(!initialLocale)
 
   useEffect(() => {
     // Initialize translations
