@@ -1426,6 +1426,85 @@
     "noApplicationsWithStatus": "No applications",
     "noApplicationsWithStatusDesc": "No applications with this status have been submitted yet"
   },
+  "createPostPage": {
+    "title": "Create New Post",
+    "subtitle": "Post a case you need to complete your study requirements",
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "create": "Create New Post"
+    },
+    "basicInfo": {
+      "title": "Basic Information",
+      "description": "Enter the required case information",
+      "titleLabel": "Post Title *",
+      "titlePlaceholder": "Example: Patient needs simple dental filling",
+      "treatmentLabel": "Treatment Type *",
+      "treatmentPlaceholder": "Select treatment type",
+      "priorityLabel": "Priority *",
+      "priorityPlaceholder": "Select priority",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Write a detailed description of the required case..."
+    },
+    "treatmentTypes": {
+      "FILLING": "Filling",
+      "EXTRACTION": "Extraction",
+      "CLEANING": "Cleaning",
+      "ROOT_CANAL": "Root Canal",
+      "PROSTHETICS": "Prosthetics",
+      "ORTHODONTICS": "Orthodontics",
+      "SURGERY": "Surgery",
+      "PERIODONTAL": "Periodontal",
+      "WHITENING": "Whitening",
+      "X_RAY": "X-Ray"
+    },
+    "priorities": {
+      "normal": "Normal",
+      "medium": "Medium",
+      "urgent": "Urgent"
+    },
+    "location": {
+      "title": "Location Information",
+      "description": "Specify the location where treatment will be provided",
+      "cityLabel": "City *",
+      "cityPlaceholder": "Select city",
+      "addressLabel": "Detailed Address *",
+      "addressPlaceholder": "Example: Main Street, Maadi, Cairo"
+    },
+    "cities": {
+      "cairo": "Cairo",
+      "giza": "Giza",
+      "alexandria": "Alexandria",
+      "dakahlia": "Dakahlia",
+      "sharqia": "Sharqia",
+      "monufia": "Monufia",
+      "qalyubia": "Qalyubia",
+      "gharbia": "Gharbia",
+      "ismailia": "Ismailia",
+      "aswan": "Aswan"
+    },
+    "patientCount": {
+      "title": "Required Patient Count",
+      "description": "Specify the number of patients you need for this case",
+      "countLabel": "Required Count *",
+      "countPlaceholder": "Example: 15",
+      "hint": "You can accept 10-15 patients per post"
+    },
+    "tips": {
+      "title": "Important Tips",
+      "tip1": "Be clear in your description to attract suitable patients",
+      "tip2": "Specify the location accurately to help patients find you easily",
+      "tip3": "Choose priority carefully (urgent = faster visibility)"
+    },
+    "actions": {
+      "publish": "Publish Post",
+      "publishing": "Publishing...",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "publishFailed": "Failed to publish post",
+      "generalError": "An error occurred while publishing the post"
+    }
+  },
   "faq": {
     "title": "Frequently Asked Questions"
   },
