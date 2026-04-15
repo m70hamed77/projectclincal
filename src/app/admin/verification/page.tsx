@@ -371,8 +371,8 @@ export default function AdminVerificationPage() {
                               <img
                                 src={student.idCardUrl || ''}
                                 alt="صورة الكارنيه"
-                                suppressHydrationWarning={true}
                                 className="w-full max-h-64 object-contain cursor-pointer"
+                                suppressHydrationWarning={true}
                                 onClick={() => student.idCardUrl && window.open(student.idCardUrl, '_blank')}
                               />
                             </div>

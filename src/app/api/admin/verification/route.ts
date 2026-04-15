@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
         universityEmail: student.universityEmail,
         universityName: student.universityName,
         studentIdNumber: student.studentIdNumber,
-        idCardUrl: student.idCardUrl,
+        idCardUrl: student.idCardUrl ? `/api${student.idCardUrl}` : null,
         academicYear: student.academicYear,
         createdAt: student.createdAt,
         userCreatedAt: student.user.createdAt

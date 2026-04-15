@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
     })
 
     // ✅ تحقق من أن User موجود للكل Student/Patient
-    const baseUrl = request.nextUrl.origin
+    // Use API route to serve uploaded files
     const formattedStudents = students
       .filter(s => s.user) // فقط الطلاب الذين لديهم user
       .map(student => ({
@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
         userStatus: student.user.status,
         verificationStatus: student.verificationStatus,
         universityEmail: student.universityEmail,
-        idCardUrl: student.idCardUrl ? `${baseUrl}${student.idCardUrl}` : null,
+        idCardUrl: student.idCardUrl ? `/api${student.idCardUrl}` : null,
         academicYear: student.academicYear,
         createdAt: student.createdAt,
         rejectionReason: student.rejectionReason

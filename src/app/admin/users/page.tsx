@@ -365,7 +365,9 @@ export default function AdminUsersPage() {
         <main className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-16 h-16 animate-spin text-slate-400 mx-auto mb-4" />
-            <p className="text-slate-600">{t('common.loading')}</p>
+            <p className="text-slate-600" suppressHydrationWarning={true}>
+              {t('common.loading')}
+            </p>
           </div>
         </main>
         <Footer />
@@ -661,11 +663,12 @@ export default function AdminUsersPage() {
                     <div>
                       <span className="text-slate-600 text-sm">{t('users.idCard')}:</span>
                       <div className="mt-2 border border-slate-200 rounded-lg overflow-hidden">
-                        {selectedUser.idCardUrl.startsWith('http') ? (
+                        {selectedUser.idCardUrl.startsWith('http') || selectedUser.idCardUrl.startsWith('/api') ? (
                           <img
                             src={selectedUser.idCardUrl}
                             alt={t('users.idCardAlt')}
                             className="w-full max-h-96 object-contain cursor-pointer hover:opacity-90 transition-opacity"
+                            suppressHydrationWarning={true}
                             onClick={() => selectedUser.idCardUrl && window.open(selectedUser.idCardUrl, '_blank')}
                             onError={(e) => {
                               console.error('[Admin Users] Failed to load ID card image:', selectedUser.idCardUrl)
