@@ -199,6 +199,7 @@
   "login": {
     "home": "Home",
     "brand": "Smiley Dental",
+    "brandName": "Smiley",
     "welcomeTitle": "Welcome to Smiley",
     "welcomeDesc": "A modern medical platform connecting patients and dental students for affordable dental treatments",
     "features": {
@@ -222,6 +223,12 @@
       "facebook": "Facebook",
       "noAccount": "Don't have an account?",
       "createAccount": "Create New Account"
+    }
+  },
+  "register": {
+    "form": {
+      "sendCode": "Send Verification Code",
+      "alreadyHaveAccount": "Already have an account?"
     }
   },
   "forgotPasswordPage": {
