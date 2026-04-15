@@ -481,6 +481,75 @@
     "privacy": "Privacy Policy",
     "fillAllRequired": "💡 Make sure to fill all required fields (name, email, password with at least 6 characters)"
   },
+  "registerVerificationPage": {
+    "registerAsPatient": "Register as Patient",
+    "registerAsStudent": "Register as Student",
+    "joinPatient": "Join us and start your dental care journey",
+    "joinStudent": "Join us and start your professional journey",
+    "patient": "Patient",
+    "student": "Student",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "Enter your full name",
+    "email": "Email",
+    "codeWillBeSent": "Verification code will be sent to this email",
+    "phone": "Phone",
+    "phonePlaceholder": "01xxxxxxxxx",
+    "governorate": "Governorate",
+    "selectGovernorate": "Select Governorate",
+    "address": "Address",
+    "addressPlaceholder": "Enter your detailed address (Street, Building No., Floor...)",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "passwordVeryStrong": "Very strong ✨",
+    "passwordStrong": "Strong 👍",
+    "passwordMedium": "Medium",
+    "passwordWeak": "Weak",
+    "confirmPassword": "Confirm Password",
+    "university": "University",
+    "universityPlaceholder": "University Name",
+    "specialization": "Specialization",
+    "specializationPlaceholder": "University Specialization",
+    "sending": "Sending...",
+    "sendCode": "Send Verification Code",
+    "haveAccount": "Already have an account?",
+    "login": "Login",
+    "enterCode": "Enter Verification Code",
+    "codeSentTo": "4-digit code sent to",
+    "codeValidFor": "Verification code (valid for 10 minutes)",
+    "canRequestNewCode": "You can request a new code after",
+    "resendCode": "Resend Code",
+    "backToData": "Back to Data",
+    "verifyAndRegister": "Verify and Register",
+    "verifying": "Verifying and registering...",
+    "accountCreated": "Your account has been created!",
+    "requestReceived": "Your request has been received!",
+    "accountActive": "Your account is now active and you can login immediately",
+    "accountUnderReview": "Your account is now under review by administration. You will be notified upon approval",
+    "errors": {
+      "nameRequired": "Name is required",
+      "nameMinLength": "Name must be at least 3 characters",
+      "nameLettersOnly": "Name must contain only letters",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email address",
+      "phoneRequired": "Phone is required",
+      "phoneInvalid": "Invalid phone number (must start with 01)",
+      "governorateRequired": "Governorate is required",
+      "addressRequired": "Detailed address is required",
+      "addressMinLength": "Address must be at least 10 characters",
+      "universityRequired": "University is required",
+      "specializationRequired": "Specialization is required",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 8 characters",
+      "confirmPasswordRequired": "Password confirmation is required",
+      "passwordMismatch": "Passwords do not match",
+      "codeRequired": "Verification code is required",
+      "codeInvalid": "Code must be 4 digits",
+      "sendCodeFailed": "Failed to send verification code",
+      "sendCodeError": "An error occurred while sending verification code",
+      "registrationFailed": "Registration failed",
+      "registrationError": "An error occurred during registration"
+    }
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel",
@@ -1200,82 +1269,6 @@
       "student": "Student",
       "patient": "Patient",
       "active": "Active"
-    },
-    "subtitle": "Post a case you need to complete your study requirements",
-    "breadcrumb": {
-      "dashboard": "Dashboard",
-      "create": "Create New Post"
-    },
-    "basicInfo": {
-      "title": "Basic Information",
-      "description": "Enter the required case information",
-      "titleLabel": "Post Title *",
-      "titlePlaceholder": "Example: Patient needs simple dental filling",
-      "treatmentLabel": "Treatment Type *",
-      "treatmentPlaceholder": "Select treatment type",
-      "priorityLabel": "Priority *",
-      "priorityPlaceholder": "Select priority",
-      "descriptionLabel": "Description",
-      "descriptionPlaceholder": "Write a detailed description of the required case..."
-    },
-    "treatmentTypes": {
-      "FILLING": "Filling (حشو)",
-      "EXTRACTION": "Extraction (خلع)",
-      "CLEANING": "Cleaning (تنظيف)",
-      "ROOT_CANAL": "Root Canal (علاج عصب)",
-      "PROSTHETICS": "Prosthetics (تركيبات)",
-      "ORTHODONTICS": "Orthodontics (تقويم)",
-      "SURGERY": "Surgery (جراحة)",
-      "PERIODONTAL": "Periodontal (علاج لثة)",
-      "WHITENING": "Whitening (تبييض)",
-      "X_RAY": "X-Ray (أشعة)"
-    },
-    "priorities": {
-      "normal": "Normal",
-      "medium": "Medium",
-      "urgent": "Urgent"
-    },
-    "location": {
-      "title": "Location Information",
-      "description": "Specify the location where treatment will be performed",
-      "cityLabel": "City *",
-      "cityPlaceholder": "Select city",
-      "addressLabel": "Detailed Address *",
-      "addressPlaceholder": "Example: Main Street, Maadi, Cairo"
-    },
-    "cities": {
-      "cairo": "Cairo",
-      "giza": "Giza",
-      "alexandria": "Alexandria",
-      "dakahlia": "Dakahlia",
-      "sharqia": "Sharqia",
-      "monufia": "Monufia",
-      "qalyubia": "Qalyubia",
-      "gharbia": "Gharbia",
-      "ismailia": "Ismailia",
-      "aswan": "Aswan"
-    },
-    "patientCount": {
-      "title": "Required Patients Count",
-      "description": "Specify the number of patients you need for this case",
-      "countLabel": "Required Count *",
-      "countPlaceholder": "Example: 15",
-      "hint": "You can accept 10-15 patients per post"
-    },
-    "tips": {
-      "title": "Important Tips",
-      "tip1": "Be clear in your description to attract suitable patients",
-      "tip2": "Specify the location precisely to make it easy for patients to find you",
-      "tip3": "Choose priority carefully (urgent = faster visibility)"
-    },
-    "actions": {
-      "publish": "Publish Post",
-      "publishing": "Publishing...",
-      "cancel": "Cancel"
-    },
-    "errors": {
-      "publishFailed": "Failed to publish post",
-      "generalError": "An error occurred while publishing the post"
     }
   },
   "chatList": {
