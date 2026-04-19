@@ -938,7 +938,7 @@ function ProfileContent() {
                 name: userName,
                 email: user.email,
                 role: user.role as 'PATIENT' | 'STUDENT',
-                avatar: user.avatarUrl,
+                avatar: user.avatarUrl ?? undefined,
               }
             : undefined
         }

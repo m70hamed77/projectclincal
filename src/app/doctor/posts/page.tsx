@@ -173,7 +173,7 @@ export default function DoctorPostsPage() {
           name: user.name,
           email: user.email,
           role: user.role,
-          avatar: user.avatar
+          avatar: user.avatar ?? undefined
         }} />
         <main className="flex-1 flex items-center justify-center">
           <Card className="w-full max-w-md mx-4">

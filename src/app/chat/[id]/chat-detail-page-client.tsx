@@ -475,7 +475,7 @@ function ChatPageContent() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl } : undefined} />
+        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl ?? undefined } : undefined} />
         <main className="flex-1 flex items-center justify-center bg-gradient-to-br from-teal-50 to-emerald-100">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
@@ -489,7 +489,7 @@ function ChatPageContent() {
   if (!conversation) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl } : undefined} />
+        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl ?? undefined } : undefined} />
         <main className="flex-1 flex items-center justify-center bg-gradient-to-br from-rose-50 to-pink-100">
           <Card className="max-w-md mx-4 bg-gradient-to-br from-rose-100 to-pink-100 border-2 border-rose-300 shadow-lg hover:shadow-xl transition-all duration-300">
             <CardContent className="py-12 text-center">

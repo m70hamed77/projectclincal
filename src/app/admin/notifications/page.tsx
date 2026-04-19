@@ -374,7 +374,7 @@ export default function AdminNotificationsPage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
-      <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl } : undefined} />
+      <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'PATIENT' | 'STUDENT' | 'ADMIN', avatar: user.avatarUrl ?? undefined } : undefined} />
 
       <main className="flex-1 py-8 px-4">
         <div className="container mx-auto max-w-5xl">

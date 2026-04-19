@@ -114,7 +114,7 @@ export default function ChangePasswordPage() {
         name: user.name,
         email: user.email,
         role: user.role,
-        avatar: user.avatar
+        avatar: user.avatar ?? undefined
       }} />
 
       <main className="flex-1 py-8 px-4 bg-muted/30">

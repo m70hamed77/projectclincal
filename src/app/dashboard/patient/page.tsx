@@ -148,7 +148,7 @@ export default function PatientDashboard() {
   if (userLoading || loading) {
     return (
       <div className="min-h-screen flex flex-col">
-      <Navigation user={user ? { id: user.id, name: user.name, email: user.email, role: user.role as 'PATIENT', avatar: user.avatarUrl } : undefined} />
+      <Navigation user={user ? { id: user.id, name: user.name, email: user.email, role: user.role as 'PATIENT', avatar: user.avatarUrl ?? undefined } : undefined} />
         <main className="flex-1 py-8 px-4 bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50">
           <div className="container mx-auto max-w-7xl">
             <div className="bg-gradient-to-br from-teal-50 to-emerald-100 border-2 border-teal-200 rounded-2xl p-12 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -166,7 +166,7 @@ export default function PatientDashboard() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-50 via-blue-50 to-purple-50" suppressHydrationWarning={true}>
-      <Navigation user={user ? { id: user.id, name: user.name, email: user.email, role: user.role as 'PATIENT', avatar: user.avatarUrl } : undefined} />
+      <Navigation user={user ? { id: user.id, name: user.name, email: user.email, role: user.role as 'PATIENT', avatar: user.avatarUrl ?? undefined } : undefined} />
 
       <main className="flex-1 py-8 px-4">
         <div className="container mx-auto max-w-7xl">

@@ -158,7 +158,7 @@ export default function AppointmentsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'STUDENT' | 'PATIENT', avatar: user.avatarUrl } : undefined} />
+        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'STUDENT' | 'PATIENT', avatar: user.avatarUrl ?? undefined } : undefined} />
         <main className="flex-1 py-8 px-4 bg-muted/30">
           <div className="container mx-auto max-w-5xl">
             <Skeleton className="h-12 mb-6" />
@@ -174,7 +174,7 @@ export default function AppointmentsPage() {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col">
-        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'STUDENT' | 'PATIENT', avatar: user.avatarUrl } : undefined} />
+        <Navigation user={user ? { id: user.id, name: user.name || 'مستخدم', email: user.email || '', role: user.role as 'STUDENT' | 'PATIENT', avatar: user.avatarUrl ?? undefined } : undefined} />
         <main className="flex-1 py-8 px-4 bg-muted/30">
           <div className="container mx-auto max-w-5xl">
             <Alert variant="destructive">

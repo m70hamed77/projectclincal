@@ -585,7 +585,7 @@ export default function SettingsPage() {
                 name: user.name,
                 email: user.email,
                 role: user.role as 'PATIENT' | 'STUDENT',
-                avatar: user.avatarUrl,
+                avatar: user.avatarUrl ?? undefined,
               }
             : undefined
         }
