@@ -156,7 +156,7 @@ export function AdminPageContent() {
     // إذا لم يكن user.id متاحاً، حاول من localStorage
     if (!userId) {
       try {
-        userId = localStorage.getItem('userId')
+        userId = localStorage.getItem('userId') ?? undefined
       } catch (e) {
         // ignore
       }
@@ -165,7 +165,7 @@ export function AdminPageContent() {
     // إذا لم يكن متاحاً، حاول من sessionStorage
     if (!userId) {
       try {
-        userId = sessionStorage.getItem('userId')
+        userId = sessionStorage.getItem('userId') ?? undefined
       } catch (e) {
         // ignore
       }
@@ -186,13 +186,13 @@ export function AdminPageContent() {
 
     if (!userId) {
       try {
-        userId = localStorage.getItem('userId')
+        userId = localStorage.getItem('userId') ?? undefined
       } catch (e) {}
     }
 
     if (!userId) {
       try {
-        userId = sessionStorage.getItem('userId')
+        userId = sessionStorage.getItem('userId') ?? undefined
       } catch (e) {}
     }
 
@@ -320,7 +320,7 @@ export function AdminPageContent() {
                 // إذا لم يكن user.id متاحاً، حاول من localStorage
                 if (!userId) {
                   try {
-                    userId = localStorage.getItem('userId')
+                    userId = localStorage.getItem('userId') ?? undefined
                   } catch (e) {
                     // ignore
                   }
@@ -329,7 +329,7 @@ export function AdminPageContent() {
                 // إذا لم يكن متاحاً، حاول من sessionStorage
                 if (!userId) {
                   try {
-                    userId = sessionStorage.getItem('userId')
+                    userId = sessionStorage.getItem('userId') ?? undefined
                   } catch (e) {
                     // ignore
                   }
@@ -364,7 +364,7 @@ export function AdminPageContent() {
                 // إذا لم يكن user.id متاحاً، حاول من localStorage
                 if (!userId) {
                   try {
-                    userId = localStorage.getItem('userId')
+                    userId = localStorage.getItem('userId') ?? undefined
                   } catch (e) {
                     // ignore
                   }
@@ -373,7 +373,7 @@ export function AdminPageContent() {
                 // إذا لم يكن متاحاً، حاول من sessionStorage
                 if (!userId) {
                   try {
-                    userId = sessionStorage.getItem('userId')
+                    userId = sessionStorage.getItem('userId') ?? undefined
                   } catch (e) {
                     // ignore
                   }
@@ -441,7 +441,7 @@ export function AdminPageContent() {
                   <div className="text-4xl font-bold text-white mb-1">{stats.activePatients}</div>
                   <div className="flex items-center gap-1 text-white/70 text-xs">
                     <Users className="w-3 h-3" />
-                    <span suppressHydrationWarning={true}>{t('admin.ofRegistered', { count: stats.totalPatients })}</span>
+                    <span suppressHydrationWarning={true}>{stats.totalPatients} {t('admin.ofRegistered')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -453,10 +453,10 @@ export function AdminPageContent() {
                 onClick={() => {
                   let userId = user?.id
                   if (!userId) {
-                    try { userId = localStorage.getItem('userId') } catch (e) {}
+                    try { userId = localStorage.getItem('userId') ?? undefined } catch (e) {}
                   }
                   if (!userId) {
-                    try { userId = sessionStorage.getItem('userId') } catch (e) {}
+                    try { userId = sessionStorage.getItem('userId') ?? undefined } catch (e) {}
                   }
                   if (userId) {
                     window.location.href = `/admin/users?userId=${encodeURIComponent(userId)}`
@@ -545,10 +545,10 @@ export function AdminPageContent() {
                 onClick={() => {
                   let userId = user?.id
                   if (!userId) {
-                    try { userId = localStorage.getItem('userId') } catch (e) {}
+                    try { userId = localStorage.getItem('userId') ?? undefined } catch (e) {}
                   }
                   if (!userId) {
-                    try { userId = sessionStorage.getItem('userId') } catch (e) {}
+                    try { userId = sessionStorage.getItem('userId') ?? undefined } catch (e) {}
                   }
                   if (userId) {
                     window.location.href = `/admin/reports?userId=${encodeURIComponent(userId)}`

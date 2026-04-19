@@ -24,9 +24,10 @@ async function testEmail() {
     })
 
     console.log('\n✅ Email sent successfully!')
-    console.log('Message ID:', data.id)
-    console.log('To:', data.to)
-    console.log('Status:', data.status || 'queued')
+    console.log('Response data:', data)
+    // console.log('Message ID:', data.id)
+    // console.log('To:', data.to)
+    // console.log('Status:', data.status || 'queued')
 
   } catch (error: any) {
     console.error('\n❌ Error sending email:')

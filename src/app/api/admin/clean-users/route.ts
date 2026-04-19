@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 
+interface DeletedUser {
+  email: string
+  role: string
+  name: string | null
+}
+
+interface DeleteError {
+  email: string
+  error: string
+}
+
 // POST - Clean all users except admin
 export async function POST(request: NextRequest) {
   try {
@@ -37,8 +48,8 @@ export async function POST(request: NextRequest) {
 
     console.log(`[CLEAN USERS] Found ${nonAdminUsers.length} non-admin users to delete`)
 
-    const deletedUsers = []
-    const errors = []
+    const deletedUsers: DeletedUser[] = []
+    const errors: DeleteError[] = []
 
     // Delete each user and their related data
     for (const userToDelete of nonAdminUsers) {

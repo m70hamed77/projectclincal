@@ -270,8 +270,8 @@ export function NavigationContent({ user }: NavigationProps) {
   )
 }
 
-// Default export with Suspense boundary for useSearchParams
-export default function Navigation(props: NavigationProps) {
+// Named export with Suspense boundary for useSearchParams
+export function Navigation(props: NavigationProps) {
   return (
     <Suspense fallback={<div className="h-20 w-full" />}>
       <NavigationContent {...props} />

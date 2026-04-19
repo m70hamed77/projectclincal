@@ -24,6 +24,7 @@ Please be very specific and detailed about the exact code changes needed.`;
   ];
 
   const response = await zai.chat.completions.createVision({
+    model: 'gpt-4o-mini', // or use 'gpt-4o' for better quality
     messages: [
       {
         role: 'user',

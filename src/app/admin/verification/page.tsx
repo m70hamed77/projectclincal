@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useTranslations } from '@/hooks/useTranslations'
 import {
   Check,
   X,
@@ -47,6 +48,7 @@ interface Student {
 
 export default function AdminVerificationPage() {
   const { user } = useCurrentUser()
+  const { t } = useTranslations()
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [rejectDialog, setRejectDialog] = useState<{ open: boolean; studentId: string | null }>({
@@ -234,7 +236,7 @@ export default function AdminVerificationPage() {
                   // إذا لم يكن user.id متاحاً، حاول من localStorage
                   if (!userId) {
                     try {
-                      userId = localStorage.getItem('userId')
+                      userId = localStorage.getItem('userId') ?? undefined
                     } catch (e) {
                       // ignore
                     }
@@ -243,7 +245,7 @@ export default function AdminVerificationPage() {
                   // إذا لم يكن متاحاً، حاول من sessionStorage
                   if (!userId) {
                     try {
-                      userId = sessionStorage.getItem('userId')
+                      userId = sessionStorage.getItem('userId') ?? undefined
                     } catch (e) {
                       // ignore
                     }

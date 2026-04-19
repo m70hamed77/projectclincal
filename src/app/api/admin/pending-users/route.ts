@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
         name: true,
         email: true,
         phone: true,
-        carniehImage: true,
         createdAt: true,
       },
       orderBy: {

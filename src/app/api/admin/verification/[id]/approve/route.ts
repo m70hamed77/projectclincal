@@ -128,7 +128,7 @@ export async function POST(
 
     // Notify other admins about the approval
     try {
-      await notifyAdminStudentApproved(student.user.name, student.user.email)
+      await notifyAdminStudentApproved(student.user.name || 'Unknown', student.user.email || '')
     } catch (notifyError) {
       console.error('[ADMIN APPROVE] Failed to notify admins:', notifyError)
       // Don't fail the approval if notification fails

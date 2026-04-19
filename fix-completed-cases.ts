@@ -14,7 +14,12 @@ async function fixCompletedCases() {
       }
     },
     include: {
-      photos: true
+      photos: true,
+      application: {
+        include: {
+          student: true
+        }
+      }
     }
   })
 

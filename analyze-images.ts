@@ -35,6 +35,7 @@ async function analyzeImages() {
       const prompt = `Describe this screenshot in detail. What is shown? Are there any error messages? What is the user interface showing? If there are Arabic texts, transcribe them. If there's an error, explain what it means.`
 
       const response = await zai.chat.completions.createVision({
+        model: 'gpt-4o-mini', // or use 'gpt-4o' for better quality
         messages: [
           {
             role: 'user',

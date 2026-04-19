@@ -121,7 +121,7 @@ export async function POST(
 
     // Notify other admins about the rejection
     try {
-      await notifyAdminStudentRejected(student.user.name, student.user.email, rejectionReason)
+      await (student.user.name || 'Unknown', student.user.email || '', rejectionReason)
     } catch (notifyError) {
       console.error('[ADMIN REJECT] Failed to notify admins:', notifyError)
       // Don't fail the rejection if notification fails
