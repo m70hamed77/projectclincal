@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Suspense } from 'react'
 import { Navigation } from '@/components/navigation'
 import { Footer } from '@/components/footer'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -53,7 +53,7 @@ interface DashboardStats {
   totalReports: number          // ⚠️ إجمالي البلاغات
 }
 
-export default function AdminDashboardPage() {
+export function AdminPageContent() {
   const { user } = useCurrentUser()
   const { t, locale, loading: i18nLoading } = useTranslations()
   const searchParams = useSearchParams()
@@ -666,5 +666,25 @@ export default function AdminDashboardPage() {
 
       <Footer />
     </div>
+  )
+}
+
+// Default export with Suspense boundary
+export default function AdminDashboardPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col">
+        <Navigation user={undefined} />
+        <main className="flex-1 flex items-center justify-center bg-muted/30">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 rounded-full animate-spin mx-auto mb-4" style={{borderTopColor: '#00BFA6', borderRightColor: 'transparent', borderBottomColor: '#008C7A', borderLeftColor: 'transparent'}} />
+            <p className="text-muted-foreground" suppressHydrationWarning={true}>Loading...</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    }>
+      <AdminPageContent />
+    </Suspense>
   )
 }

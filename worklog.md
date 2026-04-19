@@ -269,3 +269,180 @@ Stage Summary:
 - ✅ Users will now see correct error messages when entering wrong code
 - ✅ Improved user experience by showing the right error at the right time
 - ✅ Both patient and student registration flows fixed
+
+---
+Task ID: 3-a
+Agent: general-purpose
+Task: Fix admin/users/page.tsx useSearchParams Suspense
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Read target file /home/z/my-project/src/app/admin/users/page.tsx
+- Identified useSearchParams usage on line 67
+- Splitting AdminUsersPage into AdminUsersPageContent and Suspense wrapper
+- Creating new PageContent component with all logic and useSearchParams
+- Creating new default export wrapper with Suspense boundary
+- Renamed main component from `AdminUsersPage` to `AdminUsersPageContent` (named export)
+- Created new default export `AdminUsersPage` wrapper with Suspense boundary
+- useSearchParams remains in AdminUsersPageContent component
+- All logic and state management preserved in content component
+
+Stage Summary:
+- Fixed useSearchParams Suspense boundary issue in admin/users/page.tsx
+- File now complies with Next.js 16 requirements
+- Pattern applied: Page wrapper with Suspense + Content component with useSearchParams
+
+---
+Task ID: 3-b
+Agent: general-purpose
+Task: Fix admin/page.tsx useSearchParams Suspense
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Read target file /home/z/my-project/src/app/admin/page.tsx
+- Identified useSearchParams usage on line 59
+- Added Suspense import from react (line 3)
+- Renamed main component from `AdminDashboardPage` to `AdminPageContent` (named export, line 56)
+- Created new default export `AdminDashboardPage` wrapper with Suspense boundary (lines 673-690)
+- useSearchParams remains in AdminPageContent component
+- All logic and state management preserved in content component
+- Fallback UI includes Navigation, loading spinner, and Footer
+
+Files Modified:
+- `/home/z/my-project/src/app/admin/page.tsx`
+  - Added Suspense import
+  - Renamed component to AdminPageContent
+  - Created new default export with Suspense boundary
+  - Added fallback loading UI
+
+Stage Summary:
+- Fixed useSearchParams Suspense boundary issue in admin/page.tsx
+- File now complies with Next.js 16 requirements
+- Pattern applied: Page wrapper with Suspense + Content component with useSearchParams
+
+---
+Task ID: 3-c
+Agent: general-purpose
+Task: Fix navigation.tsx useSearchParams Suspense
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Read target file /home/z/my-project/src/components/navigation.tsx
+- Identified useSearchParams usage on line 35 (renamed component)
+- Added Suspense import from 'react' (line 19)
+- Renamed main component from `Navigation` to `NavigationContent` (named export, line 34)
+- Created new default export `Navigation` wrapper with Suspense boundary (lines 274-280)
+- useSearchParams remains in NavigationContent component (line 36)
+- All logic, state management, and hooks preserved in content component
+- Fallback placeholder matches expected header height (h-20)
+
+Stage Summary:
+- Fixed useSearchParams Suspense boundary issue in navigation.tsx
+- Component now complies with Next.js 16 requirements
+- Pattern applied: Component wrapper with Suspense + Content component with useSearchParams
+
+---
+Task ID: 3-d
+Agent: general-purpose
+Task: Fix auth pages Suspense batch 1
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Analyzed 5 auth pages for Suspense boundary issues:
+  1. /home/z/my-project/src/app/auth/verify/page.tsx - ALREADY SPLIT (VerifyEmailContent + Suspense wrapper)
+  2. /home/z/my-project/src/app/auth/register-advanced/page.tsx - FIXED (split into AdvancedRegisterContent + Suspense wrapper)
+  3. /home/z/my-project/src/app/auth/register-verification/page.tsx - FIXED (split into RegisterWithVerificationContent + Suspense wrapper)
+  4. /home/z/my-project/src/app/auth/simple-register/page.tsx - FIXED (split into SimpleRegisterContent + Suspense wrapper)
+  5. /home/z/my-project/src/app/auth/verify-sms/page.tsx - ALREADY SPLIT (VerifySMSContent + Suspense wrapper)
+
+Files Modified:
+- /home/z/my-project/src/app/auth/register-advanced/page.tsx
+  - Added Suspense import from 'react'
+  - Renamed component from AdvancedRegisterPage to AdvancedRegisterContent (named export)
+  - Created new default export AdvancedRegisterPage wrapper with Suspense boundary
+  - Added fallback loading UI with spinner and Arabic text
+  - useSearchParams remains in AdvancedRegisterContent component
+
+- /home/z/my-project/src/app/auth/register-verification/page.tsx
+  - Added Suspense import from 'react'
+  - Renamed component from RegisterWithVerificationPage to RegisterWithVerificationContent (already was named export)
+  - Created new default export RegisterWithVerificationPage wrapper with Suspense boundary
+  - Added fallback loading UI with spinner and Arabic text
+  - useSearchParams remains in RegisterWithVerificationContent component
+
+- /home/z/my-project/src/app/auth/simple-register/page.tsx
+  - Added Suspense import from 'react'
+  - Renamed component from SimpleRegisterPage to SimpleRegisterContent (named export)
+  - Created new default export SimpleRegisterPage wrapper with Suspense boundary
+  - Added fallback loading UI with spinner and Arabic text
+  - useSearchParams remains in SimpleRegisterContent component
+
+Files Skipped (already split):
+- /home/z/my-project/src/app/auth/verify/page.tsx - Already has VerifyEmailContent with Suspense wrapper
+- /home/z/my-project/src/app/auth/verify-sms/page.tsx - Already has VerifySMSContent with Suspense wrapper
+
+Stage Summary:
+- Fixed 3 auth pages with useSearchParams Suspense boundary issues
+- 2 pages already had proper Suspense boundaries implemented
+- All fixed pages now comply with Next.js 16 requirements
+- Pattern applied: Page wrapper with Suspense + Content component with useSearchParams
+- Total pages in batch: 5 (3 fixed, 2 skipped)
+
+
+---
+Task ID: 3-h to 3-l
+Agent: general-purpose
+Task: Fix remaining pages Suspense batch 2
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Analyzed 4 listed files for useSearchParams Suspense issues:
+  1. /home/z/my-project/src/app/auth/reset-password/page.tsx
+     - ✅ Already has Suspense boundary (ResetPasswordContent + ResetPasswordPage wrapper)
+     - useSearchParams usage on line 14
+     - SKIP: Already fixed
+     
+  2. /home/z/my-project/src/app/chat/chat-page-client.tsx
+     - ✅ Already has Suspense boundary (ChatPageContent + ChatPageClient wrapper)
+     - useSearchParams usage on line 8
+     - SKIP: Already fixed
+     
+  3. /home/z/my-project/src/app/sandbox-login/page.tsx
+     - ❌ Was partially fixed: function renamed to SandboxLoginContent but missing default export wrapper
+     - useSearchParams usage on line 12
+     - FIX: Added Suspense import (already present), added default export SandboxLoginPage with Suspense wrapper (lines 184-194)
+     - Fallback UI: Loading spinner with centered layout
+     
+  4. /home/z/my-project/src/app/admin/packages/page.tsx
+     - ❌ Does NOT use useSearchParams
+     - SKIP: Does not need Suspense for useSearchParams
+
+Files Modified:
+- `/home/z/my-project/src/app/sandbox-login/page.tsx`
+  - Added default export SandboxLoginPage wrapper with Suspense boundary
+  - Component renamed to SandboxLoginContent (named export, already done)
+  - Added fallback loading UI with spinner
+
+Stage Summary:
+- Fixed useSearchParams Suspense boundary issue in 1 file (sandbox-login/page.tsx)
+- 3 files skipped: 2 already fixed, 1 doesn't use useSearchParams
+- All files now comply with Next.js 16 requirements
+- Pattern applied: Page wrapper with Suspense + Content component with useSearchParams
+---
+Task ID: 3-m
+Agent: Z.ai Code
+Task: Fix useCurrentUser hook to avoid useSearchParams Suspense issue
+
+Work Log:
+- Read worklog at /home/z/my-project/worklog.md
+- Removed `useSearchParams` import from useCurrentUser hook
+- Replaced `searchParams.get('userId')` with `new URLSearchParams(window.location.search).get('userId')`
+- This approach avoids Suspense boundary requirement by using window.location inside useEffect
+- All other methods (localStorage, sessionStorage, document.cookie) remain unchanged
+- Hook functionality preserved completely
+
+Stage Summary:
+- Fixed useSearchParams Suspense boundary issue in custom hook
+- Hook now uses window.location.search inside useEffect to avoid Suspense requirement
+- Alternative approach to wrapping entire app in Suspense
+- No changes to API calls or data fetching logic

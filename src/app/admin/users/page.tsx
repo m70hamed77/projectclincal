@@ -61,7 +61,7 @@ interface UserData {
   rejectionReason?: string | null
 }
 
-export default function AdminUsersPage() {
+export function AdminUsersPageContent() {
   const { user, loading: userLoading } = useCurrentUser()
   const { t, locale, loading: i18nLoading } = useTranslations()
   const searchParams = useSearchParams()
@@ -844,5 +844,16 @@ export default function AdminUsersPage() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+// Page wrapper with Suspense boundary
+import { Suspense } from 'react'
+
+export default function AdminUsersPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-slate-50">Loading...</div>}>
+      <AdminUsersPageContent />
+    </Suspense>
   )
 }

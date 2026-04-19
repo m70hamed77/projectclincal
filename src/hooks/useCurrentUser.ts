@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
 
 export interface CurrentUser {
   id: string
@@ -20,7 +19,6 @@ export interface CurrentUser {
 export function useCurrentUser(): { user: CurrentUser | null; loading: boolean } {
   const [user, setUser] = useState<CurrentUser | null>(null)
   const [loading, setLoading] = useState(true)
-  const searchParams = useSearchParams()
 
   useEffect(() => {
     // ✅ منع infinite loop: تشغيل مرة واحدة فقط عند mount
@@ -37,7 +35,8 @@ export function useCurrentUser(): { user: CurrentUser | null; loading: boolean }
 
         // Method 1: URL query parameter (أولوية قصوى لـ sandboxed environment)
         try {
-          const urlUserId = searchParams.get('userId')
+          const urlParams = new URLSearchParams(window.location.search)
+          const urlUserId = urlParams.get('userId')
           if (urlUserId) {
             localUserId = urlUserId
             console.log('[useCurrentUser] ✅ Got userId from URL:', urlUserId)

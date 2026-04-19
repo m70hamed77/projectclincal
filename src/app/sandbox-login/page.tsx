@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Shield, LogIn, User, Mail, Lock } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function SandboxLoginPage() {
+export function SandboxLoginContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [email, setEmail] = useState('')
@@ -178,5 +178,17 @@ export default function SandboxLoginPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function SandboxLoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div>
+      </div>
+    }>
+      <SandboxLoginContent />
+    </Suspense>
   )
 }

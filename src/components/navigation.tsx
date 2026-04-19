@@ -16,6 +16,7 @@ import { Menu, Bell, Settings, LogOut, User, LayoutDashboard, MessageCircle, Cal
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { Suspense } from 'react'
 import { MotivationalMessage } from '@/components/MotivationalMessage'
 import { LanguageSwitcher } from '@/components/language-switcher'
 import { useTranslations } from '@/hooks/useTranslations'
@@ -30,7 +31,7 @@ interface NavigationProps {
   }
 }
 
-export function Navigation({ user }: NavigationProps) {
+export function NavigationContent({ user }: NavigationProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const { showMessage, MessageComponent } = MotivationalMessage()
@@ -266,5 +267,14 @@ export function Navigation({ user }: NavigationProps) {
         </div>
       </div>
     </header>
+  )
+}
+
+// Default export with Suspense boundary for useSearchParams
+export default function Navigation(props: NavigationProps) {
+  return (
+    <Suspense fallback={<div className="h-20 w-full" />}>
+      <NavigationContent {...props} />
+    </Suspense>
   )
 }
