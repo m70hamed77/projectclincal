@@ -4,8 +4,6 @@
 /node_modules
 /.pnp/
 .pnp.js
-package-lock.json
-bun.lock
 
 # testing
 /coverage
@@ -85,21 +83,12 @@ check-*.ts
 temp-*.js
 temp-*.ts
 
-# Documentation files - only ignore specific ones, keep the rest
-# *.md  # Commented out to keep documentation
-!PROJECT_LINKS.md
-!README.md
-
 # turbo
 .turbo
 
 # uploads
 public/uploads/*
 !public/uploads/.gitkeep
-
-# database (optional - uncomment if you don't want to commit db)
-# db/*.db
-# db/*.db-journal
 
 # temporary files
 upload/
