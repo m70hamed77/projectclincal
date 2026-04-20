@@ -62,7 +62,7 @@ export async function notifyAdmins(params: {
  */
 export async function notifyAdminNewStudent(studentId: string, studentName: string, studentEmail: string) {
   return notifyAdmins({
-    type: 'STUDENT_VERIFICATION',
+    type: 'NEW_APPLICATION',
     title: '🎓 طالب جديد ينتظر التفعيل',
     message: `قام ${studentName} (${studentEmail}) بالتسجيل كطالب طب أسنان ويحتاج إلى مراجعة بياناته وتوثيق حسابه.`,
     actionLink: `/admin/users?userId=${studentId}`,
@@ -118,7 +118,7 @@ export async function notifyAdminStudentApproved(studentName: string, studentEma
  */
 export async function notifyAdminStudentRejected(studentName: string, studentEmail: string, reason: string) {
   return notifyAdmins({
-    type: 'STUDENT_VERIFICATION',
+    type: 'APPLICATION_REJECTED',
     title: '❌ تم رفض طالب',
     message: `تم رفض حساب الطالب ${studentName} (${studentEmail}) بسبب: ${reason}`,
     actionLink: `/admin/users`,

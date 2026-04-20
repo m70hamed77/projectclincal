@@ -160,12 +160,12 @@ export default function EnterCodePage() {
                   {contactInfo?.method === 'email' ? (
                     <>
                       <Mail className="w-4 h-4 text-blue-600" />
-                      <span className="font-mono">{contactInfo.value}</span>
+                      <span className="font-mono">{contactInfo?.value}</span>
                     </>
                   ) : (
                     <>
                       <Phone className="w-4 h-4 text-blue-600" />
-                      <span className="font-mono">{contactInfo.value}</span>
+                      <span className="font-mono">{contactInfo?.value}</span>
                     </>
                   )}
                 </div>

@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
         reportedId: report.reportedUserId,
         reportedName: report.reportedUser.name,
         reportedEmail: report.reportedUser.email,
-        type: report.reportType,
+        reportType: report.reportType,
         description: report.description,
         status: report.status,
         adminDecision: report.adminDecision,

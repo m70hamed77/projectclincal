@@ -128,13 +128,13 @@ export default function NotificationsPage() {
 
     if (!userId) {
       try {
-        userId = localStorage.getItem('userId')
+        userId = localStorage.getItem('userId') ?? undefined
       } catch (e) {}
     }
 
     if (!userId) {
       try {
-        userId = sessionStorage.getItem('userId')
+        userId = sessionStorage.getItem('userId') ?? undefined
       } catch (e) {}
     }
 
@@ -155,17 +155,17 @@ export default function NotificationsPage() {
 
       try {
         // ✅ الحصول على userId من مصادر متعددة
-        let userId = user?.id
+        let userId: string | undefined = user?.id
 
         if (!userId) {
           try {
-            userId = localStorage.getItem('userId')
+            userId = localStorage.getItem('userId') ?? undefined
           } catch (e) {}
         }
 
         if (!userId) {
           try {
-            userId = sessionStorage.getItem('userId')
+            userId = sessionStorage.getItem('userId') ?? undefined
           } catch (e) {}
         }
 
@@ -196,7 +196,7 @@ export default function NotificationsPage() {
           setNotifications(data.notifications)
           setUnreadCount(data.unreadCount)
         } else {
-          console.error('[Notifications Page] ❌ API returned error:', data.error)
+          console.error('[Notifications Page] ❌ API returned success=false')
         }
       } catch (error) {
         console.error('[Notifications Page] ❌ Fetch error:', error)
@@ -211,17 +211,17 @@ export default function NotificationsPage() {
   const markAsRead = async (id: string) => {
     try {
       // ✅ الحصول على userId من مصادر متعددة
-      let userId = user?.id
+      let userId: string | undefined = user?.id
 
       if (!userId) {
         try {
-          userId = localStorage.getItem('userId')
+          userId = localStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
       if (!userId) {
         try {
-          userId = sessionStorage.getItem('userId')
+          userId = sessionStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
@@ -259,13 +259,13 @@ export default function NotificationsPage() {
 
       if (!userId) {
         try {
-          userId = localStorage.getItem('userId')
+          userId = localStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
       if (!userId) {
         try {
-          userId = sessionStorage.getItem('userId')
+          userId = sessionStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
@@ -301,13 +301,13 @@ export default function NotificationsPage() {
 
       if (!userId) {
         try {
-          userId = localStorage.getItem('userId')
+          userId = localStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
       if (!userId) {
         try {
-          userId = sessionStorage.getItem('userId')
+          userId = sessionStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
@@ -348,13 +348,13 @@ export default function NotificationsPage() {
 
       if (!userId) {
         try {
-          userId = localStorage.getItem('userId')
+          userId = localStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 
       if (!userId) {
         try {
-          userId = sessionStorage.getItem('userId')
+          userId = sessionStorage.getItem('userId') ?? undefined
         } catch (e) {}
       }
 

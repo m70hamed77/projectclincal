@@ -211,7 +211,7 @@ export default function ForgotPasswordPage() {
           </CardTitle>
           <CardDescription className="text-responsive-base" suppressHydrationWarning={true}>
             {step === 'email' && t('forgotPasswordPage.stepEmailDesc')}
-            {step === 'otp' && t('forgotPasswordPage.stepOtpDesc', { email })}
+            {step === 'otp' && t('forgotPasswordPage.stepOtpDesc')}
             {step === 'reset' && t('forgotPasswordPage.stepResetDesc')}
             {step === 'success' && t('forgotPasswordPage.stepSuccessDesc')}
           </CardDescription>

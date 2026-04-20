@@ -77,6 +77,9 @@ export default function DoctorPostsPage() {
     try {
       setLoading(true)
       // نستخدم الـ studentId كـ doctorId (في مشروعنا Student = Doctor)
+      if (!user) {
+        throw new Error('المستخدم غير موجود')
+      }
       const doctorId = user.id
 
       console.log('[DoctorPosts] Fetching posts for doctorId:', doctorId)
@@ -172,8 +175,8 @@ export default function DoctorPostsPage() {
           id: user.id,
           name: user.name,
           email: user.email,
-          role: user.role,
-          avatar: user.avatar ?? undefined
+          role: user.role as "PATIENT" | "STUDENT" | "ADMIN",
+          avatar: user.avatarUrl ?? undefined
         }} />
         <main className="flex-1 flex items-center justify-center">
           <Card className="w-full max-w-md mx-4">
@@ -200,8 +203,8 @@ export default function DoctorPostsPage() {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role,
-        avatar: user.avatar
+        role: user.role as "PATIENT" | "STUDENT" | "ADMIN",
+        avatar: user.avatarUrl
       }} />
 
       <main className="flex-1 py-8 px-4 bg-muted/30">
@@ -300,7 +303,7 @@ export default function DoctorPostsPage() {
                     </div>
                     <div>
                       <p className="text-2xl font-bold text-green-600">
-                        {posts.reduce((sum, p) => sum + p.acceptedCount, 0)}
+                        {posts.reduce((sum, p) => sum + p.acceptedApplications, 0)}
                       </p>
                       <p className="text-xs text-muted-foreground" suppressHydrationWarning={true}>مرضى مقبولين</p>
                     </div>

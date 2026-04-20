@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getSMSVerificationCode, deleteSMSVerificationCode } from '../send-sms-code/route'
+import { getSMSVerificationCode, deleteSMSVerificationCode } from '@/lib/sms-codes'
 
 export async function POST(request: NextRequest) {
   try {

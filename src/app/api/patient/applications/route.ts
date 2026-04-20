@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
       postId: app.postId,
       postTitle: app.post.title,
       postCity: app.post.city,
-      postAddress: app.address,
+      postAddress: app.post.student.address || app.post.city,
       postTreatmentType: app.post.treatmentType,
       status: app.status,
       createdAt: app.createdAt,

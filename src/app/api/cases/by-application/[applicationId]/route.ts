@@ -7,8 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ applicationId: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const applicationId = resolvedParams.applicationId
+    const { applicationId } = await params
 
     // Get the case by application ID
     const case_ = await db.case.findUnique({

@@ -159,12 +159,12 @@ export default function DoctorProfilePage() {
     const fetchCurrentUser = async () => {
       try {
         // Try to get userId from multiple sources
-        let userId = null
-        
+        let userId: string | null = null
+
         // Method 1: URL query params
         const urlParams = new URLSearchParams(window.location.search)
         userId = urlParams.get('userId')
-        
+
         // Method 2: Try cookies
         if (!userId) {
           try {
@@ -576,7 +576,7 @@ export default function DoctorProfilePage() {
             </Card>
             <Card>
               <CardContent className="p-4 text-center">
-                <div className="text-3xl font-bold text-blue-600">{stats.activeCases}</div>
+                <div className="text-3xl font-bold text-blue-600">{stats.activePosts}</div>
                 <div className="text-sm text-muted-foreground">حالة نشطة</div>
               </CardContent>
             </Card>
@@ -934,7 +934,7 @@ export default function DoctorProfilePage() {
             <RatingModal
               open={showRatingModal}
               onOpenChange={setShowRatingModal}
-              caseData={selectedCaseForRating}
+              caseData={selectedCaseForRating as any}
               studentName={student.name}
               onSuccess={async () => {
                 // Refresh the profile to show new rating

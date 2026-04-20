@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Students can see their own cases, patients can see their cases
-    let cases = []
+    let cases: any[] = []
 
     if (user.role === 'STUDENT') {
       const student = await db.student.findFirst({

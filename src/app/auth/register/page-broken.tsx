@@ -262,7 +262,7 @@ export default function RegisterPage() {
 
     if (nameError) return { isValid: false, error: nameError, field: 'name' }
     if (phoneError) return { isValid: false, error: phoneError, field: 'phone' }
-    if (emailError) return { isValid: false, error: emailError, field: email: emailError, field: 'email' }
+    if (emailError) return { isValid: false, error: emailError, field: 'email' }
     if (passwordError) return { isValid: false, error: passwordError, field: 'password' }
     if (confirmPasswordError) return { isValid: false, error: confirmPasswordError, field: 'confirmPassword' }
 
@@ -331,9 +331,9 @@ export default function RegisterPage() {
       console.log('[Register Form] Redirecting to verify page...')
 
       if (verificationMethod === 'email') {
-        await router.push(\`/auth/verify?email=${encodeURIComponent(formData.email)}&userType=${userType}\`)
+        await router.push(`/auth/verify?email=${encodeURIComponent(formData.email)}&userType=${userType}`)
       } else {
-        await router.push(\`/auth/verify-sms?phone=${encodeURIComponent(formData.phone)}&userType=${userType}\`)
+        await router.push(`/auth/verify-sms?phone=${encodeURIComponent(formData.phone)}&userType=${userType}`)
       }
     } catch (err: any) {
       console.error('[Register Form] Error:', err)
@@ -382,24 +382,23 @@ export default function RegisterPage() {
     return (
       <div className="space-y-1.5">
         <div className="flex items-center justify-between">
-          <Label 
-            htmlFor={id} 
-            className={hasError ? 'text-red-500' : ''}
-            className="text-sm font-medium"
+          <Label
+            htmlFor={id}
+            className={`text-sm font-medium ${hasError ? 'text-red-500' : ''}`}
           >
             {label}
             {required && <span className="text-red-500">*</span>}
           </Label>
-          
+
           {showStrengthMeter && passwordStrength > 0 && (
             <div className="flex items-center gap-1.5">
               <div className="flex-1 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  className=\`h-full transition-all duration-300 ${getPasswordStrengthColor(passwordStrength)}`}
-                  style={{ width: \`\${(passwordStrength / 5) * 100}%\`}}
+                <div
+                  className={`h-full transition-all duration-300 ${getPasswordStrengthColor(passwordStrength)}`}
+                  style={{ width: `${(passwordStrength / 5) * 100}%` }}
                 />
               </div>
-              <span className=\`text-xs font-medium \${getPasswordStrengthColor(passwordStrength).replace('bg-', 'text-')}\`}>
+              <span className={`text-xs font-medium ${getPasswordStrengthColor(passwordStrength).replace('bg-', 'text-')}`}>
                 {getPasswordStrengthText(passwordStrength)}
               </span>
             </div>
@@ -415,39 +414,36 @@ export default function RegisterPage() {
               <X className="w-5 h-5 text-red-500" />
             )}
             {!hasSuccess && !hasError && Icon && (
-              <Icon className=\`w-5 h-5 transition-colors \${hasError ? 'text-red-500' : 'text-muted-foreground'}\`} />
+              <Icon className={`w-5 h-5 transition-colors ${hasError ? 'text-red-500' : 'text-muted-foreground'}`} />
             )}
           </div>
 
           <Input
             id={id}
-            type={showPasswordToggle ? (showPassword ? 'text' : 'password') : (showPassword ? 'text' : 'password')}
+            type={showPassword ? 'text' : type}
             placeholder={placeholder}
             maxLength={maxLength}
             required={required}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
-            className=\`
+            className={`
               pr-10
               transition-all duration-200
-              \${hasError 
-                ? 'border-red-500 focus-visible:ring-red-500' 
-                : hasSuccess 
-                  ? 'border-emerald-500 focus-visible:ring-emerald-500' 
+              ${hasError
+                ? 'border-red-500 focus-visible:ring-red-500'
+                : hasSuccess
+                  ? 'border-emerald-500 focus-visible:ring-emerald-500'
                   : 'border-gray-300 focus-visible:ring-emerald-500 hover:border-emerald-400'
               }
-              \${hasSuccess ? 'bg-emerald-50/30' : ''}
-            \`}
+              ${hasSuccess ? 'bg-emerald-50/30' : ''}
+            `}
           />
 
           {showPasswordToggle && (
             <button
               type="button"
-              onClick={() => showPassword === 'password' 
-                ? setShowPassword('confirmPassword') 
-                : setShowPassword('password')
-              }
+              onClick={() => setShowPassword(!showPassword)}
               className="absolute left-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -505,14 +501,14 @@ export default function RegisterPage() {
           <TabsList className="grid w-full grid-cols-2 mb-8 p-1 bg-muted/50 rounded-lg">
             <TabsTrigger 
               value="patient" 
-              className="gap-2 data-state={userType === 'patient' ? 'active' : ''}
+              className="gap-2"
             >
               <User className="w-5 h-5" />
               كمريض
             </TabsTrigger>
             <TabsTrigger 
               value="student" 
-              className="gap-2 data-state={userType === 'student' ? 'active' : ''}
+              className="gap-2"
             >
               <Stethoscope className="w-5 h-5" />
               كطالب

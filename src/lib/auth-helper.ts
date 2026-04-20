@@ -15,7 +15,7 @@ export async function getUserIdFromRequest(request: NextRequest): Promise<string
   }
 
   // Method 2: Headers
-  userId = request.headers.get('X-User-Id')
+  userId = request.headers.get('X-User-Id') || undefined
   if (userId) {
     console.log('[AUTH] ✅ Got userId from headers')
     return userId
@@ -23,7 +23,7 @@ export async function getUserIdFromRequest(request: NextRequest): Promise<string
 
   // Method 3: Query Parameters
   const { searchParams } = new URL(request.url, request.url.startsWith('http') ? request.url : `http://localhost${request.url}`)
-  userId = searchParams.get('userId')
+  userId = searchParams.get('userId') || undefined
   if (userId) {
     console.log('[AUTH] ✅ Got userId from query parameter')
     return userId

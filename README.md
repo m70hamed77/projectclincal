@@ -10,6 +10,7 @@ A dental clinic platform connecting dental students with patients for free or lo
 
 - Node.js 18+ أو أحدث / Latest version
 - npm أو yarn أو pnpm
+- حساب على Neon (PostgreSQL Cloud) - [احصل عليه مجاناً](https://neon.tech)
 
 ---
 
@@ -28,20 +29,31 @@ code .
 npm install
 ```
 
-### 3. إنشاء مجلد قاعدة البيانات / Create Database Folder
+### 3. إعداد قاعدة البيانات (Neon PostgreSQL) / Setup Database (Neon)
 
-```bash
-mkdir db
-```
+⭐ **مهم جداً:** المشروع يستخدم PostgreSQL على السحابة (Neon)
 
-### 4. إعداد قاعدة البيانات / Setup Database
+1. اذهب إلى https://neon.tech وأنشئ حساب مجاني
+2. أنشئ مشروع جديد
+3. انسخ Connection String مثل:
+   ```
+   postgresql://neondb_owner:xxx@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
+   ```
+4. افتح ملف `.env` وأضف الـ DATABASE_URL:
+   ```env
+   DATABASE_URL=postgresql://neondb_owner:xxx@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
+   ```
+
+ثم شغل الأوامر التالية / Then run these commands:
 
 ```bash
 npx prisma generate
 npx prisma db push
 ```
 
-### 5. إنشاء حساب الأدمن / Create Admin Account
+✅ **فائدة:** نفس قاعدة البيانات تستخدم محلياً وعلى Vercel!
+
+### 4. إنشاء حساب الأدمن / Create Admin Account
 
 ```bash
 npm run create-admin
@@ -51,7 +63,7 @@ npm run create-admin
 - **Email**: `admin@smileydental.com`
 - **Password**: `Admin@123456`
 
-### 6. تشغيل السيرفر / Start Development Server
+### 5. تشغيل السيرفر / Start Development Server
 
 ```bash
 npm run dev
@@ -137,7 +149,30 @@ smiley-dental-clinic/
 
 ## ⚙️ إعداد قاعدة البيانات / Database Setup
 
-### استخدام SQLite (افتراضي) / Using SQLite (Default)
+### ⭐ استخدام PostgreSQL (Neon) - الموصى به! / Using PostgreSQL (Neon) - Recommended!
+
+المشروع مهيأ لاستخدام PostgreSQL على السحابة عبر Neon:
+
+1. أنشئ حساب مجاني على https://neon.tech
+2. أنشئ مشروع جديد
+3. انسخ Connection String
+4. أضفه في ملف `.env`:
+   ```env
+   DATABASE_URL="postgresql://neondb_owner:xxx@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require"
+   ```
+5. شغل:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+✅ **المميزات:**
+- نفس قاعدة البيانات محلياً وعلى Vercel
+- لا حاجة لقاعدة بيانات محلية
+- نسخ احتياطي تلقائي
+- أداء عالي
+
+### استخدام SQLite (للتجربة فقط) / Using SQLite (For Testing Only)
 
 ملف `.env`:
 ```env
@@ -147,33 +182,6 @@ DATABASE_URL="file:./db/custom.db"
 أذا واجهت مشاكل في المسار، استخدم المسار المطلق:
 ```env
 DATABASE_URL="file:G:/projrct clinc/db/custom.db"
-```
-
-### استخدام PostgreSQL (اختياري) / Using PostgreSQL (Optional)
-
-1. قم بتثبيت PostgreSQL / Install PostgreSQL
-2. أنشئ قاعدة بيانات / Create database:
-```sql
-CREATE DATABASE smiley_dental_clinic;
-```
-
-3. غيّر ملف `.env`:
-```env
-DATABASE_URL="postgresql://user:password@localhost:5432/smiley_dental_clinic"
-```
-
-4. غيّر `prisma/schema.prisma`:
-```prisma
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-```
-
-5. شغل الأوامر:
-```bash
-npx prisma generate
-npx prisma db push
 ```
 
 ---

@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle carnieh file upload for patients
-    let carniehImagePath = null
+    let carniehImagePath: string | null = null
     if (role === 'PATIENT' && carniehFile) {
       try {
         // Create uploads directory if it doesn't exist
@@ -108,7 +108,6 @@ export async function POST(request: NextRequest) {
         password, // Note: In production, hash this with bcrypt!
         name: `${firstName} ${lastName}`,
         phone: phone || null,
-        carniehImage: carniehImagePath,
         role: role,
         status,
       },

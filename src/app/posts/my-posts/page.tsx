@@ -365,7 +365,7 @@ export default function MyPostsPage() {
 
                       <CardFooter className="flex flex-wrap gap-2">
                         <Link href={`/posts/${post.id}`} className="flex-1">
-                          <Button variant="outline" className="w-full gap-2" suppressHydrationWarning={true}>
+                          <Button variant="viewDetails" className="w-full gap-2" suppressHydrationWarning={true}>
                             <Eye className="h-4 w-4" />
                             عرض التفاصيل
                           </Button>

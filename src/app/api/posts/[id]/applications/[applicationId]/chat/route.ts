@@ -9,9 +9,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string; applicationId: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const id = resolvedParams.id
-    const applicationId = resolvedParams.applicationId
+    const { id, applicationId } = await params
 
     if (!id || !applicationId) {
       return NextResponse.json(

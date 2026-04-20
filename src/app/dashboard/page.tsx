@@ -145,7 +145,7 @@ export default function DashboardPage() {
                       </div>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" suppressHydrationWarning={true}>
+                  <Button variant="viewDetails" size="sm" suppressHydrationWarning={true}>
                     عرض التفاصيل
                   </Button>
                 </div>

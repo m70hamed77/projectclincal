@@ -1,12 +1,11 @@
-import nextCoreWebVitals from "eslint-config-next/core-web-vitals";
-import nextTypescript from "eslint-config-next/typescript";
+import next from "eslint-config-next";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
+const eslintConfig = [...next, {
   rules: {
     // TypeScript rules
     "@typescript-eslint/no-explicit-any": "off",
@@ -15,10 +14,13 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     "@typescript-eslint/ban-ts-comment": "off",
     "@typescript-eslint/prefer-as-const": "off",
     "@typescript-eslint/no-unused-disable-directive": "off",
-    
+    "@typescript-eslint/no-require-imports": "off",
+
     // React rules
     "react-hooks/exhaustive-deps": "off",
     "react-hooks/purity": "off",
+    "react-hooks/immutability": "off",
+    "react-hooks/set-state-in-effect": "off",
     "react/no-unescaped-entities": "off",
     "react/display-name": "off",
     "react/prop-types": "off",

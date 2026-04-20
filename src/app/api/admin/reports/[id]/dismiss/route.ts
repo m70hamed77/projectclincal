@@ -17,7 +17,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const reportId = (await params).id
+    const { id: reportId } = await params
 
     console.log('[ADMIN REPORT DISMISS] Dismissing report:', reportId)
 

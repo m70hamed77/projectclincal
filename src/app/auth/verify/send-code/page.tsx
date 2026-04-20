@@ -222,7 +222,7 @@ export default function SendVerificationCodePage() {
                   ) : (
                     <>
                       <ShieldCheck className="w-5 h-5" />
-                      {t('register.form.sendCode')}
+                      إرسال كود التحقق
                     </>
                   )}
                 </Button>
@@ -233,7 +233,7 @@ export default function SendVerificationCodePage() {
                 <Alert className="bg-emerald-50 border-emerald-200">
                   <CheckCircle2 className="h-5 w-5" />
                   <AlertDescription className="text-emerald-900">
-                    {t('registerPage.codeSentTitle')}
+                    تم إرسال كود التحقق بنجاح!
                   </AlertDescription>
                 </Alert>
 
@@ -302,7 +302,7 @@ export default function SendVerificationCodePage() {
         {/* Footer Links */}
         <div className="mt-6 text-center text-sm text-muted-foreground">
           <Link href="/auth/login" className="text-emerald-600 hover:underline font-medium">
-            {t('auth.haveAccount')} {t('auth.loginButton')}
+            لديك حساب بالفعل؟ سجل دخول
           </Link>
         </div>
       </div>

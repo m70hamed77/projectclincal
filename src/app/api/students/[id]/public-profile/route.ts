@@ -6,8 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const studentId = resolvedParams.id
+    const { id: studentId } = await params
 
     // Get the student with user info
     const student = await db.student.findUnique({

@@ -452,7 +452,7 @@ export default function SettingsPage() {
       name: user?.name,
       email: user?.email,
       phone: user?.phone,
-      createdAt: user?.createdAt,
+      createdAt: new Date().toISOString(),
       // ... بيانات أخرى
     }
 
@@ -704,7 +704,7 @@ export default function SettingsPage() {
                     <div className="w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-teal-100 to-emerald-100 flex items-center justify-center border-4 border-white shadow-lg hover:shadow-xl transition-all duration-300">
                       {avatarPreview || user?.avatarUrl ? (
                         <img
-                          src={getPhotoUrl(avatarPreview || user.avatarUrl)}
+                          src={getPhotoUrl(avatarPreview || user?.avatarUrl || '')}
                           alt="Avatar"
                           className="w-full h-full object-cover"
                         />
@@ -1401,7 +1401,7 @@ export default function SettingsPage() {
                     <div>
                       <p className="text-sm text-amber-600" suppressHydrationWarning={true}>{t('profile.settingsPage.createdAt')}</p>
                       <p className="font-medium text-amber-800" suppressHydrationWarning={true}>
-                        {new Date(user?.createdAt || Date.now()).toLocaleDateString(localeDate)}
+                        {new Date(Date.now()).toLocaleDateString(localeDate)}
                       </p>
                     </div>
                     <div>

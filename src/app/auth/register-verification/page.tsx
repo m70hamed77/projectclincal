@@ -411,7 +411,7 @@ export function RegisterWithVerificationContent() {
 
     try {
       // Upload ID card first for students
-      let idCardUrl = null
+      let idCardUrl: string | null = null
       if (userType === 'student' && idCardFile) {
         idCardUrl = await uploadIdCard()
         if (!idCardUrl) {

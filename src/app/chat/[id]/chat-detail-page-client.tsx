@@ -426,7 +426,7 @@ function ChatPageContent() {
         console.error('[Chat Page] ❌ Send failed:', errorData)
         throw new Error(errorData.error || 'حدث خطأ أثناء إرسال الرسالة')
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('[Chat Page] ❌ Error in handleSendMessage:', error)
       console.error('[Chat Page] Error stack:', error.stack)
       alert('حدث خطأ أثناء إرسال الرسالة')
@@ -624,7 +624,7 @@ function ChatPageContent() {
                               src={msg.fileUrl}
                               alt="صورة" suppressHydrationWarning={true}
                               className="max-w-full h-auto rounded-lg cursor-pointer hover:opacity-90 transition-opacity hover:shadow-md"
-                              onClick={() => window.open(msg.fileUrl, '_blank')}
+                              onClick={() => window.open(msg.fileUrl!, '_blank')}
                             />
                           </div>
                         )}

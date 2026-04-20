@@ -35,7 +35,6 @@ async function testRatingToggle() {
     console.log('  Is Visible:', rating.isVisible)
     console.log('  Student ID:', rating.studentId)
     console.log('  Case Student ID:', rating.case_?.application?.studentId)
-    console.log('  Student User:', rating.case_?.application?.student?.user?.name)
     console.log('  Patient User:', rating.case_?.application?.patient?.user?.name)
     console.log()
 

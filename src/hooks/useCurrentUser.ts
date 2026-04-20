@@ -42,7 +42,7 @@ export function useCurrentUser(): { user: CurrentUser | null; loading: boolean }
             console.log('[useCurrentUser] ✅ Got userId from URL:', urlUserId)
           }
         } catch (urlError) {
-          console.warn('[useCurrentUser] URL query parameter not accessible:', urlError.message)
+          console.warn('[useCurrentUser] URL query parameter not accessible:', urlError instanceof Error ? urlError.message : String(urlError))
         }
 
         // Method 2: localStorage
@@ -53,7 +53,7 @@ export function useCurrentUser(): { user: CurrentUser | null; loading: boolean }
               console.log('[useCurrentUser] ✅ Got userId from localStorage:', localUserId)
             }
           } catch (localError) {
-            console.warn('[useCurrentUser] localStorage not accessible (sandboxed environment):', localError.message)
+            console.warn('[useCurrentUser] localStorage not accessible (sandboxed environment):', localError instanceof Error ? localError.message : String(localError))
           }
         }
 
@@ -65,7 +65,7 @@ export function useCurrentUser(): { user: CurrentUser | null; loading: boolean }
               console.log('[useCurrentUser] ✅ Got userId from sessionStorage:', localUserId)
             }
           } catch (sessionError) {
-            console.warn('[useCurrentUser] sessionStorage not accessible:', sessionError.message)
+            console.warn('[useCurrentUser] sessionStorage not accessible:', sessionError instanceof Error ? sessionError.message : String(sessionError))
           }
         }
 
@@ -82,7 +82,7 @@ export function useCurrentUser(): { user: CurrentUser | null; loading: boolean }
               }
             }
           } catch (cookieError) {
-            console.warn('[useCurrentUser] document.cookie not accessible:', cookieError.message)
+            console.warn('[useCurrentUser] document.cookie not accessible:', cookieError instanceof Error ? cookieError.message : String(cookieError))
           }
         }
 

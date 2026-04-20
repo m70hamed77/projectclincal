@@ -15,7 +15,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const studentId = (await params).id
+    const { id: studentId } = await params
     console.log('[ADMIN REJECT] Rejecting student:', studentId)
 
     // ✅ Get userId from multiple sources

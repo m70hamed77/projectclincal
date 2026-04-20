@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendSMS, formatPhoneNumber } from '@/lib/sms'
-
-// تخزين الأكواد في الذاكرة (في الإنتاج، استخدم قاعدة البيانات أو Redis)
-const verificationCodes = new Map<string, { code: string; expiresAt: number; phone: string }>()
+import { saveSMSVerificationCode } from '@/lib/sms-codes'
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,11 +14,7 @@ export async function POST(request: NextRequest) {
     const code = Math.floor(100000 + Math.random() * 900000).toString()
 
     // حفظ الكود مع وقت انتهاء الصلاحية (10 دقائق)
-    verificationCodes.set(phone, {
-      code,
-      expiresAt: Date.now() + 10 * 60 * 1000,
-      phone,
-    })
+    saveSMSVerificationCode(phone, code, 10)
 
     // تنسيق رقم الهاتف
     const formattedPhone = formatPhoneNumber(phone)
@@ -44,23 +38,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
-
-// دالة مساعدة للحصول على الكود المخزن
-export function getSMSVerificationCode(phone: string): string | null {
-  const stored = verificationCodes.get(phone)
-  if (!stored) return null
-
-  // التحقق من عدم انتهاء صلاحية الكود
-  if (Date.now() > stored.expiresAt) {
-    verificationCodes.delete(phone)
-    return null
-  }
-
-  return stored.code
-}
-
-// دالة مساعدة لحذف الكود
-export function deleteSMSVerificationCode(phone: string): void {
-  verificationCodes.delete(phone)
 }

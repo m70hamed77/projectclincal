@@ -463,7 +463,7 @@ export default function RegisterNewPage() {
         {/* Footer Link */}
         <div className="mt-6 text-center text-sm text-muted-foreground">
           <Link href="/auth/login" className="text-purple-600 hover:underline font-medium">
-            {t('auth.haveAccount')} {t('auth.loginButton')}
+            لديك حساب بالفعل؟ سجل دخول
           </Link>
         </div>
       </div>

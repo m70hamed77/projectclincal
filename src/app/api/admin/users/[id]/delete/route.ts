@@ -15,7 +15,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const userId = (await params).id
+    const { id: userId } = await params
     console.log('[ADMIN DELETE USER] Deleting user:', userId)
 
     // Get delete reason from request body

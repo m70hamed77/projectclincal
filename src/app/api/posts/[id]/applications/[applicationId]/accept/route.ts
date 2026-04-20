@@ -10,9 +10,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string; applicationId: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const id = resolvedParams.id
-    const applicationId = resolvedParams.applicationId
+    const { id, applicationId } = await params
 
     console.log('[ACCEPT API] =========================================')
     console.log('[ACCEPT API] Request received')
@@ -224,7 +222,7 @@ export async function POST(
     })
 
     console.log(`[NOTIFICATION] ✅ Notification created for patient ${application.patient.user.id}, notification ID: ${patientNotification.id}`)
-    console.log(`[NOTIFICATION] Notification data:`, JSON.parse(patientNotification.data))
+    console.log(`[NOTIFICATION] Notification data:`, patientNotification.data ? JSON.parse(patientNotification.data) : null)
 
     // Check if the post is now full
     const isFull = updatedPost.acceptedCount >= requiredCount
@@ -252,7 +250,7 @@ export async function POST(
       application: updatedApplication,
       postIsFull: isFull
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('[ACCEPT API] ❌ Error accepting application:', error)
     console.error('[ACCEPT API] Error details:', {
       message: error.message,

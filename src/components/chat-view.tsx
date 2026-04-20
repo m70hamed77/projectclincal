@@ -599,7 +599,7 @@ export default function ChatView({ conversationId }: ChatViewProps) {
                               src={msg.fileUrl}
                               alt={t('chat.imageAlt')}
                               className="max-w-full h-auto rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                              onClick={() => window.open(msg.fileUrl, '_blank')}
+                              onClick={() => window.open(msg.fileUrl!, '_blank')}
                             />
                           </div>
                         )}

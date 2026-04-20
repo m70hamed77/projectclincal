@@ -35,7 +35,15 @@ function VerifyEmailContent() {
         body: JSON.stringify({ email, code }),
       })
 
-      const verifyData = await verifyResponse.json()
+      // Parse JSON safely
+      let verifyData
+      try {
+        const text = await verifyResponse.text()
+        verifyData = JSON.parse(text)
+      } catch (parseError) {
+        console.error('[VERIFY CODE] JSON Parse Error:', parseError)
+        throw new Error('فشل التحقق من الكود - خطأ في الاتصال بالخادم')
+      }
 
       if (!verifyResponse.ok) {
         throw new Error(verifyData.error || 'فشل التحقق من الكود')
@@ -58,7 +66,15 @@ function VerifyEmailContent() {
             }),
           })
 
-          const registerData = await registerResponse.json()
+          // Parse JSON safely
+          let registerData
+          try {
+            const text = await registerResponse.text()
+            registerData = JSON.parse(text)
+          } catch (parseError) {
+            console.error('[REGISTER USER] JSON Parse Error:', parseError)
+            throw new Error('فشل إنشاء الحساب - خطأ في الاتصال بالخادم')
+          }
 
           if (!registerResponse.ok) {
             console.warn('User registration failed:', registerData)
@@ -102,7 +118,15 @@ function VerifyEmailContent() {
         body: JSON.stringify({ email }),
       })
 
-      const data = await response.json()
+      // Parse JSON safely
+      let data
+      try {
+        const text = await response.text()
+        data = JSON.parse(text)
+      } catch (parseError) {
+        console.error('[RESEND CODE] JSON Parse Error:', parseError)
+        throw new Error('فشل إرسال الكود - خطأ في الاتصال بالخادم')
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'فشل إرسال الكود')

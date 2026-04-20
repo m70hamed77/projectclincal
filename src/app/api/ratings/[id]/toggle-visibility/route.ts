@@ -7,8 +7,7 @@ export async function POST(
 ) {
   try {
     // Resolve params first
-    const resolvedParams = await params
-    const ratingId = resolvedParams.id
+    const { id: ratingId } = await params
 
     console.log('[RATING VISIBILITY] ===== Toggle Request Start =====')
     console.log('[RATING VISIBILITY] Rating ID:', ratingId)

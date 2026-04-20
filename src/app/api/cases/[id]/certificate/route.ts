@@ -8,8 +8,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const caseId = resolvedParams.id
+    const { id: caseId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value
@@ -87,8 +86,7 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const caseId = resolvedParams.id
+    const { id: caseId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value
@@ -164,8 +162,7 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const caseId = resolvedParams.id
+    const { id: caseId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value

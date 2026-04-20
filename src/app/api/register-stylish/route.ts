@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Handle carnieh file upload
-    let carniehImageUrl = null
+    let carniehImageUrl: string | null = null
     if (carniehFile && role === 'PATIENT') {
       // In production, you would upload to a cloud service like Cloudinary, AWS S3, etc.
       // For now, we'll save it as base64 to the database
@@ -123,13 +123,12 @@ export async function POST(request: NextRequest) {
     // Create user
     const user = await db.user.create({
       data: {
-        email: email || null,
+        email,
         name: `${firstName} ${lastName}`,
         phone: phone || null,
         password, // In production, hash this password with bcrypt!
         role,
         status,
-        carniehImage: carniehImageUrl,
       },
     })
 

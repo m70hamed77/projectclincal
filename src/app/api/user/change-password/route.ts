@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     const { currentPassword, newPassword, confirmPassword } = body
 
     // 1. جلب الجلسة الحالية
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value
 
     if (!userId) {

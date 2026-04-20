@@ -87,7 +87,8 @@ export default function AllApplicationsPage() {
         const data: ApplicationsResponse = await response.json()
 
         if (!response.ok) {
-          setError(data.error || t('applicationsPage.errors.fetchFailed'))
+          const errorData: any = data
+          setError(errorData.error || t('applicationsPage.errors.fetchFailed'))
           return
         }
 

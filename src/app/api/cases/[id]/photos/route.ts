@@ -8,8 +8,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const caseId = resolvedParams.id
+    const { id: caseId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value
@@ -58,7 +57,7 @@ export async function POST(
     console.log('[Case Photos API] FormData entries:')
     for (const [key, value] of formData.entries()) {
       console.log(`  ${key}:`, {
-        type: typeof value,
+        valueType: typeof value,
         isFile: value instanceof File,
         isBlob: value instanceof Blob,
         name: value instanceof File ? value.name : 'N/A',
@@ -70,7 +69,7 @@ export async function POST(
     const beforePhoto = formData.get('beforePhoto')
     const afterPhoto = formData.get('afterPhoto')
     const description = formData.get('description') as string
-    const isPublic = formData.get('isPublic') === 'true' || formData.get('isPublic') === true
+    const isPublic = formData.get('isPublic') === 'true'
 
     console.log('[Case Photos API] Parsed data:', {
       beforePhoto: beforePhoto ? 'exists' : 'missing',
@@ -193,8 +192,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const caseId = resolvedParams.id
+    const { id: caseId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value

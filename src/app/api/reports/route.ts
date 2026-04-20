@@ -98,8 +98,8 @@ export async function POST(request: NextRequest) {
     try {
       await notifyAdminNewReport(
         report.id,
-        currentUser.name,
-        reportedUser.name,
+        currentUser.name || 'مستخدم',
+        reportedUser.name || 'مستخدم',
         description
       )
     } catch (notifyError) {

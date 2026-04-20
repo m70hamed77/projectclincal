@@ -8,8 +8,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const conversationId = resolvedParams.id
+    const { id: conversationId } = await params
 
     console.log('[Conversation API] Fetching conversation with ID:', conversationId)
 

@@ -17,7 +17,7 @@ export async function POST(
     // Get body first, then params
     const body = await request.json()
     const { suspensionReason } = body
-    const reportId = (await params).id
+    const { id: reportId } = await params
 
     console.log('[ADMIN REPORT SUSPEND] Report ID:', reportId)
     console.log('[ADMIN REPORT SUSPEND] Suspension reason:', suspensionReason)

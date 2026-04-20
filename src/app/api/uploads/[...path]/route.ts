@@ -14,18 +14,18 @@ export async function GET(
 ) {
   try {
     // Unwrap params (Next.js 15+ requires this)
-    const resolvedParams = await params
+    const { path: pathArray } = await params
 
-    // Build the file path safely
-    const filePath = path.join(process.cwd(), 'public', 'uploads', ...resolvedParams.path);
+    // Build file path safely
+    const filePath = path.join(process.cwd(), 'public', 'uploads', ...pathArray);
 
-    // Security check: ensure the path doesn't escape the uploads directory
+    // Security check: ensure path doesn't escape uploads directory
     const uploadsPath = path.join(process.cwd(), 'public', 'uploads');
     const normalizedFilePath = path.normalize(filePath);
     const normalizedUploadsPath = path.normalize(uploadsPath);
 
     if (!normalizedFilePath.startsWith(normalizedUploadsPath)) {
-      console.error('[UPLOADS] ❌ Path traversal attempt detected:', resolvedParams.path);
+      console.error('[UPLOADS] ❌ Path traversal attempt detected:', pathArray);
       return new NextResponse('Access denied', { status: 403 });
     }
 
@@ -58,7 +58,7 @@ export async function GET(
 
     const contentType = contentTypes[ext] || 'application/octet-stream';
 
-    // Read and serve the file
+    // Read and serve file
     const file = fs.readFileSync(filePath);
 
     console.log('[UPLOADS] ✅ Serving file:', {

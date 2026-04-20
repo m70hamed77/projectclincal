@@ -9,8 +9,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const conversationId = resolvedParams.id
+    const { id: conversationId } = await params
 
     const cookieStore = await cookies()
     const userId = cookieStore.get('userId')?.value
@@ -124,8 +123,7 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const resolvedParams = await params
-    const conversationId = resolvedParams.id
+    const { id: conversationId } = await params
 
     const body = await request.json()
     const { content, messageType = 'TEXT', fileUrl } = body

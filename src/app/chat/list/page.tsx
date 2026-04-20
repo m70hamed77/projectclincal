@@ -98,7 +98,7 @@ export default function ChatListPage() {
           })
           setConversations(data.conversations)
         } else {
-          console.error('[Chat List] ❌ API returned error:', data.error)
+          console.error('[Chat List] ❌ API returned success=false')
         }
       } catch (error) {
         console.error('[Chat List] ❌ Fetch error:', error)

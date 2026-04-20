@@ -152,6 +152,7 @@ function ProfileContent() {
   const [loadingCases, setLoadingCases] = useState(true)
   const [selectedCase, setSelectedCase] = useState<any>(null)
   const [showUploadModal, setShowUploadModal] = useState(false)
+  const [showCertificateModal, setShowCertificateModal] = useState(false)
 
   // Privacy Settings state for students
   const [privacySettings, setPrivacySettings] = useState({
@@ -935,9 +936,9 @@ function ProfileContent() {
           user
             ? {
                 id: user.id,
-                name: userName,
+                name: userName || user.name || 'مستخدم',
                 email: user.email,
-                role: user.role as 'PATIENT' | 'STUDENT',
+                role: (user.role as 'PATIENT' | 'STUDENT' | 'ADMIN') || 'STUDENT',
                 avatar: user.avatarUrl ?? undefined,
               }
             : undefined
@@ -1028,14 +1029,14 @@ function ProfileContent() {
                       <div className="flex items-start gap-2 text-sm col-span-1 md:col-span-2">
                         <MapPin className="w-4 h-4 text-muted-foreground mt-0.5" />
                         <span className="text-teal-700 line-clamp-2">
-                          {isStudent ? studentProfile.address : patientProfile.address}
+                          {isStudent ? studentProfile?.address : patientProfile?.address}
                         </span>
                       </div>
                     ) : null}
                     <div className="flex items-center gap-2 text-sm">
                       <Calendar className={`w-4 h-4 text-muted-foreground ${isRTL ? 'ml-2' : 'mr-2'}`} />
                       <span className="text-teal-700" suppressHydrationWarning={true}>
-                        {t('profile.joined')} {new Date(user?.createdAt || Date.now()).toLocaleDateString(localeDate, { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {t('profile.joined')} {new Date(Date.now()).toLocaleDateString(localeDate, { year: 'numeric', month: 'long', day: 'numeric' })}
                       </span>
                     </div>
                     {isStudent && (

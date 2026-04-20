@@ -1,4 +1,4 @@
-import { db } from './src/lib/db.ts'
+import { db } from './src/lib/db'
 
 const users = await db.user.findMany({
   where: { role: { in: ['STUDENT', 'PATIENT'] } },

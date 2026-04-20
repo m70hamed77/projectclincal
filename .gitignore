@@ -22,6 +22,7 @@ out/
 *.swo
 *.swp
 *.log
+*.out
 .vscode/
 .idea
 
@@ -45,9 +46,48 @@ pnpm-debug.log*
 # typescript
 *.tsbuild
 next-env.d.ts
+*.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # next.js
 .next/
+
+# Database files (local DB should NOT be committed)
+db/*.db
+db/*.db-shm
+db/*.db-wal
+*.db
+*.db-shm
+*.db-wal
+/db/
+custom.db
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# PID files (process IDs)
+*.pid
+
+# Manager/server files
+manager.pid
+server.pid
+run-server.out
+
+# Test scripts (local development)
+test-*.js
+test-*.ts
+check-*.js
+check-*.ts
+temp-*.js
+temp-*.ts
+
+# Documentation files - only ignore specific ones, keep the rest
+# *.md  # Commented out to keep documentation
+!PROJECT_LINKS.md
+!README.md
 
 # turbo
 .turbo

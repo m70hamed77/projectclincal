@@ -151,7 +151,7 @@ export default function SignupPage() {
   }
 
   // ========== Handle Input Change with data cleaning ==========
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target
     let cleanedValue = value
 
@@ -180,7 +180,7 @@ export default function SignupPage() {
   }
 
   // Handle Blur (Mark as touched)
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setTouched(prev => ({ ...prev, [name]: true }))
     validateField(name, value)
@@ -678,7 +678,7 @@ export default function SignupPage() {
                 </p>
 
                 {/* Progress Indicator */}
-                <div className="mt-4" role="progressbar" aria-valuenow={step} aria-valuemin="1" aria-valuemax={userType === 'student' ? 3 : 2}>
+                <div className="mt-4" role="progressbar" aria-valuenow={step} aria-valuemin={1} aria-valuemax={userType === 'student' ? 3 : 2}>
                   <div className="flex items-center gap-2">
                     {userType === 'student' ? (
                       <>
@@ -823,7 +823,7 @@ export default function SignupPage() {
                     {/* Password Strength Indicator */}
                     {formData.password && (
                       <div className="mt-3" id="password-strength">
-                        <div className="flex gap-1 mb-2" role="progressbar" aria-valuenow={passwordStrength} aria-valuemin="0" aria-valuemax="100">
+                        <div className="flex gap-1 mb-2" role="progressbar" aria-valuenow={passwordStrength} aria-valuemin={0} aria-valuemax={100}>
                           {[25, 50, 75, 100].map((threshold) => (
                             <div
                               key={threshold}
@@ -1051,7 +1051,7 @@ export default function SignupPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      sendOTP()
+                      // sendOTP() // TODO: Implement OTP resend
                       setFormData(prev => ({ ...prev, verificationCode: '' }))
                       setErrors({})
                     }}
