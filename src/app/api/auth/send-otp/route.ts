@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     // تخزين الكود
     otpStore.set(value, { code: otp, expiresAt, type })
 
-    // عرض الكود في Console (للتجربة) - إضافة تنسيق
+    // عرض الكود في Console (للتجربة)
     console.log('\n' + '='.repeat(70))
     console.log('🔐 VERIFICATION CODE SENT')
     console.log('='.repeat(70))
@@ -59,12 +59,9 @@ export async function POST(request: NextRequest) {
     console.log(`📍 IP: ${request.headers.get('x-forwarded-for') || 'Unknown'}`)
     console.log('='.repeat(70) + '\n')
 
-    // TODO: إرسال الكود عبر البريد الإلكتروني في الإنتاج
-
     return NextResponse.json({
       success: true,
       message: 'تم إرسال كود التحقق بنجاح',
-      // في الإنتاج، لا ترجع الكود هنا
       devCode: otp, // للتجربة فقط
     })
   } catch (error) {
@@ -76,26 +73,19 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// دالة مساعدة للتحقق من الكود (ستستخدمها في verify-otp)
-export function verifyOtpValue(value: string, code: string): boolean {
+// دالة مساعدة داخلية (بدون export)
+function verifyOtpValue(value: string, code: string): boolean {
   const stored = otpStore.get(value)
 
-  if (!stored) {
-    return false
-  }
+  if (!stored) return false
 
-  // التحقق من انتهاء الصلاحية
   if (Date.now() > stored.expiresAt) {
     otpStore.delete(value)
     return false
   }
 
-  // التحقق من الكود
-  if (stored.code !== code) {
-    return false
-  }
+  if (stored.code !== code) return false
 
-  // الكود صحيح - حذفه
   otpStore.delete(value)
   return true
 }

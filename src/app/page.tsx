@@ -890,8 +890,7 @@ export default function Home() {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* ==========================================
+{/* ==========================================
            VIDEO DEMO SECTION
       ========================================== */}
       <section
@@ -928,19 +927,26 @@ export default function Home() {
               style={{
                 background: "#0a0a0a",
                 border: "2px solid rgba(147, 51, 234, 0.3)",
+                boxShadow: "0 0 60px rgba(147, 51, 234, 0.2)",
               }}
             >
-              <video className="w-full aspect-video" controls poster="/img/video-poster.jpg" preload="metadata">
-                <source src="/img/poster.mp4" type="video/mp4" />
-                <source src="/img/platform-demo.webm" type="video/webm" />
-                <p className="text-white text-center p-8">{t("home.videoSection.notSupported")}</p>
-              </video>
+              {/* Glow top bar */}
               <div
-                className="absolute bottom-6 right-6 px-5 py-3 rounded-xl text-sm font-semibold text-white flex items-center gap-2"
-                style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
-              >
-                <Play className="w-4 h-4" style={{ color: "#a855f7" }} />
-                <span suppressHydrationWarning>{t("home.videoSection.watchFull")}</span>
+                className="absolute top-0 left-0 right-0 h-1 z-10"
+                style={{ background: "linear-gradient(90deg, #a855f7, #ec4899, #a855f7)" }}
+              />
+
+              {/* YouTube iframe */}
+              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
+                <iframe
+                  className="absolute inset-0 w-full h-full"
+                  src="https://www.youtube.com/embed/1PSCBAmeMSk?rel=0&modestbranding=1&color=white"
+                  title="Smiley Dental Clinic Demo"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  loading="lazy"
+                  style={{ border: "none" }}
+                />
               </div>
             </div>
 
@@ -975,7 +981,6 @@ export default function Home() {
           </AnimatedSection>
         </div>
       </section>
-
       {/* ==========================================
            FEATURES SECTION
       ========================================== */}
