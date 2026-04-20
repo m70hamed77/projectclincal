@@ -3,41 +3,5 @@
   "devCommand": "next dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["iad1"],
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "env": {
-    "NEXT_PUBLIC_APP_URL": {
-      "description": "Base URL of the application"
-    },
-    "NEXT_PUBLIC_API_URL": {
-      "description": "API Base URL"
-    },
-    "DATABASE_URL": {
-      "description": "PostgreSQL connection string (Neon)"
-    },
-    "EMAIL_USER": {
-      "description": "Gmail email for sending notifications"
-    },
-    "EMAIL_PASS": {
-      "description": "Gmail App Password"
-    },
-    "NEXTAUTH_SECRET": {
-      "description": "Secret key for JWT tokens"
-    },
-    "NEXTAUTH_URL": {
-      "description": "NextAuth URL"
-    },
-    "NODE_ENV": {
-      "description": "Environment (development/production)"
-    },
-    "NODE_OPTIONS": {
-      "description": "Node.js runtime options (max-old-space-size)",
-      "value": "--max-old-space-size=4096"
-    }
-  }
+  "regions": ["iad1"]
 }
