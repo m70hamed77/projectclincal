@@ -4,4 +4,8 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["iad1"]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 178ef82 (fix: move tw-animate-css to dependencies)
