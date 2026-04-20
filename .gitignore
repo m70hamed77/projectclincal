@@ -35,6 +35,7 @@ pnpm-debug.log*
 # local env files - IMPORTANT: .env is protected!
 .env
 .env*.local
+.env.development
 .env.development.local
 .env.test.local
 .env.production.local
