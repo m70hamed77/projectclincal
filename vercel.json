@@ -4,6 +4,12 @@
   "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["iad1"],
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
   "env": {
     "NEXT_PUBLIC_APP_URL": {
       "description": "Base URL of the application"
@@ -28,6 +34,10 @@
     },
     "NODE_ENV": {
       "description": "Environment (development/production)"
+    },
+    "NODE_OPTIONS": {
+      "description": "Node.js runtime options (max-old-space-size)",
+      "value": "--max-old-space-size=4096"
     }
   }
 }

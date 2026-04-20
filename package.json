@@ -2,6 +2,9 @@
   "name": "smiley-dental-clinic",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0 <21.0.0"
+  },
   "scripts": {
     "dev": "cross-env TURBOPACK=0 next dev -p 3000",
     "dev:turbo": "next dev -p 3000",
