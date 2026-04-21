@@ -661,7 +661,7 @@ export function AdminUsersPageContent() {
                     <div>
                       <span className="text-slate-600 text-sm">{t('users.idCard')}:</span>
                       <div className="mt-2 border border-slate-200 rounded-lg overflow-hidden">
-                        {selectedUser.idCardUrl.startsWith('http') || selectedUser.idCardUrl.startsWith('/api') ? (
+                        {selectedUser.idCardUrl.startsWith('http') ? (
                           <img
                             src={selectedUser.idCardUrl}
                             alt={t('users.idCardAlt')}
