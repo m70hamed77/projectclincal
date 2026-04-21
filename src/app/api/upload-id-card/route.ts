@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { v2 as cloudinary } from 'cloudinary'
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 /**
  * API Route: رفع صورة الكارنيه للطلاب
@@ -32,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file size (max 5MB)
-    const maxSize = 5 * 1024 * 1024 // 5MB
+    const maxSize = 5 * 1024 * 1024
     if (file.size > maxSize) {
       return NextResponse.json(
         { error: 'حجم الصورة يجب أن يكون أقل من 5MB' },
@@ -40,30 +45,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'id-cards')
-    await mkdir(uploadsDir, { recursive: true })
-
-    // Generate unique filename
-    const timestamp = Date.now()
-    const randomString = Math.random().toString(36).substring(2, 8)
-    const ext = file.name.split('.').pop() || 'jpg'
-    const filename = `idcard_${timestamp}_${randomString}.${ext}`
-    const filePath = path.join(uploadsDir, filename)
-
-    // Convert file to buffer and save
+    // Convert file to base64
     const bytes = await file.arrayBuffer()
-    await writeFile(filePath, Buffer.from(bytes))
+    const buffer = Buffer.from(bytes)
+    const base64 = `data:${file.type};base64,${buffer.toString('base64')}`
 
-    // Return the relative path (to be used with base URL)
-    const relativePath = `/uploads/id-cards/${filename}`
+    // Upload to Cloudinary
+    const result = await cloudinary.uploader.upload(base64, {
+      folder: 'id-cards',
+      resource_type: 'image',
+    })
 
-    console.log('[UPLOAD ID CARD] ✅ File uploaded successfully:', relativePath)
+    console.log('[UPLOAD ID CARD] ✅ File uploaded successfully:', result.secure_url)
     console.log('[UPLOAD ID CARD] File size:', (file.size / 1024).toFixed(2), 'KB')
 
     return NextResponse.json({
       success: true,
-      idCardUrl: relativePath,
+      idCardUrl: result.secure_url,
       message: 'تم رفع صورة الكارنيه بنجاح'
     })
 
