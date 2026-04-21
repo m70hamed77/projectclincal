@@ -55,7 +55,7 @@ export function useTranslations() {
   }, [])
 
   const t = (key: string): string => {
-    if (loading) return key
+    if (loading) return ''
 
     const keys = key.split('.')
     let value = translations
