@@ -826,8 +826,7 @@
       "show": "إظهار",
       "notRatedYet": "لم يقيم المريض هذه الحالة بعد"
     },
-
-    "title": "شهادات المرضى",
+  "testimonials": {
     "description": "إدارة التقييمات التي قدمها المرضى لك",
     "loading": "جاري التحميل...",
     "noRatings": "لا توجد تقييمات",
@@ -835,9 +834,9 @@
     "hide": "إخفاء",
     "show": "إظهار",
     "updating": "جاري التحديث...",
-    "testimonials":{
-    "ratingVisible": "مرئي"
-  },
+    "title": "شهادات المرضى",
+    "ratingVisible": "ظاهر للمرضى"
+},
     "privacySettings": {
       "title": "إعدادات الخصوصية",
       "description": "تحكم في ما يظهر للمرضى في بروفايلك العام",
