@@ -905,13 +905,17 @@
       "show": "Show",
       "notRatedYet": "Patient hasn't rated this case yet"
     },
+    "title": "Patient Testimonials",
+    "description": "Manage ratings given to you by patients",
+    "loading": "Loading...",
+    "noRatings": "No ratings",
+    "noRatingsDesc": "No patient has rated you yet",
+    "hide": "Hide",
+    "show": "Show",
+    "updating": "Updating...",
     "testimonials": {
-      "title": "Patient Testimonials",
-      "description": "Manage ratings submitted by patients to you",
-      "loading": "Loading...",
-      "noRatings": "No ratings yet",
-      "noRatingsDesc": "No patients have rated you yet"
-    },
+    "ratingVisible": "Visible"
+  },
     "privacySettings": {
       "title": "Privacy Settings",
       "description": "Control what patients see in your public profile",
