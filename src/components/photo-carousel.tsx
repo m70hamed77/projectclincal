@@ -8,6 +8,8 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
+  DialogHeader,
+  DialogTitle,
 } from '@/components/ui/dialog'
 
 interface Photo {
