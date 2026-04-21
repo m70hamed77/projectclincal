@@ -146,13 +146,11 @@ export function RegisterWithVerificationContent() {
   // Upload ID Card to server
   const uploadIdCard = async (): Promise<string | null> => {
     if (!idCardFile) return null
-
-    setIsUploading(true)
+setIsUploading(true)
     try {
       const formDataUpload = new FormData()
-      formDataUpload.append('file', idCardFile)
-
-      const response = await fetch('/api/upload/id-card', {
+      formDataUpload.append('idCardFile', idCardFile)
+const response = await fetch('/api/upload-id-card', {
         method: 'POST',
         body: formDataUpload,
       })
@@ -1126,7 +1124,7 @@ export function RegisterWithVerificationContent() {
                 {countdown > 0 ? (
                   <p className="text-sm text-gray-400 flex items-center justify-center gap-2">
                     <Clock className="w-4 h-4 animate-pulse" />
-                    {t('registerPage.canRequestNewCode')} {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
+                    {t('registerVerificationPage.canRequestNewCode')} {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
                   </p>
                 ) : (
                   <button
@@ -1149,7 +1147,7 @@ export function RegisterWithVerificationContent() {
                 className="w-full py-3.5 border-2 border-white/10 text-gray-300 font-semibold rounded-xl hover:bg-white/5 hover:border-white/20 transition-all flex items-center justify-center gap-2 group hover:scale-[1.02] active:scale-[0.98]"
               >
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                {t('registerPage.backToData')}
+                {t('registerVerificationPage.backToData')}
               </button>
 
               {/* Verify Button */}
@@ -1171,7 +1169,7 @@ export function RegisterWithVerificationContent() {
                 ) : (
                   <span className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    {t('registerPage.verifyAndRegister')}
+                   {t('registerVerificationPage.verifyAndRegister')}
                   </span>
                 )}
               </Button>

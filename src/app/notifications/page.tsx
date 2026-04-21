@@ -553,8 +553,7 @@ export default function NotificationsPage() {
                                   </p>
                                 </div>
                               </div>
-
-                              {/* Actions */}
+{/* Actions */}
                               <div className="flex items-center gap-2 mt-3">
                                 {isAdminAction(notification.type) && (
                                   <Button
@@ -567,7 +566,7 @@ export default function NotificationsPage() {
                                     <span suppressHydrationWarning={true}>{t('notifications.viewActionDetails')}</span>
                                   </Button>
                                 )}
-                                {notification.actionLink && !isAdminAction(notification.type) && (
+                                {notification.actionLink && !isAdminAction(notification.type) && !notification.actionLink.startsWith('/admin') && (
                                   <Button
                                     variant="outline"
                                     size="sm"
@@ -668,7 +667,7 @@ export default function NotificationsPage() {
                                     <span suppressHydrationWarning={true}>{t('notifications.viewActionDetails')}</span>
                                   </Button>
                                 )}
-                                {notification.actionLink && !isAdminAction(notification.type) && (
+                                {notification.actionLink && !isAdminAction(notification.type) && !notification.actionLink.startsWith('/admin') && (
                                   <Button
                                     variant="outline"
                                     size="sm"

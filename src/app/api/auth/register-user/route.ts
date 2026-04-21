@@ -153,7 +153,7 @@ export async function POST(request: NextRequest) {
             type: 'NEW_APPLICATION',
             title: '📝 طلب تحقق جديد',
             message: `قام ${user.name} بالتسجيل كطبيب/طالب وينتظر موافقتك على البيانات`,
-            actionLink: '/admin/users',
+            actionLink: '/admin/verification',
             actionText: 'مراجعة الطلب',
             isRead: false
           }
