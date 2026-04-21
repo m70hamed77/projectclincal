@@ -103,7 +103,7 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
             </Badge>
           </div>
 
-          {/* Zoom Button */}
+        {/* Zoom Button */}
           <div className="absolute bottom-3 left-3">
             <Dialog>
               <DialogTrigger asChild>
@@ -113,6 +113,11 @@ export function PhotoCarousel({ photos }: PhotoCarouselProps) {
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-4xl">
+                <DialogHeader>
+                  <DialogTitle className="sr-only">
+                    {isBefore ? 'صورة قبل العلاج' : 'صورة بعد العلاج'}
+                  </DialogTitle>
+                </DialogHeader>
                 <img
                   src={imageSrc}
                   alt={isBefore ? 'صورة قبل العلاج' : 'صورة بعد العلاج'}
