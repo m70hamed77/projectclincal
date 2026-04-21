@@ -216,12 +216,12 @@ function AdminNotificationsPageInner() {
             <div className="flex gap-2 mt-4">
               <Button variant="outline" size="sm" onClick={markAllAsRead} disabled={unreadCount === 0}
                 className="hover:bg-slate-100 border-slate-200 text-emerald-600 hover:text-emerald-700">
-                <Check className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                <Check className="w-4 h-4 mr-2" />
                 <span>{t('notifications.markAllAsRead')}</span>
               </Button>
               <Button size="sm" onClick={clearAll} disabled={notifications.length === 0}
                 className="bg-red-800 hover:bg-red-900 text-white">
-                <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+                <Trash2 className="w-4 h-4 mr-2" />
                 <span>{t('notifications.clearAll')}</span>
               </Button>
             </div>
