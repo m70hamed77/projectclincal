@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent } from '@/components/ui/card'
@@ -91,6 +92,13 @@ export default function ChatView({ conversationId }: ChatViewProps) {
   const { user } = useCurrentUser()
   const { t, locale } = useTranslations()
   const isRTL = locale === 'ar'
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!conversationId) {
+      router.push('/chat/list')
+    }
+  }, [conversationId, router])
   
   const [conversation, setConversation] = useState<Conversation | null>(null)
   const [messages, setMessages] = useState<Message[]>([])
