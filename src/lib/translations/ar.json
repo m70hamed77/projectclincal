@@ -1015,15 +1015,16 @@
     },
     
     "testimonials": {
-      "description": "Manage ratings given to you by patients",
-      "loading": "Loading...",
-      "noRatings": "No ratings",
-      "noRatingsDesc": "No patient has rated you yet",
-      "hide": "Hide",
-      "show": "Show",
-      "updating": "Updating...",
-      "title": "Patient Testimonials",
-      "ratingVisible": "Visible"
+  "title": "Patient Testimonials",
+  "description": "Manage ratings given to you by patients",
+  "loading": "Loading...",
+  "noRatings": "No ratings",
+  "noRatingsDesc": "No patient has rated you yet",
+  "hide": "Hide",
+  "show": "Show",
+  "updating": "Updating...",
+  "ratingVisible": "Visible",
+  "ratingHidden": "Hidden from patients"
 },
     "privacySettings": {
       "title": "إعدادات الخصوصية",

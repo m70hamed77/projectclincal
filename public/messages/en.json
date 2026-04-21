@@ -905,6 +905,8 @@
       "show": "Show",
       "notRatedYet": "Patient hasn't rated this case yet"
     },
+
+    "testimonials": {
     "title": "Patient Testimonials",
     "description": "Manage ratings given to you by patients",
     "loading": "Loading...",
@@ -913,9 +915,9 @@
     "hide": "Hide",
     "show": "Show",
     "updating": "Updating...",
-    "testimonials": {
-    "ratingVisible": "Visible"
-  },
+    "ratingVisible": "Visible",
+    "ratingHidden": "Hidden from patients"
+},
     "privacySettings": {
       "title": "Privacy Settings",
       "description": "Control what patients see in your public profile",

@@ -826,16 +826,18 @@
       "show": "إظهار",
       "notRatedYet": "لم يقيم المريض هذه الحالة بعد"
     },
-  "testimonials": {
-    "description": "إدارة التقييمات التي قدمها المرضى لك",
-    "loading": "جاري التحميل...",
-    "noRatings": "لا توجد تقييمات",
-    "noRatingsDesc": "لم يقم أي مريض بتقييمك بعد",
-    "hide": "إخفاء",
-    "show": "إظهار",
-    "updating": "جاري التحديث...",
-    "title": "شهادات المرضى",
-    "ratingVisible": "ظاهر للمرضى"
+
+    "testimonials": {
+  "title": "شهادات المرضى",
+  "description": "إدارة التقييمات التي قدمها المرضى لك",
+  "loading": "جاري التحميل...",
+  "noRatings": "لا توجد تقييمات",
+  "noRatingsDesc": "لم يقم أي مريض بتقييمك بعد",
+  "hide": "إخفاء",
+  "show": "إظهار",
+  "updating": "جاري التحديث...",
+  "ratingVisible": "ظاهر للمرضى",
+  "ratingHidden": "مخفي عن المرضى"
 },
     "privacySettings": {
       "title": "إعدادات الخصوصية",

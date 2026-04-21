@@ -921,7 +921,7 @@ function ProfileContent() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-800 mx-auto"></div>
-          <p className="mt-4 text-muted-foreground">{t('profile.loading')}</p>
+          <p className="mt-4 text-muted-foreground" suppressHydrationWarning>{t('profile.loading')}</p>
         </div>
       </div>
     )
@@ -2091,12 +2091,12 @@ function ProfileContent() {
                                       <Badge className={caseItem.rating.isVisible ? "bg-emerald-800 text-emerald-50" : "bg-gray-100 text-gray-700"}>
                                         {caseItem.rating.isVisible ? (
                                           <>
-                                            <Eye className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                            <Eye className="w-3 h-3 mr-1" />
                                             {t('profile.myCases.visibleToPatients')}
                                           </>
                                         ) : (
                                           <>
-                                            <EyeOff className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                            <Eye className="w-3 h-3 mr-1" />
                                             {t('profile.myCases.hiddenFromPatients')}
                                           </>
                                         )}
@@ -2225,7 +2225,7 @@ function ProfileContent() {
                                     </Badge>
                                   ) : (
                                     <Badge variant="secondary">
-                                      <EyeOff className={`w-3 h-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                      <EyeOff className="w-3 h-3 mr-1" />
                                       {t('profile.testimonials.ratingHidden')}
                                     </Badge>
                                   )}
