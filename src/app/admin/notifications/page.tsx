@@ -283,14 +283,14 @@ function AdminNotificationsPageInner() {
                                 {isAdminAction(notification.type) && (
                                   <Button variant="outline" size="sm" onClick={() => handleShowActionDetails(notification)}
                                     className="hover:bg-slate-100 border-slate-200 text-purple-600">
-                                    <FileText className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                    <FileText className={`w-4 h-4 mr-1`} />
                                     <span>{t('notifications.viewActionDetails')}</span>
                                   </Button>
                                 )}
                                 {!notification.isRead && (
                                   <Button variant="ghost" size="sm" onClick={() => markAsRead(notification.id)}
                                     className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
-                                    <Check className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                                    <Check className={`w-4 h-4 mr-1`} />
                                     <span>{t('notifications.markAsRead')}</span>
                                   </Button>
                                 )}

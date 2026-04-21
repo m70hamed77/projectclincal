@@ -442,27 +442,27 @@ export default function NotificationsPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={markAllAsRead}
-                      disabled={unreadCount === 0}
-                      className="border-teal-300 text-teal-700 hover:bg-teal-50 hover:border-teal-400 transition-all duration-300"
-                    >
-                      <Check className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span suppressHydrationWarning={true}>{t('notifications.markAllAsRead')}</span>
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={clearAll}
-                      disabled={allNotifications.length === 0}
-                      className="bg-red-800 hover:bg-red-900 text-white font-bold transition-all duration-300"
-                    >
-                      <Trash2 className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-                      <span suppressHydrationWarning={true}>{t('notifications.clearAll')}</span>
-                    </Button>
-                  </div>
+              <div className="flex gap-2">
+  <Button
+    variant="outline"
+    size="sm"
+    onClick={markAllAsRead}
+    disabled={unreadCount === 0}
+    className="border-teal-300 text-teal-700 hover:bg-teal-50 hover:border-teal-400 transition-all duration-300"
+  >
+    <Check className="w-4 h-4 mr-2" />
+    <span suppressHydrationWarning={true}>{t('notifications.markAllAsRead')}</span>
+  </Button>
+  <Button
+    size="sm"
+    onClick={clearAll}
+    disabled={allNotifications.length === 0}
+    className="bg-red-800 hover:bg-red-900 text-white font-bold transition-all duration-300"
+  >
+    <Trash2 className="w-4 h-4 mr-2" />
+    <span suppressHydrationWarning={true}>{t('notifications.clearAll')}</span>
+  </Button>
+</div>
                 </div>
               </CardContent>
             </Card>
