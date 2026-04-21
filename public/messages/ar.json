@@ -828,16 +828,16 @@
     },
 
     "testimonials": {
-  "title": "شهادات المرضى",
-  "description": "إدارة التقييمات التي قدمها المرضى لك",
-  "loading": "جاري التحميل...",
-  "noRatings": "لا توجد تقييمات",
-  "noRatingsDesc": "لم يقم أي مريض بتقييمك بعد",
-  "hide": "إخفاء",
-  "show": "إظهار",
-  "updating": "جاري التحديث...",
-  "ratingVisible": "ظاهر للمرضى",
-  "ratingHidden": "مخفي عن المرضى"
+  "title": "Patient Testimonials",
+  "description": "Manage ratings given to you by patients",
+  "loading": "Loading...",
+  "noRatings": "No ratings",
+  "noRatingsDesc": "No patient has rated you yet",
+  "hide": "Hide",
+  "show": "Show",
+  "updating": "Updating...",
+  "ratingVisible": "Visible",
+  "ratingHidden": "Hidden from patients"
 },
     "privacySettings": {
       "title": "إعدادات الخصوصية",
