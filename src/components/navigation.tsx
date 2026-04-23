@@ -231,10 +231,10 @@ export function NavigationContent({ user }: NavigationProps) {
           ) : (
             <>
               <LanguageSwitcher />
-              <Button variant="ghost" asChild className="hidden sm:inline-flex">
+              <Button variant="ghost" asChild className="hidden md:inline-flex">
                 <Link href={withUserId('/auth/login')}><span suppressHydrationWarning={true}>{t('navbar.login')}</span></Link>
               </Button>
-              <Button asChild className="hidden sm:inline-flex bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+              <Button asChild className="hidden md:inline-flex bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
                 <Link href={withUserId('/auth/register')}><span suppressHydrationWarning={true}>{t('navbar.register')}</span></Link>
               </Button>
             </>
@@ -292,6 +292,8 @@ export function Navigation(props: NavigationProps) {
     </Suspense>
   )
 }
+
+
 
 
 
