@@ -111,7 +111,7 @@ export async function GET(request: NextRequest) {
         userStatus: student.user.status,
         verificationStatus: student.verificationStatus,
         universityEmail: student.universityEmail,
-        idCardUrl: student.idCardUrl ? `/api${student.idCardUrl}` : null,
+        idCardUrl: student.idCardUrl || null,
         academicYear: student.academicYear,
         createdAt: student.createdAt,
         rejectionReason: student.rejectionReason
