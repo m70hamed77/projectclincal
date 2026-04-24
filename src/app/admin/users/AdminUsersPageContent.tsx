@@ -656,12 +656,11 @@ export function AdminUsersPageContent() {
                       </div>
                     )}
                   </div>
-
-                  {selectedUser.idCardUrl && (
+{selectedUser.idCardUrl && (
                     <div>
                       <span className="text-slate-600 text-sm">{t('users.idCard')}:</span>
                       <div className="mt-2 border border-slate-200 rounded-lg overflow-hidden">
-                        {selectedUser.idCardUrl.startsWith('http') ? (
+                        {selectedUser.idCardUrl.startsWith('http') || selectedUser.idCardUrl.startsWith('data:') ? (
                           <img
                             src={selectedUser.idCardUrl}
                             alt={t('users.idCardAlt')}
@@ -686,7 +685,6 @@ export function AdminUsersPageContent() {
                   )}
                 </div>
               )}
-
               {selectedUser.role === 'STUDENT' && selectedUser.verificationStatus === 'PENDING' && (
                 <div className="flex gap-3 pt-4 border-t border-slate-200">
                   <Button
