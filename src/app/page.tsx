@@ -451,445 +451,469 @@ export default function Home() {
           </div>
         </div>
       </header>
+{/* ==========================================
+     HERO SECTION
+========================================== */}
+<section
+  className="section-spacing-lg relative overflow-hidden"
+  style={{
+    backgroundImage: "url('/img/hero.jpg')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "#0D1B40",
+  }}
+>
+  {/* Overlay داكن للصورة */}
+  <div
+    className="absolute inset-0 z-0"
+    style={{ background: "rgba(13, 27, 64, 0.7)" }}
+  />
 
-      {/* ==========================================
-           HERO SECTION
-      ========================================== */}
-      <section className="section-spacing-lg relative overflow-hidden">
-        {/* Animated Background Orbs with Parallax */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
-          <div
-            className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
-            style={{
-              animationDelay: '0s',
-              transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
-            }}
-          />
-          <div
-            className="absolute bottom-20 right-20 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-float"
-            style={{
-              animationDelay: '2s',
-              transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
-            }}
-          />
-          <div
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"
-          />
+  {/* Animated Background Orbs with Parallax */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    <div
+      className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
+      style={{
+        animationDelay: '0s',
+        transform: `translate(${mousePosition.x * 2}px, ${mousePosition.y * 2}px)`
+      }}
+    />
+    <div
+      className="absolute bottom-20 right-20 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-float"
+      style={{
+        animationDelay: '2s',
+        transform: `translate(${-mousePosition.x * 2}px, ${-mousePosition.y * 2}px)`
+      }}
+    />
+    <div
+      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"
+    />
 
-          {/* Floating Particles */}
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-particle-1" />
-          <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-pink-400 rounded-full animate-particle-2" />
-          <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-particle-3" />
-          <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
-        </div>
+    {/* Floating Particles */}
+    <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-purple-400 rounded-full animate-particle-1" />
+    <div className="absolute top-1/3 right-1/3 w-3 h-3 bg-pink-400 rounded-full animate-particle-2" />
+    <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-blue-400 rounded-full animate-particle-3" />
+    <div className="absolute bottom-1/3 right-1/4 w-3 h-3 bg-cyan-400 rounded-full animate-particle-4" />
+  </div>
 
-        <div className="container-full relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+  <div className="container-full relative z-10">
+    <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-            {/* Left */}
-            <div className="space-y-8 animate-slide-in-left" style={{ animationDelay: "200ms" }}>
-              <div
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold"
-                style={{
-                  background: "rgba(147, 51, 234, 0.2)",
-                  border: "1px solid rgba(147, 51, 234, 0.4)",
-                  color: "#a855f7",
-                }}
-              >
-                <Sparkles className="w-4 h-4" />
-                🚀 {t("home.badge")}
-                <Sparkles className="w-4 h-4" />
-              </div>
-
-              <h1 className="text-responsive-5xl font-bold leading-tight text-white">
-                {t("home.title")}
-                <span
-                  className="block pt-2"
-                  style={{
-                    background: "linear-gradient(135deg, #a855f7, #ec4899, #06b6d4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundSize: "200% 200%",
-                    animation: "gradient 3s ease infinite",
-                  }}
-                >
-                  {t("home.titleHighlight")}
-                </span>
-              </h1>
-
-              <p className="text-responsive-lg leading-relaxed max-w-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
-                {t("home.description")}
-              </p>
-
-              <div className="flex flex-wrap gap-4">
-                <Button
-                  size="lg"
-                  asChild
-                  className="font-bold text-responsive-base text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
-                  style={{
-                    background: "linear-gradient(135deg, #9333ea, #ec4899)",
-                    boxShadow: "0 6px 24px rgba(236, 72, 153, 0.5)",
-                    border: "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.7)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.5)";
-                  }}
-                >
-                  <Link href="/auth/register-verification?type=student">
-                    <Stethoscope className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
-                    {t("home.registerAsStudent")}
-                  </Link>
-                </Button>
-                <Button
-                  size="lg"
-                  asChild
-                  className="font-bold text-responsive-base text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
-                  style={{
-                    background: "transparent",
-                    border: "2px solid rgba(255,255,255,0.4)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
-                    e.currentTarget.style.boxShadow = "0 6px 24px rgba(147, 51, 234, 0.3)";
-                    e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.5)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.boxShadow = "none";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
-                  }}
-                >
-                  <Link href="/auth/register-verification?type=patient">
-                    <User className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
-                    {t("home.registerAsPatient")}
-                  </Link>
-                </Button>
-              </div>
-
-              <div className="flex flex-wrap gap-8 pt-4">
-                {[t("home.freeTreatment"), t("home.verifiedStudents"), t("home.comprehensiveRating")].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-responsive-sm font-semibold text-white">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center"
-                      style={{
-                        background: "rgba(147, 51, 234, 0.2)",
-                        border: "2px solid #a855f7",
-                      }}
-                    >
-                      <CheckCircle2 className="w-4 h-4" style={{ color: "#a855f7" }} />
-                    </div>
-                    <span>{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Right: stat cards */}
-            <div
-              ref={heroStatsRef}
-              className="grid grid-cols-2 gap-6 animate-slide-in-right"
-              style={{ animationDelay: "300ms" }}
-            >
-              <StatCard
-                emoji="👨‍⚕️"
-                value={statsLoading ? 0 : stats.activeStudents}
-                label={t("home.activeStudents")}
-                numClassName=""
-                delay="0ms"
-                start={heroStatsInView}
-              />
-              <StatCard
-                emoji="👥"
-                value={statsLoading ? 0 : stats.activePatients}
-                label={t("home.registeredPatients")}
-                numClassName=""
-                delay="100ms"
-                start={heroStatsInView}
-              />
-              <StatCard
-                emoji="✅"
-                value={statsLoading ? 0 : stats.completedCases}
-                label={t("home.completedCases")}
-                numClassName=""
-                delay="200ms"
-                start={heroStatsInView}
-              />
-
-              {/* Rating card — static */}
-              <Card
-                className="border border-white/20 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl group"
-                style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(10px)" }}
-              >
-                <CardContent className="pt-8 text-center">
-                  <div className="text-4xl mb-3 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6">⭐</div>
-                  <div
-                    className="text-responsive-3xl font-bold mb-1"
-                    style={{
-                      background: "linear-gradient(135deg, #FFAE00, #ffcf57)",
-                      WebkitBackgroundClip: "text",
-                      WebkitTextFillColor: "transparent",
-                    }}
-                  >
-                    {statsLoading ? "0.0" : stats.averageRating.toFixed(1)}
-                  </div>
-                  <div className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.65)" }}>
-                    {t("home.averageRating")}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ==========================================
-           FOR WHOM SECTION - USER TYPES
-      ========================================== */}
-      <section
-        style={{
-          width: "100%",
-          minHeight: "100vh",
-          padding: "80px 5vw",
-          position: "relative",
-          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
-        }}
-      >
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
-          <div
-            className="absolute top-20 right-20 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float"
-            style={{ animationDelay: '1s' }}
-          />
-          <div
-            className="absolute bottom-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float"
-            style={{ animationDelay: '3s' }}
-          />
-        </div>
-
-        {/* Content */}
-        <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 10 }}>
-          <AnimatedSection>
-            <div
-              className="eyebrow inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
-              style={{
-                background: "rgba(147, 51, 234, 0.2)",
-                border: "1px solid rgba(147, 51, 234, 0.4)",
-                color: "#a855f7",
-              }}
-            >
-              <Sparkles className="w-4 h-4" />
-              {t("home.userTypes.eyebrow") || "من لأجله؟"}
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <h2
-              style={{
-                fontSize: "clamp(32px, 5vw, 48px)",
-                fontWeight: "bold",
-                marginBottom: "16px",
-                color: "#fff",
-              }}
-            >
-              {t("home.userTypes.title") || "المنصة لك سواء كنت..."}
-            </h2>
-          </AnimatedSection>
-        </div>
-
+      {/* Left */}
+      <div className="space-y-8 animate-slide-in-left" style={{ animationDelay: "200ms" }}>
         <div
-          className="user-types"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold"
           style={{
-            maxWidth: "900px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "32px",
-            position: "relative",
-            zIndex: 10,
+            background: "rgba(147, 51, 234, 0.2)",
+            border: "1px solid rgba(147, 51, 234, 0.4)",
+            color: "#a855f7",
           }}
         >
-          {/* Patient Card */}
-          <AnimatedSection delay={100}>
-            <div
-              className="user-card patient"
-              onClick={() => window.location.href = "/auth/register-verification?type=patient"}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "24px",
-                padding: "40px 32px",
-                cursor: "pointer",
-                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                border: "2px solid rgba(147, 51, 234, 0.2)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 24px 40px rgba(147, 51, 234, 0.3)";
-                e.currentTarget.style.borderColor = "#a855f7";
-                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.2)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-              }}
-            >
-              <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
-                {t("home.userTypes.patient.icon") || "🏥"}
-              </span>
-              <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
-                {t("home.userTypes.patient.title") || "مريض يبحث عن علاج"}
-              </h3>
-              <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
-                {t("home.userTypes.patient.description") || "تصفّح الحالات المتاحة، قدّم على ما يناسبك، وتواصل مع الطالب مباشرة"}
-              </p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
-                {(() => {
-                  const patientFeatures = getData("home.userTypes.patient.features");
-                  const safeFeatures = Array.isArray(patientFeatures)
-                    ? patientFeatures
-                    : [
-                        "علاج مجاني أو بأسعار منخفضة",
-                        "طلاب موثّقون وذوو تقييمات عالية",
-                        "تتبع حالتك خطوة بخطوة",
-                        "نظام إبلاغ لضمان سلامتك",
-                      ];
-                  return safeFeatures.map((feature, index) => (
-                    <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                      <span style={{ color: "#a855f7", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
-                      <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
-                    </li>
-                  ));
-                })()}
-              </ul>
-              <button
-                className="btn-primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.location.href = "/auth/register-verification?type=patient";
-                }}
-                style={{
-                  width: "100%",
-                  padding: "14px",
-                  background: "linear-gradient(135deg, #9333ea, #ec4899)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "12px",
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                  e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
-                  e.currentTarget.style.background = "linear-gradient(135deg, #a855f7, #f472b6)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
-                  e.currentTarget.style.background = "linear-gradient(135deg, #9333ea, #ec4899)";
-                }}
-              >
-                {t("home.userTypes.patient.button") || "سجّل كمريض ←"}
-              </button>
-            </div>
-          </AnimatedSection>
-
-          {/* Student Card */}
-          <AnimatedSection delay={200}>
-            <div
-              className="user-card student"
-              onClick={() => window.location.href = "/auth/register-verification?type=student"}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                backdropFilter: "blur(10px)",
-                borderRadius: "24px",
-                padding: "40px 32px",
-                cursor: "pointer",
-                transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
-                border: "2px solid rgba(236, 72, 153, 0.2)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
-                e.currentTarget.style.boxShadow = "0 24px 40px rgba(236, 72, 153, 0.3)";
-                e.currentTarget.style.borderColor = "#ec4899";
-                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "translateY(0) scale(1)";
-                e.currentTarget.style.boxShadow = "none";
-                e.currentTarget.style.borderColor = "rgba(236, 72, 153, 0.2)";
-                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-              }}
-            >
-              <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
-                {t("home.userTypes.student.icon") || "🎓"}
-              </span>
-              <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
-                {t("home.userTypes.student.title") || "طالب طب أسنان"}
-              </h3>
-              <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
-                {t("home.userTypes.student.description") || "انشر حالاتك المطلوبة، اقبل المرضى المناسبين، وطوّر مهاراتك مع كل حالة"}
-              </p>
-              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
-                {(() => {
-                  const studentFeatures = getData("home.userTypes.student.features");
-                  const safeFeatures = Array.isArray(studentFeatures)
-                    ? studentFeatures
-                    : [
-                        "حالات عملية متنوعة ومصنّفة",
-                        "نظام نقاط وشارات تحفيزي",
-                        "بورتفوليو احترافي للإنجازات",
-                        "لوحة تحكم شاملة للحالات",
-                      ];
-                  return safeFeatures.map((feature, index) => (
-                    <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
-                      <span style={{ color: "#ec4899", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
-                      <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
-                    </li>
-                  ));
-                })()}
-              </ul>
-              <button
-                className="btn-primary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.location.href = "/auth/register-verification?type=student";
-                }}
-                style={{
-                  width: "100%",
-                  padding: "14px",
-                  background: "linear-gradient(135deg, #ec4899, #f472b6)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "12px",
-                  fontSize: "15px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                  boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-3px)";
-                  e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
-                  e.currentTarget.style.background = "linear-gradient(135deg, #f472b6, #fb7185)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
-                  e.currentTarget.style.background = "linear-gradient(135deg, #ec4899, #f472b6)";
-                }}
-              >
-                {t("home.userTypes.student.button") || "سجّل كطالب ←"}
-              </button>
-            </div>
-          </AnimatedSection>
+          <Sparkles className="w-4 h-4" />
+          🚀 {t("home.badge")}
+          <Sparkles className="w-4 h-4" />
         </div>
-      </section>
+
+        <h1 className="text-responsive-5xl font-bold leading-tight text-white">
+          {t("home.title")}
+          <span
+            className="block pt-2"
+            style={{
+              background: "linear-gradient(135deg, #a855f7, #ec4899, #06b6d4)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundSize: "200% 200%",
+              animation: "gradient 3s ease infinite",
+            }}
+          >
+            {t("home.titleHighlight")}
+          </span>
+        </h1>
+
+        <p className="text-responsive-lg leading-relaxed max-w-xl" style={{ color: "rgba(255,255,255,0.75)" }}>
+          {t("home.description")}
+        </p>
+
+        <div className="flex flex-wrap gap-4">
+          <Button
+            size="lg"
+            asChild
+            className="font-bold text-responsive-base text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+            style={{
+              background: "linear-gradient(135deg, #9333ea, #ec4899)",
+              boxShadow: "0 6px 24px rgba(236, 72, 153, 0.5)",
+              border: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.7)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.5)";
+            }}
+          >
+            <Link href="/auth/register-verification?type=student">
+              <Stethoscope className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
+              {t("home.registerAsStudent")}
+            </Link>
+          </Button>
+          <Button
+            size="lg"
+            asChild
+            className="font-bold text-responsive-base text-white transition-all duration-300 hover:scale-105 hover:shadow-xl active:scale-95"
+            style={{
+              background: "transparent",
+              border: "2px solid rgba(255,255,255,0.4)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(147, 51, 234, 0.2)";
+              e.currentTarget.style.boxShadow = "0 6px 24px rgba(147, 51, 234, 0.3)";
+              e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.5)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = "rgba(255,255,255,0.4)";
+            }}
+          >
+            <Link href="/auth/register-verification?type=patient">
+              <User className={`w-5 h-5 ${isRTL ? "ml-2" : "mr-2"}`} />
+              {t("home.registerAsPatient")}
+            </Link>
+          </Button>
+        </div>
+
+        <div className="flex flex-wrap gap-8 pt-4">
+          {[t("home.freeTreatment"), t("home.verifiedStudents"), t("home.comprehensiveRating")].map((item) => (
+            <div key={item} className="flex items-center gap-3 text-responsive-sm font-semibold text-white">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center"
+                style={{
+                  background: "rgba(147, 51, 234, 0.2)",
+                  border: "2px solid #a855f7",
+                }}
+              >
+                <CheckCircle2 className="w-4 h-4" style={{ color: "#a855f7" }} />
+              </div>
+              <span>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Right: stat cards */}
+      <div
+        ref={heroStatsRef}
+        className="grid grid-cols-2 gap-6 animate-slide-in-right"
+        style={{ animationDelay: "300ms" }}
+      >
+        <StatCard
+          emoji="👨‍⚕️"
+          value={statsLoading ? 0 : stats.activeStudents}
+          label={t("home.activeStudents")}
+          numClassName=""
+          delay="0ms"
+          start={heroStatsInView}
+        />
+        <StatCard
+          emoji="👥"
+          value={statsLoading ? 0 : stats.activePatients}
+          label={t("home.registeredPatients")}
+          numClassName=""
+          delay="100ms"
+          start={heroStatsInView}
+        />
+        <StatCard
+          emoji="✅"
+          value={statsLoading ? 0 : stats.completedCases}
+          label={t("home.completedCases")}
+          numClassName=""
+          delay="200ms"
+          start={heroStatsInView}
+        />
+
+        {/* Rating card — static */}
+        <Card
+          className="border border-white/20 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl group"
+          style={{ background: "rgba(255,255,255,0.08)", backdropFilter: "blur(10px)" }}
+        >
+          <CardContent className="pt-8 text-center">
+            <div className="text-4xl mb-3 transition-transform duration-300 group-hover:scale-125 group-hover:rotate-6">⭐</div>
+            <div
+              className="text-responsive-3xl font-bold mb-1"
+              style={{
+                background: "linear-gradient(135deg, #FFAE00, #ffcf57)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              {statsLoading ? "0.0" : stats.averageRating.toFixed(1)}
+            </div>
+            <div className="text-sm font-semibold" style={{ color: "rgba(255,255,255,0.65)" }}>
+              {t("home.averageRating")}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* ==========================================
+     FOR WHOM SECTION - USER TYPES
+========================================== */}
+<section
+  style={{
+    width: "100%",
+    minHeight: "100vh",
+    padding: "80px 5vw",
+    position: "relative",
+    backgroundImage: "url('/img/forYou.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "#0D1B40",
+  }}
+>
+  {/* Overlay داكن للصورة */}
+  <div
+    className="absolute inset-0 z-0"
+    style={{ background: "rgba(13, 27, 64, 0.65)" }}
+  />
+
+  {/* Animated Blobs */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    <div
+      className="absolute top-20 right-20 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-float"
+      style={{ animationDelay: '1s' }}
+    />
+    <div
+      className="absolute bottom-20 left-20 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float"
+      style={{ animationDelay: '3s' }}
+    />
+  </div>
+
+  {/* Content */}
+  <div style={{ maxWidth: "1280px", margin: "0 auto", position: "relative", zIndex: 10 }}>
+    <AnimatedSection>
+      <div
+        className="eyebrow inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+        style={{
+          background: "rgba(147, 51, 234, 0.2)",
+          border: "1px solid rgba(147, 51, 234, 0.4)",
+          color: "#a855f7",
+        }}
+      >
+        <Sparkles className="w-4 h-4" />
+        {t("home.userTypes.eyebrow") || "من لأجله؟"}
+        <Sparkles className="w-4 h-4" />
+      </div>
+      <h2
+        style={{
+          fontSize: "clamp(32px, 5vw, 48px)",
+          fontWeight: "bold",
+          marginBottom: "16px",
+          color: "#fff",
+        }}
+      >
+        {t("home.userTypes.title") || "المنصة لك سواء كنت..."}
+      </h2>
+    </AnimatedSection>
+  </div>
+
+  <div
+    className="user-types"
+    style={{
+      maxWidth: "900px",
+      margin: "0 auto",
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+      gap: "32px",
+      position: "relative",
+      zIndex: 10,
+    }}
+  >
+    {/* Patient Card */}
+    <AnimatedSection delay={100}>
+      <div
+        className="user-card patient"
+        onClick={() => window.location.href = "/auth/register-verification?type=patient"}
+        style={{
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "24px",
+          padding: "40px 32px",
+          cursor: "pointer",
+          transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+          border: "2px solid rgba(147, 51, 234, 0.2)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
+          e.currentTarget.style.boxShadow = "0 24px 40px rgba(147, 51, 234, 0.3)";
+          e.currentTarget.style.borderColor = "#a855f7";
+          e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0) scale(1)";
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.borderColor = "rgba(147, 51, 234, 0.2)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+        }}
+      >
+        <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
+          {t("home.userTypes.patient.icon") || "🏥"}
+        </span>
+        <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
+          {t("home.userTypes.patient.title") || "مريض يبحث عن علاج"}
+        </h3>
+        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
+          {t("home.userTypes.patient.description") || "تصفّح الحالات المتاحة، قدّم على ما يناسبك، وتواصل مع الطالب مباشرة"}
+        </p>
+        <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
+          {(() => {
+            const patientFeatures = getData("home.userTypes.patient.features");
+            const safeFeatures = Array.isArray(patientFeatures)
+              ? patientFeatures
+              : [
+                  "علاج مجاني أو بأسعار منخفضة",
+                  "طلاب موثّقون وذوو تقييمات عالية",
+                  "تتبع حالتك خطوة بخطوة",
+                  "نظام إبلاغ لضمان سلامتك",
+                ];
+            return safeFeatures.map((feature, index) => (
+              <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                <span style={{ color: "#a855f7", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
+                <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
+              </li>
+            ));
+          })()}
+        </ul>
+        <button
+          className="btn-primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.location.href = "/auth/register-verification?type=patient";
+          }}
+          style={{
+            width: "100%",
+            padding: "14px",
+            background: "linear-gradient(135deg, #9333ea, #ec4899)",
+            color: "white",
+            border: "none",
+            borderRadius: "12px",
+            fontSize: "15px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-3px)";
+            e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
+            e.currentTarget.style.background = "linear-gradient(135deg, #a855f7, #f472b6)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
+            e.currentTarget.style.background = "linear-gradient(135deg, #9333ea, #ec4899)";
+          }}
+        >
+          {t("home.userTypes.patient.button") || "سجّل كمريض ←"}
+        </button>
+      </div>
+    </AnimatedSection>
+
+    {/* Student Card */}
+    <AnimatedSection delay={200}>
+      <div
+        className="user-card student"
+        onClick={() => window.location.href = "/auth/register-verification?type=student"}
+        style={{
+          background: "rgba(255,255,255,0.05)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "24px",
+          padding: "40px 32px",
+          cursor: "pointer",
+          transition: "all 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
+          border: "2px solid rgba(236, 72, 153, 0.2)",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = "translateY(-10px) scale(1.02)";
+          e.currentTarget.style.boxShadow = "0 24px 40px rgba(236, 72, 153, 0.3)";
+          e.currentTarget.style.borderColor = "#ec4899";
+          e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = "translateY(0) scale(1)";
+          e.currentTarget.style.boxShadow = "none";
+          e.currentTarget.style.borderColor = "rgba(236, 72, 153, 0.2)";
+          e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+        }}
+      >
+        <span className="uc-icon" style={{ display: "block", textAlign: "center", fontSize: "56px", marginBottom: "24px", transition: "all 0.3s ease" }}>
+          {t("home.userTypes.student.icon") || "🎓"}
+        </span>
+        <h3 style={{ fontSize: "22px", fontWeight: "bold", marginBottom: "16px", textAlign: "center", color: "#fff" }}>
+          {t("home.userTypes.student.title") || "طالب طب أسنان"}
+        </h3>
+        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.7)", textAlign: "center", marginBottom: "24px", lineHeight: 1.8 }}>
+          {t("home.userTypes.student.description") || "انشر حالاتك المطلوبة، اقبل المرضى المناسبين، وطوّر مهاراتك مع كل حالة"}
+        </p>
+        <ul style={{ listStyle: "none", padding: 0, margin: "0 0 32px 0" }}>
+          {(() => {
+            const studentFeatures = getData("home.userTypes.student.features");
+            const safeFeatures = Array.isArray(studentFeatures)
+              ? studentFeatures
+              : [
+                  "حالات عملية متنوعة ومصنّفة",
+                  "نظام نقاط وشارات تحفيزي",
+                  "بورتفوليو احترافي للإنجازات",
+                  "لوحة تحكم شاملة للحالات",
+                ];
+            return safeFeatures.map((feature, index) => (
+              <li key={index} style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "12px" }}>
+                <span style={{ color: "#ec4899", fontWeight: 700, fontSize: "16px", flexShrink: 0 }}>✓</span>
+                <span style={{ fontSize: "14px", color: "rgba(255,255,255,0.85)" }}>{feature}</span>
+              </li>
+            ));
+          })()}
+        </ul>
+        <button
+          className="btn-primary"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.location.href = "/auth/register-verification?type=student";
+          }}
+          style={{
+            width: "100%",
+            padding: "14px",
+            background: "linear-gradient(135deg, #ec4899, #f472b6)",
+            color: "white",
+            border: "none",
+            borderRadius: "12px",
+            fontSize: "15px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 6px 24px rgba(236, 72, 153, 0.35)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-3px)";
+            e.currentTarget.style.boxShadow = "0 10px 32px rgba(236, 72, 153, 0.5)";
+            e.currentTarget.style.background = "linear-gradient(135deg, #f472b6, #fb7185)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 6px 24px rgba(236, 72, 153, 0.35)";
+            e.currentTarget.style.background = "linear-gradient(135deg, #ec4899, #f472b6)";
+          }}
+        >
+          {t("home.userTypes.student.button") || "سجّل كطالب ←"}
+        </button>
+      </div>
+    </AnimatedSection>
+  </div>
+</section>
 {/* ==========================================
            VIDEO DEMO SECTION
       ========================================== */}
@@ -1215,92 +1239,111 @@ export default function Home() {
           </div>
         </div>
       </section>
+{/* ==========================================
+     FAQ SECTION
+========================================== */}
+<section
+  id="faq"
+  className="section-spacing relative"
+  style={{
+    backgroundImage: "url('/img/faq.png')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "#0D1B40", // fallback لو الصورة محملتش
+  }}
+>
+  {/* Overlay داكن عشان المحتوى يبقي مقروء */}
+  <div
+    className="absolute inset-0 z-0"
+    style={{ background: "rgba(13, 27, 64, 0.75)" }}
+  />
 
-      {/* ==========================================
-           FAQ SECTION
-      ========================================== */}
-      <section
-        id="faq"
-        className="section-spacing relative"
-        style={{
-          background: "linear-gradient(135deg, #0D1B40 0%, #1a2a6c 50%, #2d1b69 100%)",
-        }}
-      >
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
-          <div
-            className="absolute bottom-20 left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float"
-            style={{ animationDelay: '2.5s' }}
-          />
-        </div>
+  {/* Animated Background - blob متحرك (موجود أصلاً) */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-[0]">
+    <div
+      className="absolute bottom-20 left-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float"
+      style={{ animationDelay: "2.5s" }}
+    />
+  </div>
 
-        <div className="container-full relative z-10">
-          <div className="container-medium">
-            <AnimatedSection className="text-center mb-16">
-              <span
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
-                style={{ background: "rgba(168, 85, 247, 0.2)", color: "#a855f7", border: "1px solid rgba(168, 85, 247, 0.35)" }}
-              >
-                <MessageCircle className="w-4 h-4" />
-                {t("faq.title")}
-                <MessageCircle className="w-4 h-4" />
-              </span>
-              <h2 className="text-responsive-4xl font-bold mb-4 text-white">
-                {t("home.faqTitle")}
-              </h2>
-              <p className="text-responsive-lg max-w-2xl mx-auto" style={{ color: "rgba(255,255,255,0.7)" }}>
-                {t("home.faqSubtitle") || "Find answers to frequently asked questions"}
-              </p>
-            </AnimatedSection>
+  <div className="container-full relative z-10">
+    <div className="container-medium">
+      <AnimatedSection className="text-center mb-16">
+        <span
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold mb-4"
+          style={{
+            background: "rgba(168, 85, 247, 0.2)",
+            color: "#a855f7",
+            border: "1px solid rgba(168, 85, 247, 0.35)",
+          }}
+        >
+          <MessageCircle className="w-4 h-4" />
+          {t("faq.title")}
+          <MessageCircle className="w-4 h-4" />
+        </span>
+        <h2 className="text-responsive-4xl font-bold mb-4 text-white">
+          {t("home.faqTitle")}
+        </h2>
+        <p
+          className="text-responsive-lg max-w-2xl mx-auto"
+          style={{ color: "rgba(255,255,255,0.7)" }}
+        >
+          {t("home.faqSubtitle") || "Find answers to frequently asked questions"}
+        </p>
+      </AnimatedSection>
 
-            <div className="space-y-5">
-              {[
-                { q: t("home.faq1"), a: t("home.faq1Answer") },
-                { q: t("home.faq2"), a: t("home.faq2Answer") },
-                { q: t("home.faq3"), a: t("home.faq3Answer") },
-              ].map((item, i) => (
-                <AnimatedSection key={i} delay={i * 100}>
-                  <Card
-                    className="transition-all duration-300 hover:shadow-lg group"
-                    style={{
-                      border: "2px solid rgba(147, 51, 234, 0.2)",
-                      background: "rgba(255,255,255,0.05)",
-                      backdropFilter: "blur(8px)"
-                    }}
-                    onMouseEnter={(e) => {
-                      handleHoverBorderColor(e, "#a855f7");
-                      e.currentTarget.style.transform = "translateY(-2px)";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.08)";
-                    }}
-                    onMouseLeave={(e) => {
-                      handleLeaveBorderColor(e);
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                    }}
+      <div className="space-y-5">
+        {[
+          { q: t("home.faq1"), a: t("home.faq1Answer") },
+          { q: t("home.faq2"), a: t("home.faq2Answer") },
+          { q: t("home.faq3"), a: t("home.faq3Answer") },
+        ].map((item, i) => (
+          <AnimatedSection key={i} delay={i * 100}>
+            <Card
+              className="transition-all duration-300 hover:shadow-lg group"
+              style={{
+                border: "2px solid rgba(147, 51, 234, 0.2)",
+                background: "rgba(255,255,255,0.05)",
+                backdropFilter: "blur(8px)",
+              }}
+              onMouseEnter={(e) => {
+                handleHoverBorderColor(e, "#a855f7");
+                e.currentTarget.style.transform = "translateY(-2px)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+              }}
+              onMouseLeave={(e) => {
+                handleLeaveBorderColor(e);
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+              }}
+            >
+              <CardHeader>
+                <CardTitle className="text-responsive-base font-bold flex items-start gap-3 text-white">
+                  <span
+                    className="font-black transition-all duration-300 group-hover:scale-125 inline-block"
+                    style={{ color: "#a855f7" }}
                   >
-                    <CardHeader>
-                      <CardTitle className="text-responsive-base font-bold flex items-start gap-3 text-white">
-                        <span
-                          className="font-black transition-all duration-300 group-hover:scale-125 inline-block"
-                          style={{ color: "#a855f7" }}
-                        >
-                          Q{i + 1}.
-                        </span>
-                        <span className="leading-relaxed">{item.q}</span>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-responsive-sm leading-relaxed pl-7" style={{ color: "rgba(255,255,255,0.7)" }}>
-                        {item.a}
-                      </p>
-                    </CardContent>
-                  </Card>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+                    Q{i + 1}.
+                  </span>
+                  <span className="leading-relaxed">{item.q}</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p
+                  className="text-responsive-sm leading-relaxed pl-7"
+                  style={{ color: "rgba(255,255,255,0.7)" }}
+                >
+                  {item.a}
+                </p>
+              </CardContent>
+            </Card>
+          </AnimatedSection>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* ==========================================
            FOOTER

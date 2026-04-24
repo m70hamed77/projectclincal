@@ -66,10 +66,10 @@ export function PublicNavigation() {
         {/* Right Side Actions */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <Button variant="ghost" asChild>
+          <Button variant="ghost" asChild className="hidden md:inline-flex">
             <Link href="/auth/login"><span suppressHydrationWarning={true}>تسجيل دخول</span></Link>
           </Button>
-          <Button asChild className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+          <Button asChild className="hidden md:inline-flex bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
             <Link href="/auth/register"><span suppressHydrationWarning={true}>ابدأ الآن</span></Link>
           </Button>
 
@@ -101,3 +101,7 @@ export function PublicNavigation() {
     </header>
   )
 }
+
+
+
+

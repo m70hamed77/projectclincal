@@ -1,12 +1,3 @@
-html, body {
-  overflow-x: hidden;
-  max-width: 100%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -53,7 +44,7 @@ html, body {
 }
 
 :root {
-  /* Spacing scale (8px base system) */
+  /* Spacing scale (8px base system) */   
   --spacing-0: 0px;
   --spacing-1: 4px;
   --spacing-2: 8px;
@@ -1440,4 +1431,3 @@ html, body {
     box-shadow: 0 8px 32px rgba(99, 102, 241, 0.1);
   }
 }
-

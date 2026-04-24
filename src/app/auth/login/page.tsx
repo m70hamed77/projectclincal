@@ -192,11 +192,20 @@ export default function LoginPage() {
       setIsSubmitting(false)
     }
   }
+return (
+    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950" suppressHydrationWarning>
+      {/* ✅ خلفية الصفحة - صورة background-login.jpg */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-50 z-[0]"
+        style={{ backgroundImage: 'url("/img/background-login.jpg")' }}
+        aria-hidden="true"
+      />
 
-  return (
-    <div dir={isRTL ? 'rtl' : 'ltr'} className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Overlay داكن على خلفية الصفحة */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/80 via-purple-950/60 to-slate-950/80 z-[1]" />
+
+      {/* Animated Background - Orbs و Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-[2]">
         {/* Gradient Orbs */}
         <div
           className="absolute top-20 left-20 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
@@ -259,50 +268,64 @@ export default function LoginPage() {
       {/* Main Container */}
       <div className="relative w-full max-w-6xl z-10">
         <div className="grid md:grid-cols-2 gap-8 items-center">
+          
           {/* Left Side - Branding */}
           <div className="hidden md:flex flex-col justify-center items-start space-y-8 animate-slide-in-left">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 hover:scale-105 cursor-pointer group">
-                <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                  <User className="w-5 h-5 text-white" />
+            
+            {/* ✅ صورة Branding Card - login-bg.jpg */}
+            <div className="relative w-full rounded-3xl overflow-hidden shadow-2xl">
+              <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: 'url("/img/login.jpg")' }}
+                aria-hidden="true"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-950/85 via-purple-950/70 to-slate-950/85" />
+              
+              <div className="relative z-10 p-8 space-y-6">
+                <div className="space-y-4">
+                  <div className="inline-flex items-center gap-3 bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl px-6 py-3 hover:bg-white/10 transition-all duration-300 hover:scale-105 cursor-pointer group">
+                    <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
+                      <User className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-white font-semibold text-lg group-hover:text-purple-300 transition-colors">{t('login.brand')}</span>
+                  </div>
+
+                  <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+                    {t('login.welcomeTitle')}{' '}
+                    <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
+                      {t('login.brandName')}
+                    </span>
+                  </h1>
+
+                  <p className="text-xl text-gray-300 leading-relaxed">
+                    {t('login.welcomeDesc')}
+                  </p>
                 </div>
-                <span className="text-white font-semibold text-lg group-hover:text-purple-300 transition-colors">{t('login.brand')}</span>
-              </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
-                {t('login.welcomeTitle')}{' '}
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                  {t('login.brandName')}
-                </span>
-              </h1>
-
-              <p className="text-xl text-gray-300 leading-relaxed">
-                {t('login.welcomeDesc')}
-              </p>
-            </div>
-
-            {/* Feature Cards */}
-            <div className="space-y-4 w-full">
-              <div className="group bg-gradient-to-r from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Shield className="w-6 h-6 text-white" />
+                {/* Feature Cards */}
+                <div className="space-y-4">
+                  <div className="group bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-purple-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Shield className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg">{t('login.features.securityTitle')}</h3>
+                        <p className="text-gray-300 text-sm">{t('login.features.securityDesc')}</p>
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-white font-bold text-lg">{t('login.features.securityTitle')}</h3>
-                    <p className="text-gray-400 text-sm">{t('login.features.securityDesc')}</p>
-                  </div>
-                </div>
-              </div>
 
-              <div className="group bg-gradient-to-r from-white/5 to-white/0 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Zap className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="text-white font-bold text-lg">{t('login.features.speedTitle')}</h3>
-                    <p className="text-gray-400 text-sm">{t('login.features.speedDesc')}</p>
+                  <div className="group bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                        <Zap className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-white font-bold text-lg">{t('login.features.speedTitle')}</h3>
+                        <p className="text-gray-300 text-sm">{t('login.features.speedDesc')}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
