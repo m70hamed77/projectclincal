@@ -306,10 +306,11 @@
   }
 
   /* Smooth scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-
+ html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
+}
   /* Selection color */
   ::selection {
     background-color: var(--primary-subtle);

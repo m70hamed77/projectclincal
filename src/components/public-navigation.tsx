@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -73,29 +73,30 @@ export function PublicNavigation() {
             <Link href="/auth/register"><span suppressHydrationWarning={true}>ابدأ الآن</span></Link>
           </Button>
 
-          {/* Mobile Menu */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="w-5 h-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72">
-              <nav className="flex flex-col space-y-4 mt-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`text-sm font-medium transition-colors p-2 rounded-lg hover:bg-muted ${
-                      pathname === link.href ? 'bg-muted text-primary' : ''
-                    }`}
-                  >
-                    <span suppressHydrationWarning={true}>{link.label}</span>
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+         {/* Mobile Menu */}
+<Sheet>
+  <SheetTrigger asChild>
+    <Button variant="ghost" size="icon" className="md:hidden">
+      <Menu className="w-5 h-5" />
+    </Button>
+  </SheetTrigger>
+  <SheetContent side="left" className="w-72">
+    <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+    <nav className="flex flex-col space-y-4 mt-8">
+      {navLinks.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={`text-sm font-medium transition-colors p-2 rounded-lg hover:bg-muted ${
+            pathname === link.href ? 'bg-muted text-primary' : ''
+          }`}
+        >
+          <span suppressHydrationWarning={true}>{link.label}</span>
+        </Link>
+      ))}
+    </nav>
+  </SheetContent>
+</Sheet>
         </div>
       </div>
     </header>

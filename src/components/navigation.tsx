@@ -11,7 +11,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+
 import { Menu, Bell, Settings, LogOut, User, LayoutDashboard, MessageCircle, Calendar, FileText } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
@@ -241,29 +243,30 @@ export function NavigationContent({ user }: NavigationProps) {
           )}
 
           {/* Mobile Menu */}
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <span suppressHydrationWarning><Menu className="w-5 h-5" /></span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="w-72">
-              <nav className="flex flex-col space-y-4 mt-8">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`text-sm font-medium transition-colors flex items-center gap-2 p-2 rounded-lg hover:bg-muted ${
-                      pathname === link.href ? 'bg-muted text-primary' : ''
-                    }`}
-                  >
-                    {link.icon && <span suppressHydrationWarning><link.icon className="w-4 h-4" /></span>}
-                    <span suppressHydrationWarning={true}>{link.label}</span>
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+<Sheet>
+  <SheetTrigger asChild>
+    <Button variant="ghost" size="icon" className="md:hidden">
+      <span suppressHydrationWarning><Menu className="w-5 h-5" /></span>
+    </Button>
+  </SheetTrigger>
+  <SheetContent side="left" className="w-72">
+    <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+    <nav className="flex flex-col space-y-4 mt-8">
+      {navLinks.map((link) => (
+        <Link
+          key={link.href}
+          href={link.href}
+          className={`text-sm font-medium transition-colors flex items-center gap-2 p-2 rounded-lg hover:bg-muted ${
+            pathname === link.href ? 'bg-muted text-primary' : ''
+          }`}
+        >
+          {link.icon && <span suppressHydrationWarning><link.icon className="w-4 h-4" /></span>}
+          <span suppressHydrationWarning={true}>{link.label}</span>
+        </Link>
+      ))}
+    </nav>
+  </SheetContent>
+</Sheet>
         </div>
       </div>
     </header>

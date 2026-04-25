@@ -109,9 +109,11 @@
   }
 
   /* Smooth Scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
+  html, body {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
+}
 
   /* Reduced Motion Preference */
   @media (prefers-reduced-motion: reduce) {
