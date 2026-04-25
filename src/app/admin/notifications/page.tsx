@@ -201,27 +201,27 @@ function AdminNotificationsPageInner() {
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Navigation user={navUser} />
 
-      <main className="flex-1 py-8 px-4">
+      <main className="flex-1 py-6 sm:py-8 px-2 sm:px-4">
         <div className="container mx-auto max-w-5xl">
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-slate-800">
-                <Bell className="w-6 h-6 text-white" />
+          <div className="mb-6 sm:mb-8">
+            <div className="flex items-center gap-2 sm:gap-3 mb-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center bg-slate-800">
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold text-slate-800">{t('notifications.title')}</h1>
-                <p className="text-sm text-slate-600">{unreadCount} {t('notifications.unreadCount')}</p>
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">{t('notifications.title')}</h1>
+                <p className="text-xs sm:text-sm text-slate-600">{unreadCount} {t('notifications.unreadCount')}</p>
               </div>
             </div>
-            <div className="flex gap-2 mt-4">
+            <div className="flex flex-col sm:flex-row gap-2 mt-4">
               <Button variant="outline" size="sm" onClick={markAllAsRead} disabled={unreadCount === 0}
-                className="hover:bg-slate-100 border-slate-200 text-emerald-600 hover:text-emerald-700">
-                <Check className="w-4 h-4 mr-2" />
+                className="w-full sm:w-auto hover:bg-slate-100 border-slate-200 text-emerald-600 hover:text-emerald-700 text-xs sm:text-sm">
+                <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                 <span>{t('notifications.markAllAsRead')}</span>
               </Button>
               <Button size="sm" onClick={clearAll} disabled={notifications.length === 0}
-                className="bg-red-800 hover:bg-red-900 text-white">
-                <Trash2 className="w-4 h-4 mr-2" />
+                className="w-full sm:w-auto bg-red-800 hover:bg-red-900 text-white text-xs sm:text-sm">
+                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
                 <span>{t('notifications.clearAll')}</span>
               </Button>
             </div>
@@ -247,15 +247,15 @@ function AdminNotificationsPageInner() {
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6 bg-white border-slate-200">
-                <TabsTrigger value="all" className="gap-2 data-[state=active]:bg-slate-100">
-                  <Bell className="w-4 h-4" />
+                <TabsTrigger value="all" className="gap-2 data-[state=active]:bg-slate-100 text-xs sm:text-sm">
+                  <Bell className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>{t('notifications.all')}</span>
-                  <Badge variant="secondary" className="bg-emerald-600 text-white hover:bg-emerald-700">{notifications.length}</Badge>
+                  <Badge variant="secondary" className="bg-emerald-600 text-white hover:bg-emerald-700 text-[10px] sm:text-xs">{notifications.length}</Badge>
                 </TabsTrigger>
-                <TabsTrigger value="unread" className="gap-2 data-[state=active]:bg-slate-100">
-                  <MessageCircle className="w-4 h-4" />
+                <TabsTrigger value="unread" className="gap-2 data-[state=active]:bg-slate-100 text-xs sm:text-sm">
+                  <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   <span>{t('notifications.unread')}</span>
-                  <Badge variant="secondary" className="bg-amber-600 text-white hover:bg-amber-700">{unreadCount}</Badge>
+                  <Badge variant="secondary" className="bg-amber-600 text-white hover:bg-amber-700 text-[10px] sm:text-xs">{unreadCount}</Badge>
                 </TabsTrigger>
               </TabsList>
 
@@ -265,38 +265,38 @@ function AdminNotificationsPageInner() {
                     {(tab === 'all' ? notifications : unreadNotifications).map((notification) => (
                       <Card key={notification.id}
                         className={`border-slate-200 hover:shadow-md transition-shadow duration-200 ${!notification.isRead ? 'bg-white' : 'bg-slate-50'}`}>
-                        <CardContent className="p-4">
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-white border border-slate-200">
+                        <CardContent className="p-3 sm:p-4">
+                          <div className="flex items-start gap-3 sm:gap-4">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-white border border-slate-200">
                               {getNotificationIcon(notification.type)}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold mb-1 flex items-center gap-2 text-slate-800">
+                              <h3 className="font-semibold mb-1 flex items-center gap-1.5 sm:gap-2 text-sm sm:text-base text-slate-800 flex-wrap">
                                 {notification.title}
                                 {!notification.isRead && (
-                                  <Badge className="bg-emerald-600 text-white hover:bg-emerald-700">{t('notifications.newBadge')}</Badge>
+                                  <Badge className="bg-emerald-600 text-white hover:bg-emerald-700 text-[10px] sm:text-xs">{t('notifications.newBadge')}</Badge>
                                 )}
                               </h3>
-                              <p className="text-sm mb-2 whitespace-pre-line text-slate-600">{notification.message}</p>
-                              <p className="text-xs text-slate-500">{notification.time}</p>
-                              <div className="flex items-center gap-2 mt-3">
+                              <p className="text-xs sm:text-sm mb-2 whitespace-pre-line text-slate-600">{notification.message}</p>
+                              <p className="text-[10px] sm:text-xs text-slate-500">{notification.time}</p>
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-3">
                                 {isAdminAction(notification.type) && (
                                   <Button variant="outline" size="sm" onClick={() => handleShowActionDetails(notification)}
-                                    className="hover:bg-slate-100 border-slate-200 text-purple-600">
-                                    <FileText className={`w-4 h-4 mr-1`} />
+                                    className="hover:bg-slate-100 border-slate-200 text-purple-600 text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5">
+                                    <FileText className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                                     <span>{t('notifications.viewActionDetails')}</span>
                                   </Button>
                                 )}
                                 {!notification.isRead && (
                                   <Button variant="ghost" size="sm" onClick={() => markAsRead(notification.id)}
-                                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50">
-                                    <Check className={`w-4 h-4 mr-1`} />
+                                    className="text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5">
+                                    <Check className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                                     <span>{t('notifications.markAsRead')}</span>
                                   </Button>
                                 )}
                                 <Button size="sm" onClick={() => deleteNotification(notification.id)}
-                                  className="bg-red-700 hover:bg-red-800 text-white">
-                                  <X className="w-4 h-4" />
+                                  className="bg-red-700 hover:bg-red-800 text-white text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5">
+                                  <X className="w-3 h-3 sm:w-4 sm:h-4" />
                                 </Button>
                               </div>
                             </div>
@@ -307,14 +307,14 @@ function AdminNotificationsPageInner() {
 
                     {(tab === 'all' ? notifications : unreadNotifications).length === 0 && (
                       <Card className="border-slate-200 bg-white">
-                        <CardContent className="py-16 text-center">
-                          <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-slate-100">
-                            {tab === 'all' ? <Bell className="w-8 h-8 text-slate-400" /> : <CheckCircle2 className="w-8 h-8 text-emerald-600" />}
+                        <CardContent className="py-12 sm:py-16 text-center">
+                          <div className="w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-4 rounded-full flex items-center justify-center bg-slate-100">
+                            {tab === 'all' ? <Bell className="w-7 h-7 sm:w-8 sm:h-8 text-slate-400" /> : <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8 text-emerald-600" />}
                           </div>
-                          <h3 className="text-xl font-semibold mb-2 text-slate-800">
+                          <h3 className="text-lg sm:text-xl font-semibold mb-2 text-slate-800">
                             {tab === 'all' ? t('notifications.noNotifications') : t('notifications.allNotificationsRead')}
                           </h3>
-                          <p className="text-slate-600">
+                          <p className="text-sm text-slate-600">
                             {tab === 'all' ? t('notifications.noNotificationsDesc') : t('notifications.noUnreadNotifications')}
                           </p>
                         </CardContent>
@@ -331,11 +331,11 @@ function AdminNotificationsPageInner() {
       <Footer />
 
       <Dialog open={actionModalOpen} onOpenChange={setActionModalOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto border-slate-200">
+        <DialogContent className="max-w-[95vw] sm:max-w-2xl max-h-[90vh] overflow-y-auto border-slate-200 mx-2 sm:mx-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 text-xl text-slate-800">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-800">
-                <FileText className="w-4 h-4 text-white" />
+            <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl text-slate-800">
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center bg-slate-800">
+                <FileText className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
               </div>
               <span>{selectedNotification?.title}</span>
             </DialogTitle>
@@ -343,31 +343,31 @@ function AdminNotificationsPageInner() {
 
           {actionData ? (
             <div className="space-y-4 mt-4">
-              <div className="flex items-center justify-center p-4 rounded-lg bg-slate-50 border border-slate-200">
-                <Badge className="bg-slate-800 text-white">{actionData.actionTitle}</Badge>
+              <div className="flex items-center justify-center p-3 sm:p-4 rounded-lg bg-slate-50 border border-slate-200">
+                <Badge className="bg-slate-800 text-white text-xs sm:text-sm">{actionData.actionTitle}</Badge>
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block text-emerald-700">{t('notifications.adminMessage')}:</label>
-                <div className="p-4 rounded-lg bg-white border border-slate-200">
-                  <p className="text-base whitespace-pre-line text-slate-800">{actionData.actionMessage}</p>
+                <div className="p-3 sm:p-4 rounded-lg bg-white border border-slate-200">
+                  <p className="text-sm sm:text-base whitespace-pre-line text-slate-800">{actionData.actionMessage}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-emerald-50 border border-emerald-200">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-emerald-600">
-                  <User className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-emerald-50 border border-emerald-200">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-emerald-600">
+                  <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-emerald-700">{t('notifications.admin')}:</p>
-                  <p className="font-medium text-slate-800">{actionData.adminName}</p>
+                  <p className="text-xs sm:text-sm text-emerald-700">{t('notifications.admin')}:</p>
+                  <p className="font-medium text-sm sm:text-base text-slate-800">{actionData.adminName}</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-4 rounded-lg bg-slate-50 border border-slate-200">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-800">
-                  <Clock className="w-4 h-4 text-white" />
+              <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-slate-50 border border-slate-200">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-slate-800">
+                  <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-slate-600">{t('notifications.actionDate')}:</p>
-                  <p className="font-medium text-slate-800">
+                  <p className="text-xs sm:text-sm text-slate-600">{t('notifications.actionDate')}:</p>
+                  <p className="font-medium text-sm sm:text-base text-slate-800">
                     {new Date(actionData.actionDate).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
                       year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
                     })}
@@ -375,17 +375,17 @@ function AdminNotificationsPageInner() {
                 </div>
               </div>
               {actionData.banDuration && (
-                <div className="flex items-center gap-3 p-4 rounded-lg bg-red-50 border border-red-200">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center bg-red-600">
-                    <Ban className="w-4 h-4 text-white" />
+                <div className="flex items-center gap-3 p-3 sm:p-4 rounded-lg bg-red-50 border border-red-200">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center bg-red-600">
+                    <Ban className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm text-red-700">{t('notifications.banDuration')}:</p>
-                    <p className="font-medium text-red-800">{actionData.banDuration} <span className="mx-1">{t('notifications.days')}</span></p>
+                    <p className="text-xs sm:text-sm text-red-700">{t('notifications.banDuration')}:</p>
+                    <p className="font-medium text-sm sm:text-base text-red-800">{actionData.banDuration} <span className="mx-1">{t('notifications.days')}</span></p>
                   </div>
                 </div>
               )}
-              <div className="text-sm text-center pt-2 text-slate-500">
+              <div className="text-xs sm:text-sm text-center pt-2 text-slate-500">
                 <p>{t('notifications.reportNumber')}: {actionData.reportId}</p>
               </div>
             </div>
