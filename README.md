@@ -5,7 +5,8 @@ A digital platform connecting dental students with patients for free dental trea
 
 ## Team
 CS-22 | Graduation Project 2026
-
+## Sprint
+SCRUM Sprint 1 | 6 May – 3 Jun 2026
 ## Jira Stories
 - SCRUM-11 تسجيل مريض جديد
 - SCRUM-12 تسجيل طالب طب أسنان
