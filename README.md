@@ -1,6 +1,6 @@
 # 🦷 Smiley Dental Link — Project Clinical
 
-## About
+## About   
 A digital platform connecting dental students with patients for free dental treatment.
 
 ## Team
